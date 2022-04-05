@@ -45,8 +45,6 @@ class Company extends Model
         'pivot',
     ];
 
-    protected $appends = ['hId'];
-
     public function hId() : Attribute
     {
         return Attribute::make(
@@ -59,12 +57,12 @@ class Company extends Model
         return $this->belongsToMany(User::class);
     }
 
-    public function branch()
+    public function branches()
     {
         return $this->hasMany(Branch::class);
     }
 
-    public function warehouse()
+    public function warehouses()
     {
         return $this->hasMany(Warehouse::class);
     }
