@@ -106,7 +106,7 @@ class CompanyAPITest extends APITestCase
 
         $userId = User::has('companies')->get()->first()->id;
         $search = '';
-        $paginate = (new RandomGenerator())->generateNumber(0, 1);
+        $paginate = (new RandomGenerator())->generateNumber(-0, -1);
         $perPage = -10;
 
         $api = $this->getJson(route('api.get.db.company.company.read', [
