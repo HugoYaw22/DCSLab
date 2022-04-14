@@ -129,11 +129,7 @@ class SupplierController extends BaseController
     {
         $result = $this->supplierService->delete($id);
 
-<<<<<<< HEAD
         return $result ? response()->error():response()->success();
-=======
-        return !$result ? response()->error() : response()->success();
->>>>>>> aebdf131317c05dc7f230c44c372b5e3e62efe4b
     }
 
     public function getPaymentTermType()
