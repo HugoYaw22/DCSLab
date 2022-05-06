@@ -36,7 +36,6 @@ class WarehouseAPITest extends APITestCase
         $this->actingAs($this->user);
 
         $companyId = $this->user->companies->random(1)->first()->id;
-        $branchId = $this->user->branches->random(1)->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
@@ -47,7 +46,6 @@ class WarehouseAPITest extends APITestCase
 
         $api = $this->json('POST', route('api.post.db.company.warehouse.save'), [
             'company_id' => Hashids::encode($companyId),
-            'branch_id' => Hashids::encode($branchId),
             'code' => $code, 
             'name' => $name,
             'address' => $address,
@@ -74,7 +72,7 @@ class WarehouseAPITest extends APITestCase
         $this->actingAs($this->user);
 
         $companyId = $this->user->companies->random(1)->first()->id;
-        $branchId = $this->user->branches->random(1)->first()->id;
+        $branchId = $this->company->branches->random(1)->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = '';
@@ -112,7 +110,7 @@ class WarehouseAPITest extends APITestCase
         $this->actingAs($this->user);
 
         $companyId = $this->user->companies->random(1)->first()->id;
-        $branchId = $this->user->branches->random(1)->first()->id;
+        $branchId = $this->company->branches->random(1)->first()->id;
 
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
@@ -229,7 +227,7 @@ class WarehouseAPITest extends APITestCase
         $this->actingAs($this->user);
 
         $companyId = $this->user->companies->random(1)->first()->id;
-        $branchId = $this->user->branches->random(1)->first()->id;
+        $branchId = $this->company->branches->random(1)->first()->id;
 
         $warehouse = Warehouse::create([
             'company_id' => $companyId,
@@ -282,7 +280,7 @@ class WarehouseAPITest extends APITestCase
         $this->actingAs($this->user);
 
         $companyId = $this->user->companies->random(1)->first()->id;
-        $branchId = $this->user->branches->random(1)->first()->id;
+        $branchId = $this->company->branches->random(1)->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = null;
@@ -336,7 +334,7 @@ class WarehouseAPITest extends APITestCase
         $this->actingAs($this->user);
 
         $companyId = $this->user->companies->random(1)->first()->id;
-        $branchId = $this->user->branches->random(1)->first()->id;
+        $branchId = $this->company->branches->random(1)->first()->id;
 
         for ($i = 0; $i < 3; $i++) {
             $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -392,7 +390,7 @@ class WarehouseAPITest extends APITestCase
         $this->actingAs($this->user);
 
         $companyId = $this->user->companies->random(1)->first()->id;
-        $branchId = $this->user->branches->random(1)->first()->id;
+        $branchId = $this->company->branches->random(1)->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
@@ -437,7 +435,7 @@ class WarehouseAPITest extends APITestCase
         $this->actingAs($this->user);
 
         $companyId = $this->user->companies->random(1)->first()->id;
-        $branchId = $this->user->branches->random(1)->first()->id;
+        $branchId = $this->company->branches->random(1)->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
@@ -483,7 +481,7 @@ class WarehouseAPITest extends APITestCase
         $this->actingAs($this->user);
 
         $companyId = $this->user->companies->random(1)->first()->id;
-        $branchId = $this->user->branches->random(1)->first()->id;
+        $branchId = $this->company->branches->random(1)->first()->id;
         $search = "";
         $paginate = 1;
         $perPage = 10;
