@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\ExpenseGroup;
+use App\Models\Employee;
 
-interface ExpenseGroupService
+interface EmployeeService
 {
     public function create(
         int $company_id,
-        string $code,
-        string $name,
-        int $status,
-    ): ?ExpenseGroup;
+        array $user,
+        string $join_date,
+        int $status
+    ): ?Employee;
 
     public function read(
         int $companyId,
@@ -23,10 +23,9 @@ interface ExpenseGroupService
     public function update(
         int $id,
         int $company_id,
-        string $code,
-        string $name,
-        int $status,
-    ): ?ExpenseGroup;
+        int $user_id,
+        int $status
+    ): ?Employee;
 
     public function delete(int $id): bool;
 

@@ -2,8 +2,8 @@
 
 namespace App\Services\Impls;
 
-use App\Services\CashService;
-use App\Models\Cash;
+use App\Services\CustomerService;
+use App\Models\Customer;
 
 use Exception;
 use App\Actions\RandomGenerator;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 
-class CashServiceImpl implements CashService
+class CustomerServiceImpl implements CustomerService
 {
     public function __construct()
     {
@@ -20,11 +20,19 @@ class CashServiceImpl implements CashService
     
     public function create(
         int $company_id,
+        int $customer_group_id,
         string $code,
+        int $is_member,
         string $name,
-        ?int $is_bank = null,
+        ?string $zone = null,
+        int $max_open_invoice,
+        int $max_outstanding_invoice,
+        int $max_invoice_age,
+        int $payment_term,
+        int $tax_id,
+        ?string $remarks = null,
         int $status,
-    ): ?Cash
+    ): ?Customer
     {
         DB::beginTransaction();
 
@@ -33,18 +41,26 @@ class CashServiceImpl implements CashService
                 $code = $this->generateUniqueCode($company_id);
             }
 
-            $cash = new Cash();
-            $cash->company_id = $company_id;
-            $cash->code = $code;
-            $cash->name = $name;
-            $cash->is_bank = $is_bank;
-            $cash->status = $status;
+            $customer = new Customer();
+            $customer->company_id = $company_id;
+            $customer->customer_group_id = $customer_group_id;
+            $customer->code = $code;
+            $customer->is_member = $is_member;
+            $customer->name = $name;
+            $customer->zone = $zone;
+            $customer->max_open_invoice = $max_open_invoice;
+            $customer->max_outstanding_invoice = $max_outstanding_invoice;
+            $customer->max_invoice_age = $max_invoice_age;
+            $customer->payment_term = $payment_term;
+            $customer->tax_id = $tax_id;
+            $customer->remarks = $remarks;
+            $customer->status = $status;
 
-            $cash->save();
+            $customer->save();
 
             DB::commit();
 
-            return $cash;
+            return $customer;
         } catch (Exception $e) {
             DB::rollBack();
             Log::debug($e);
@@ -61,52 +77,68 @@ class CashServiceImpl implements CashService
     {
         if (!$companyId) return null;
 
-        $cash = Cash::with('company')
+        $customer = Customer::with('company')
                     ->whereCompanyId($companyId);
 
         if (empty($search)) {
-            $cash = $cash->latest();
+            $customer = $customer->latest();
         } else {
-            $cash = $cash->where('name', 'like', '%'.$search.'%')->latest();
+            $customer = $customer->where('name', 'like', '%'.$search.'%')->latest();
         }
 
         if ($paginate) {
             $perPage = is_numeric($perPage) ? $perPage : Config::get('const.DEFAULT.PAGINATION_LIMIT');
-            return $cash->paginate($perPage);
+            return $customer->paginate($perPage);
         } else {
-            return $cash->get();
+            return $customer->get();
         }
     }
 
     public function update(
         int $id,
         int $company_id,
+        int $customer_group_id,
         string $code,
+        int $is_member,
         string $name,
-        ?int $is_bank = null,
+        ?string $zone = null,
+        int $max_open_invoice,
+        int $max_outstanding_invoice,
+        int $max_invoice_age,
+        int $payment_term,
+        int $tax_id,
+        ?string $remarks = null,
         int $status,
-    ): ?Cash
+    ): ?Customer
     {
         DB::beginTransaction();
 
         try {
-            $cash = Cash::find($id);
+            $customer = Customer::find($id);
 
             if ($code == Config::get('const.DEFAULT.KEYWORDS.AUTO')) {
                 $code = $this->generateUniqueCode($company_id);
             }
     
-            $cash->update([
+            $customer->update([
                 'company_id' => $company_id,
+                'customer_group_id' => $customer_group_id,
                 'code' => $code,
+                'is_member' => $is_member,
                 'name' => $name,
-                'is_bank' => $is_bank,
+                'zone' => $zone,
+                'max_open_invoice' => $max_open_invoice,
+                'max_outstanding_invoice' => $max_outstanding_invoice,
+                'max_invoice_age' => $max_invoice_age,
+                'payment_term' => $payment_term,
+                'tax_id' => $tax_id,
+                'remarks' => $remarks,
                 'status' => $status,
             ]);
 
             DB::commit();
 
-            return $cash->refresh();
+            return $customer->refresh();
         } catch (Exception $e) {
             DB::rollBack();
             Log::debug($e);
@@ -120,10 +152,10 @@ class CashServiceImpl implements CashService
 
         $retval = false;
         try {
-            $cash = Cash::find($id);
+            $customer = Customer::find($id);
 
-            if ($cash) {
-                $retval = $cash->delete();
+            if ($customer) {
+                $retval = $customer->delete();
             }
 
             DB::commit();
@@ -150,7 +182,7 @@ class CashServiceImpl implements CashService
 
     public function isUniqueCode(string $code, int $companyId, ?int $exceptId = null): bool
     {
-        $result = Cash::whereCompanyId($companyId)->where('code', '=' , $code);
+        $result = Customer::whereCompanyId($companyId)->where('code', '=' , $code);
 
         if($exceptId)
             $result = $result->where('id', '<>', $exceptId);

@@ -2,49 +2,50 @@
 
 namespace App\Services\Impls;
 
-use App\Services\CashService;
-use App\Models\Cash;
-
 use Exception;
+use App\Models\User;
+
+use App\Models\Employee;
 use App\Actions\RandomGenerator;
+use App\Services\EmployeeService;
+use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 
-class CashServiceImpl implements CashService
+class EmployeeServiceImpl implements EmployeeService
 {
-    public function __construct()
-    {
-        
-    }
-    
     public function create(
         int $company_id,
-        string $code,
-        string $name,
-        ?int $is_bank = null,
-        int $status,
-    ): ?Cash
+        array $user,
+        string $join_date,
+        int $status
+    ): ?Employee
     {
         DB::beginTransaction();
 
         try {
-            if ($code == Config::get('const.DEFAULT.KEYWORDS.AUTO')) {
-                $code = $this->generateUniqueCode($company_id);
-            }
+            $userService = app(UserService::class);
+            $user_id = $userService->create(
+                $user[0]['name'],
+                $user[0]['email'],
+                $user[0]['password'],
+                $user[0]['rolesId'],
+                $user[0]['profile']
+            );
+            $user_id = $user_id->id;
+            
+            $employee = new Employee();
+            $employee->company_id = $company_id;
+            $employee->user_id = $user_id;
+            $employee->join_date = $join_date;
+            $employee->status = $status;
 
-            $cash = new Cash();
-            $cash->company_id = $company_id;
-            $cash->code = $code;
-            $cash->name = $name;
-            $cash->is_bank = $is_bank;
-            $cash->status = $status;
-
-            $cash->save();
+            $employee->save();
 
             DB::commit();
 
-            return $cash;
+            return $employee;
         } catch (Exception $e) {
             DB::rollBack();
             Log::debug($e);
@@ -59,54 +60,45 @@ class CashServiceImpl implements CashService
         int $perPage = 10
     )
     {
-        if (!$companyId) return null;
-
-        $cash = Cash::with('company')
-                    ->whereCompanyId($companyId);
+        $employee = Employee::with('company', 'user.profile')->whereCompanyId($companyId);
 
         if (empty($search)) {
-            $cash = $cash->latest();
+            $employee = $employee->latest();
         } else {
-            $cash = $cash->where('name', 'like', '%'.$search.'%')->latest();
+            $employee = $employee->where('name', 'like', '%'.$search.'%')->latest();
         }
 
         if ($paginate) {
             $perPage = is_numeric($perPage) ? $perPage : Config::get('const.DEFAULT.PAGINATION_LIMIT');
-            return $cash->paginate($perPage);
+            return $employee->paginate($perPage);
         } else {
-            return $cash->get();
+            return $employee->get();
         }
     }
 
     public function update(
         int $id,
         int $company_id,
-        string $code,
-        string $name,
-        ?int $is_bank = null,
-        int $status,
-    ): ?Cash
+        int $user_id,
+        int $status
+    ): ?Employee
     {
         DB::beginTransaction();
 
         try {
-            $cash = Cash::find($id);
-
-            if ($code == Config::get('const.DEFAULT.KEYWORDS.AUTO')) {
-                $code = $this->generateUniqueCode($company_id);
-            }
+            $employee = Employee::find($id);
     
-            $cash->update([
+            $employee->update([
                 'company_id' => $company_id,
-                'code' => $code,
-                'name' => $name,
-                'is_bank' => $is_bank,
+                'user_id' => $user_id,
                 'status' => $status,
             ]);
 
+            $user_id = new User;
+
             DB::commit();
 
-            return $cash->refresh();
+            return $employee->refresh();
         } catch (Exception $e) {
             DB::rollBack();
             Log::debug($e);
@@ -120,10 +112,10 @@ class CashServiceImpl implements CashService
 
         $retval = false;
         try {
-            $cash = Cash::find($id);
+            $employee = Employee::find($id);
 
-            if ($cash) {
-                $retval = $cash->delete();
+            if ($employee) {
+                $retval = $employee->delete();
             }
 
             DB::commit();
@@ -150,7 +142,7 @@ class CashServiceImpl implements CashService
 
     public function isUniqueCode(string $code, int $companyId, ?int $exceptId = null): bool
     {
-        $result = Cash::whereCompanyId($companyId)->where('code', '=' , $code);
+        $result = Employee::whereCompanyId($companyId)->where('code', '=' , $code);
 
         if($exceptId)
             $result = $result->where('id', '<>', $exceptId);
