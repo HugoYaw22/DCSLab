@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Enums\ActiveStatus;
 use App\Enums\UserRoles;
-use App\Rules\uniqueCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
@@ -53,7 +52,7 @@ class BranchRequest extends FormRequest
             case 'store':
                 $rules_store = [
                     'company_id' => ['required', 'bail'],
-                    'code' => ['required', 'max:255', new uniqueCode(table: 'branches', companyId: $companyId)],
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|max:255',
                     'status' => [new Enum(ActiveStatus::class)]
                 ];
@@ -61,7 +60,7 @@ class BranchRequest extends FormRequest
             case 'update':
                 $rules_update = [
                     'company_id' => ['required', 'bail'],
-                    'code' => new uniqueCode(table: 'branches', companyId: $companyId, exceptId: $this->route('id')),
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|max:255',
                     'status' => [new Enum(ActiveStatus::class)]
                 ];
