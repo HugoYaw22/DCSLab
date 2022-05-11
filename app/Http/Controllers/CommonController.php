@@ -23,6 +23,14 @@ class CommonController extends BaseController
         ];
     }
 
+    public function getIsBank()
+    {
+        return [
+            ['name' => 'components.dropdown.values.is_bankDDL.active', 'code' => ActiveStatus::ACTIVE->name],
+            ['name' => 'components.dropdown.values.is_bankDDL.inactive', 'code' => ActiveStatus::INACTIVE->name],
+        ];
+    }
+
     public function getStatus()
     {
         return [

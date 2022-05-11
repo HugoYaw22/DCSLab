@@ -163,6 +163,7 @@ Route::group(['prefix' => 'get', 'middleware' => ['auth:sanctum', 'throttle:100,
         Route::group(['prefix' => 'common', 'as' => '.common'], function() {
             Route::group(['prefix' => 'ddl', 'as' => '.ddl'], function() {
                 Route::get('list/countries', [CommonController::class, 'getCountries'])->name('.list.countries');
+                Route::get('list/is_bank', [CommonController::class, 'getStatus'])->name('.list.is_bank');
                 Route::get('list/statuses', [CommonController::class, 'getStatus'])->name('.list.statuses');
             });
 
