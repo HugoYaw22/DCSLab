@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\ActiveStatus;
-use App\Enums\UserRoles;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 use Vinkla\Hashids\Facades\Hashids;
 
-class WarehouseRequest extends FormRequest
+class CapitalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,16 +16,6 @@ class WarehouseRequest extends FormRequest
     public function authorize()
     {
         return Auth::check();
-
-        if (!Auth::check()) return false;
-        if (empty(Auth::user()->roles)) return false;
-
-        if (Auth::user()->hasRole(UserRoles::DEVELOPER->value)) return true;
-
-        if ($this->route()->getActionMethod() == 'store' && !Auth::user()->hasPermission('create-warehouse')) return false;
-        if ($this->route()->getActionMethod() == 'update' && !Auth::user()->hasPermission('update-warehouse')) return false;
-
-        return false;
     }
 
     /**
@@ -52,19 +39,19 @@ class WarehouseRequest extends FormRequest
             case 'store':
                 $rules_store = [
                     'company_id' => ['required', 'bail'],
-                    'branch_id' => ['required'],
-                    'code' => ['required', 'max:255', new uniqueCode(table: 'warehouses', companyId: $companyId)],
-                    'name' => 'required|max:255',
-                    'status' => [new Enum(ActiveStatus::class)]
+                    'ref_number' => 'required|integer|digits_between:1,255',
+                    'group_id' => 'required',
+                    'capital_status' => 'required',
+                    'amount' => 'required|integer|digits_between:1,29',
                 ];
                 return array_merge($rules_store, $nullableArr);
             case 'update':
                 $rules_update = [
                     'company_id' => ['required', 'bail'],
-                    'branch_id' => ['required'],
-                    'code' => new uniqueCode(table: 'warehouses', companyId: $companyId, exceptId: $this->route('id')),
-                    'name' => 'required|max:255',
-                    'status' => [new Enum(ActiveStatus::class)]
+                    'ref_number' => 'required|integer|digits_between:1,255',
+                    'group_id' => 'required',
+                    'capital_status' => 'required',
+                    'amount' => 'required|integer|digits_between:1,29',
                 ];
                 return array_merge($rules_update, $nullableArr);
             default:
@@ -79,19 +66,5 @@ class WarehouseRequest extends FormRequest
         return [
             'company_id' => trans('validation_attributes.company'),
         ];
-    }
-
-    public function validationData()
-    {
-        $additionalArray = [];
-
-        return array_merge($this->all(), $additionalArray);
-    }
-
-    public function prepareForValidation()
-    {
-        $this->merge([
-            'status' => ActiveStatus::isValid($this->status) ? ActiveStatus::fromName($this->status)->value : -1
-        ]);
     }
 }
