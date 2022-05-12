@@ -20,7 +20,11 @@ class BrandServiceImpl implements BrandService
         
     }
 
-    public function create(int $company_id, string $code, string $name): Brand
+    public function create(
+        int $company_id,
+        string $code,
+        string $name
+        ): Brand
     {
         DB::beginTransaction();
         $timer_start = microtime(true);
@@ -39,6 +43,8 @@ class BrandServiceImpl implements BrandService
 
             DB::commit();
 
+            $this->flushCache();
+
             return $productbrand;
         } catch (Exception $e) {
             DB::rollBack();
@@ -50,23 +56,49 @@ class BrandServiceImpl implements BrandService
         }
     }
 
-    public function read(int $companyId, string $search = '', bool $paginate = true, int $page, ?int $perPage = 10)
+    public function read(
+        int $companyId,
+        string $search = '',
+        bool $paginate = true,
+        int $page,
+        int $perPage = 10,
+        bool $useCache = true
+    )
     {
         $timer_start = microtime(true);
 
         try {
+            $cacheKey = '';
+            if ($useCache) {
+                $cacheKey = 'read_'.(empty($search) ? '[empty]':$search).'-'.$paginate.'-'.$page.'-'.$perPage;
+                $cacheResult = $this->readFromCache($cacheKey);
+
+                if (!is_null($cacheResult)) return $cacheResult;
+            }
+
+            $result = null;
+
+            if (!$companyId) return null;
+
+            $productbrand = Brand::with('company')
+                        ->whereCompanyId($companyId);
+    
             if (empty($search)) {
-                $pb = Brand::whereCompanyId($companyId)->latest();
+                $productbrand = $productbrand->latest();
             } else {
-                $pb = Brand::whereCompanyId($companyId)->where('name', 'like', '%'.$search.'%')->latest();
+                $productbrand = $productbrand->where('name', 'like', '%'.$search.'%')->latest();
             }
     
             if ($paginate) {
                 $perPage = is_numeric($perPage) ? $perPage : Config::get('const.DEFAULT.PAGINATION_LIMIT');
-                return $pb->paginate($perPage);
+                $result = $productbrand->paginate($perPage);
             } else {
-                return $pb->get();
+                $result = $productbrand->get();
             }
+
+            if ($useCache) $this->saveToCache($cacheKey, $result);
+            
+            return $result;
         } catch (Exception $e) {
             Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
             return Config::get('const.DEFAULT.ERROR_RETURN_VALUE');
@@ -137,7 +169,12 @@ class BrandServiceImpl implements BrandService
         }
     }
 
-    public function update(int $id, int $company_id, string $code, string $name): Brand
+    public function update(
+        int $id,
+        int $company_id,
+        string $code,
+        string $name
+        ): Brand
     {
         DB::beginTransaction();
         $timer_start = microtime(true);
@@ -152,6 +189,8 @@ class BrandServiceImpl implements BrandService
             ]);
 
             DB::commit();
+
+            $this->flushCache();
 
             return $productbrand->refresh();
         } catch (Exception $e) {
@@ -177,6 +216,8 @@ class BrandServiceImpl implements BrandService
             }
 
             DB::commit();
+
+            $this->flushCache();
 
             return $retval;
         } catch (Exception $e) {
