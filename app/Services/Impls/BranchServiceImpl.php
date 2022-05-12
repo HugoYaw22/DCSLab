@@ -52,6 +52,8 @@ class BranchServiceImpl implements BranchService
 
             DB::commit();
 
+            $this->flushCache();
+
             return $branch;
         } catch (Exception $e) {
             DB::rollBack();
@@ -68,12 +70,23 @@ class BranchServiceImpl implements BranchService
         string $search = '',
         bool $paginate = true,
         int $page,
-        int $perPage = 10
+        int $perPage = 10,
+        bool $useCache = true
     )
     {
         $timer_start = microtime(true);
 
         try {
+            $cacheKey = '';
+            if ($useCache) {
+                $cacheKey = 'read_'.(empty($search) ? '[empty]':$search).'-'.$paginate.'-'.$page.'-'.$perPage;
+                $cacheResult = $this->readFromCache($cacheKey);
+
+                if (!is_null($cacheResult)) return $cacheResult;
+            }
+
+            $result = null;
+
             if (!$companyId) return null;
 
             $branch = Branch::with('company')
@@ -87,10 +100,14 @@ class BranchServiceImpl implements BranchService
     
             if ($paginate) {
                 $perPage = is_numeric($perPage) ? $perPage : Config::get('const.DEFAULT.PAGINATION_LIMIT');
-                return $branch->paginate($perPage);
+                $result = $branch->paginate($perPage);
             } else {
-                return $branch->get();
+                $result = $branch->get();
             }
+
+            if ($useCache) $this->saveToCache($cacheKey, $result);
+            
+            return $result;
         } catch (Exception $e) {
             Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
             return Config::get('const.DEFAULT.ERROR_RETURN_VALUE');
@@ -175,6 +192,8 @@ class BranchServiceImpl implements BranchService
 
             DB::commit();
 
+            $this->flushCache();
+
             return $branch->refresh();
         } catch (Exception $e) {
             DB::rollBack();
@@ -200,6 +219,8 @@ class BranchServiceImpl implements BranchService
             }
 
             DB::commit();
+
+            $this->flushCache();
 
             return $retval;
         } catch (Exception $e) {

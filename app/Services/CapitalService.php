@@ -22,7 +22,9 @@ interface CapitalService
         int $companyId,
         string $search = '',
         bool $paginate = true,
-        int $perPage = 10
+        int $page,
+        int $perPage = 10,
+        bool $useCache = true
     );
 
     public function update(

@@ -6,11 +6,12 @@ use Exception;
 use App\Models\User;
 
 use App\Models\Employee;
+use App\Services\UserService;
 use App\Actions\RandomGenerator;
 use App\Services\EmployeeService;
-use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
 class EmployeeServiceImpl implements EmployeeService
@@ -23,6 +24,7 @@ class EmployeeServiceImpl implements EmployeeService
     ): ?Employee
     {
         DB::beginTransaction();
+        $timer_start = microtime(true);
 
         try {
             $userService = app(UserService::class);
@@ -45,11 +47,16 @@ class EmployeeServiceImpl implements EmployeeService
 
             DB::commit();
 
+            $this->flushCache();
+
             return $employee;
         } catch (Exception $e) {
             DB::rollBack();
-            Log::debug($e);
+            Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
             return Config::get('const.ERROR_RETURN_VALUE');
+        } finally {
+            $execution_time = microtime(true) - $timer_start;
+            Log::channel('perfs')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' ('.number_format($execution_time, 1).'s)');
         }
     }
 
@@ -57,22 +64,91 @@ class EmployeeServiceImpl implements EmployeeService
         int $companyId,
         string $search = '',
         bool $paginate = true,
-        int $perPage = 10
+        int $page,
+        int $perPage = 10,
+        bool $useCache = true
     )
     {
-        $employee = Employee::with('company', 'user.profile')->whereCompanyId($companyId);
+        $timer_start = microtime(true);
 
-        if (empty($search)) {
-            $employee = $employee->latest();
-        } else {
-            $employee = $employee->where('name', 'like', '%'.$search.'%')->latest();
+        try {
+            $cacheKey = '';
+            if ($useCache) {
+                $cacheKey = 'read_'.(empty($search) ? '[empty]':$search).'-'.$paginate.'-'.$page.'-'.$perPage;
+                $cacheResult = $this->readFromCache($cacheKey);
+
+                if (!is_null($cacheResult)) return $cacheResult;
+            }
+
+            $result = null;
+
+            if (!$companyId) return null;
+
+            $employee = Employee::with('company')
+                        ->whereCompanyId($companyId);
+    
+            if (empty($search)) {
+                $employee = $employee->latest();
+            } else {
+                $employee = $employee->where('name', 'like', '%'.$search.'%')->latest();
+            }
+    
+            if ($paginate) {
+                $perPage = is_numeric($perPage) ? $perPage : Config::get('const.DEFAULT.PAGINATION_LIMIT');
+                $result = $employee->paginate($perPage);
+            } else {
+                $result = $employee->get();
+            }
+
+            if ($useCache) $this->saveToCache($cacheKey, $result);
+            
+            return $result;
+        } catch (Exception $e) {
+            Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
+            return Config::get('const.DEFAULT.ERROR_RETURN_VALUE');
+        } finally {
+            $execution_time = microtime(true) - $timer_start;
+            Log::channel('perfs')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' ('.number_format($execution_time, 1).'s)');
         }
+    }
 
-        if ($paginate) {
-            $perPage = is_numeric($perPage) ? $perPage : Config::get('const.DEFAULT.PAGINATION_LIMIT');
-            return $employee->paginate($perPage);
-        } else {
-            return $employee->get();
+    private function readFromCache($key)
+    {
+        try {
+            if (!Config::get('const.DEFAULT.DATA_CACHE.ENABLED')) return Config::get('const.DEFAULT.ERROR_RETURN_VALUE');
+
+            if (!Cache::tags([auth()->user()->id, class_basename(__CLASS__)])->has($key)) return Config::get('const.DEFAULT.ERROR_RETURN_VALUE');
+
+            return Cache::tags([auth()->user()->id, class_basename(__CLASS__)])->get($key);
+        } catch (Exception $e) {
+            Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
+            return Config::get('const.DEFAULT.ERROR_RETURN_VALUE');
+        } finally {
+            Log::channel('cachehits')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' Key: '.$key. ', Tags: ['.auth()->user()->id.', '.class_basename(__CLASS__).']');
+        }
+    }
+
+    private function saveToCache($key, $val)
+    {
+        try {
+            if (empty($key)) return;
+
+            Cache::tags([auth()->user()->id, class_basename(__CLASS__)])->add($key, $val, Config::get('const.DEFAULT.DATA_CACHE.CACHE_TIME.ENV'));
+        } catch (Exception $e) {
+            Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
+        } finally {
+            Log::channel('cachehits')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' Key: '.$key. ', Tags: ['.auth()->user()->id.', '.class_basename(__CLASS__).']');
+        }
+    }
+
+    private function flushCache()
+    {
+        try {
+            Cache::tags([auth()->user()->id, class_basename(__CLASS__)])->flush();
+        } catch (Exception $e) {
+            Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
+        } finally {
+            Log::channel('cachehits')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' Tags: ['.(is_null(auth()->user()) ? '':auth()->id()).', '.class_basename(__CLASS__).']');
         }
     }
 
@@ -84,6 +160,7 @@ class EmployeeServiceImpl implements EmployeeService
     ): ?Employee
     {
         DB::beginTransaction();
+        $timer_start = microtime(true);
 
         try {
             $employee = Employee::find($id);
@@ -98,17 +175,23 @@ class EmployeeServiceImpl implements EmployeeService
 
             DB::commit();
 
+            $this->flushCache();
+
             return $employee->refresh();
         } catch (Exception $e) {
             DB::rollBack();
-            Log::debug($e);
+            Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
             return Config::get('const.ERROR_RETURN_VALUE');
+        } finally {
+            $execution_time = microtime(true) - $timer_start;
+            Log::channel('perfs')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' ('.number_format($execution_time, 1).'s)');
         }
     }
 
     public function delete(int $id): bool
     {
         DB::beginTransaction();
+        $timer_start = microtime(true);
 
         $retval = false;
         try {
@@ -120,11 +203,16 @@ class EmployeeServiceImpl implements EmployeeService
 
             DB::commit();
 
+            $this->flushCache();
+
             return $retval;
         } catch (Exception $e) {
             DB::rollBack();
-            Log::debug($e);
+            Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
             return Config::get('const.ERROR_RETURN_VALUE');
+        } finally {
+            $execution_time = microtime(true) - $timer_start;
+            Log::channel('perfs')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' ('.number_format($execution_time, 1).'s)');
         }
     }
 
