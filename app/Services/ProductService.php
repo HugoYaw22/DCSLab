@@ -56,9 +56,9 @@ interface ProductService
 
     public function delete(int $id): bool;
 
-public function generateUniqueCodeForProduct(): string;
+    public function generateUniqueCodeForProduct(): string;
 
-public function generateUniqueCodeForProductUnits(): string;
+    public function generateUniqueCodeForProductUnits(): string;
 
     public function isUniqueCodeForProduct(string $code, int $companyId, ?int $exceptId = null): bool;
 
