@@ -4,9 +4,9 @@ import Cash from "@/views/cash/Cash.vue";
 import Capital from "@/views/capital/Capital.vue";
 import CapitalGroup from "@/views/capitalgroup/CapitalGroup.vue";
 import Expense from "@/views/expense/Expense.vue";
-import ExpenseGroup from "@/views/expensegroup/ExpenseGroup.vue";
+import ExpenseGroup from "@/views/expense_group/ExpenseGroup.vue";
 import Income from "@/views/income/Income.vue";
-import IncomeGroup from "@/views/incomegroup/IncomeGroup.vue";
+import IncomeGroup from "@/views/income_group/IncomeGroup.vue";
 import Investor from "@/views/investor/Investor.vue";
 
 const root = '/dashboard';
@@ -18,8 +18,8 @@ export default {
         {
             path: root + '/cash' + '/cash',
             name: 'side-menu-cash-cash',
-            component: Company,
-            meta: { 
+            component: Cash,
+            meta: {
                 remember: true,
                 log_route: true 
             }
@@ -72,7 +72,7 @@ export default {
         {
             path: root + '/cash' + '/income' + '/incomegroup',
             name: 'side-menu-cash-income-incomegroup',
-            component: ExpenseGroup,
+            component: IncomeGroup,
             meta: { 
                 remember: true,
                 log_route: true

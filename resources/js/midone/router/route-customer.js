@@ -1,7 +1,7 @@
 import SideMenu from "@/layouts/side-menu/Main.vue";
 
 import Customer from "@/views/customer/Customer.vue";
-import CustpmerGroup from "@/views/branch/CustpmerGroup.vue";
+import CustomerGroup from "@/views/customer_group/CustomerGroup.vue";
 
 const root = '/dashboard';
 

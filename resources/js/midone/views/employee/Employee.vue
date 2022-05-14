@@ -23,19 +23,17 @@
                                     <CheckCircleIcon v-if="item.status === 1" />
                                     <XIcon v-if="item.status === 0" />
                                 </td>
-                                <td class="table-report__action w-56">
+                                <td class="table-report__action w-12">
                                     <div class="flex justify-center items-center">
-                                        <a class="flex items-center mr-3" href="" @click.prevent="showSelected(itemIdx)">
-                                            <InfoIcon class="w-4 h-4 mr-1" />
-                                            {{ t('components.data-list.view') }}
-                                        </a>
-                                        <a class="flex items-center mr-3" href="" @click.prevent="editSelected(itemIdx)">
-                                            <CheckSquareIcon class="w-4 h-4 mr-1" />
-                                            {{ t('components.data-list.edit') }}
-                                        </a>
-                                        <a class="flex items-center text-danger" href="javascript:;" data-toggle="modal" data-target="#delete-confirmation-modal" @click="deleteSelected(itemIdx)">
-                                            <Trash2Icon class="w-4 h-4 mr-1" /> {{ t('components.data-list.delete') }}
-                                        </a>
+                                        <Tippy tag="a" href="javascript:;" class="tooltip p-2 hover:border" :content="t('components.data-list.view')" @click.prevent="showSelected(itemIdx)">
+                                            <InfoIcon class="w-4 h-4" />
+                                        </Tippy>
+                                        <Tippy tag="a" href="javascript:;" class="tooltip p-2 hover:border" :content="t('components.data-list.edit')" @click.prevent="editSelected(itemIdx)">
+                                            <CheckSquareIcon class="w-4 h-4" />
+                                        </Tippy>
+                                        <Tippy tag="a" href="javascript:;" class="tooltip p-2 hover:border" :content="t('components.data-list.delete')" @click.prevent="deleteSelected(itemIdx)">
+                                            <Trash2Icon class="w-4 h-4 text-danger" />
+                                        </Tippy>
                                     </div>
                                 </td>
                             </tr>
@@ -276,134 +274,8 @@ const employee = ref({
     join_date: '',
     status: 1,
 });
-const statusDDL = ref([]);
 const companyDDL = ref([]);
-//#endregion
-
-//#region onMounted
-onMounted(() => {
-    if (selectedUserCompany.value !== '') {
-        getAllEmployees({ page: 1 });
-        getDDLSync();
-    } else  {
-        
-    }
-
-    getDDL();
-
-    loading.value = false;
-});
-//#endregion
-
-//#region Methods
-const getAllEmployees = (args) => {
-    employeeList.value = {};
-    if (args.pageSize === undefined) args.pageSize = 10;
-    if (args.search === undefined) args.search = '';
-
-    let companyId = selectedUserCompany.value;
-
-    axios.get(route('api.get.db.company.employee.read', { "companyId": companyId, "page": args.page, "perPage": args.pageSize, "search": args.search })).then(response => {
-        employeeList.value = response.data;
-        loading.value = false;
-    });
-}
-
-const getDDL = () => {
-    axios.get(route('api.get.db.common.ddl.list.statuses')).then(response => {
-        statusDDL.value = response.data;
-    });
-}
-
-const getDDLSync = () => {
-    axios.get(route('api.get.db.company.company.read.all_active', {
-            companyId: selectedUserCompany.value,
-            paginate: false
-        })).then(response => {
-            companyDDL.value = response.data;
-    });
-}
-
-const onSubmit = (values, actions) => {
-    loading.value = true;
-
-    var formData = new FormData(dom('#employeeForm')[0]); 
-    formData.append('company_id', selectedUserCompany.value);
-    
-    if (mode.value === 'create') {
-        axios.post(route('api.post.db.company.employee.save'), formData).then(response => {
-            backToList();
-        }).catch(e => {
-            handleError(e, actions);
-        }).finally(() => {
-            loading.value = false;
-        });
-    } else if (mode.value === 'edit') {
-        axios.post(route('api.post.db.company.employee.edit', employee.value.hId), formData).then(response => {
-            actions.resetForm();
-            backToList();
-        }).catch(e => {
-            handleError(e, actions);
-        }).finally(() => {
-            loading.value = false;
-        });
-    } else { }
-}
-
-const handleError = (e, actions) => {
-    //Laravel Validations
-    if (e.response.data.errors !== undefined && Object.keys(e.response.data.errors).length > 0) {
-        for (var key in e.response.data.errors) {
-            for (var i = 0; i < e.response.data.errors[key].length; i++) {
-                actions.setFieldError(key, e.response.data.errors[key][i]);
-            }
-        }
-        alertErrors.value = e.response.data.errors;
-    } else {
-        //Catch From Controller
-        alertErrors.value = {
-            controller: e.response.status + ' ' + e.response.statusText +': ' + e.response.data.message
-        };
-    }
-}
-
-const invalidSubmit = (e) => {
-    alertErrors.value = e.errors;
-}
-
-const reValidate = (errors) => {
-    alertErrors.value = errors;
-}
-
-const emptyEmployee = () => {
-    return {
-        company: { 
-            hId: '',
-            name: '' 
-        },
-        user: {
-            hId: '',
-            name: '',
-            email: '',
-            profile: {
-                hId: '',
-                img_path: '',
-                address: '',
-                city: '',
-                postal_code: '',
-                country: '',
-                tax_id: '',
-                ic_num: '',
-                remarks: '',
-                status: 1,
-            },
-        },
-        join_date: '',
-        status: 1,
-    }
-}
 const statusDDL = ref([]);
-const companyDDL = ref([]);
 //#endregion
 
 //#region onMounted
@@ -519,31 +391,30 @@ const reValidate = (errors) => {
 
 const emptyEmployee = () => {
     return {
+        user: {
         company: { 
             hId: '',
             name: '' 
         },
-        user: {
+        hId: '',
+        name: '',
+        email: '',
+        profile: {
             hId: '',
-            name: '',
-            email: '',
-            profile: {
-                hId: '',
-                img_path: '',
-                address: '',
-                city: '',
-                postal_code: '',
-                country: '',
-                tax_id: '',
-                ic_num: '',
-                remarks: '',
-                status: 1,
-            },
+            img_path: '',
+            address: '',
+            city: '',
+            postal_code: '',
+            country: '',
+            tax_id: '',
+            ic_num: '',
+            remarks: '',
+            status: 1,
         },
-        join_date: '',
-        status: 1,
-    }
-} 
+    },
+    join_date: '',
+    status: 1,
+}
 
 const resetAlertErrors = () => {
     alertErrors.value = [];
