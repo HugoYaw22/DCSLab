@@ -28,7 +28,8 @@ interface SupplierService
         string $search = '',
         bool $paginate = true,
         int $page,
-        int $perPage = 10
+        int $perPage = 10, 
+        bool $useCache = true
     );
 
     public function update(
