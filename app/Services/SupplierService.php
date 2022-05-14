@@ -51,7 +51,7 @@ interface SupplierService
 
     public function delete(int $id): bool;
 
-    public function generateUniqueCode(int $companyId): string;
+    public function generateUniqueCode(): string;
 
     public function isUniqueCode(string $code, int $companyId, ?int $exceptId = null): bool;
 }

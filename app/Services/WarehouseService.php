@@ -23,8 +23,7 @@ interface WarehouseService
         string $search = '',
         bool $paginate = true,
         int $page,
-        int $perPage = 10,
-        bool $useCache = true
+        int $perPage = 10
     );
 
     public function update(
@@ -42,7 +41,7 @@ interface WarehouseService
 
     public function delete(int $id): bool;
 
-    public function generateUniqueCode(int $companyId): string;
+    public function generateUniqueCode(): string;
 
     public function isUniqueCode(string $code, int $companyId, ?int $exceptId = null): bool;
 }
