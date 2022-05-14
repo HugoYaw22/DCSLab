@@ -8,11 +8,24 @@
             "company-company": "Perusahaan",
             "company-branch": "Cabang",
             "company-warehouse": "Gudang",
-            "supplier": "Supplier",
-            "supplier-supplier": "Supplier",
-            "product": "Product",
-            "product-product": "Product",
+            "company-employee": "Karyawan",
+            "cash": "Kas",
+            "cash-cash": "Kas",
+            "cash-capital": "Modal",
+            "cash-capital_group": "Kelompok Modal",
+            "cash-expense": "Pengeluaran",
+            "cash-expense_group": "Kelompok Pengeluaran",
+            "cash-income": "Pendapatan",
+            "cash-income_group": "Kelompok Pendapatan",
+            "cash-investor": "Penananm Modal",
+            "supplier": "Pemasok",
+            "supplier-supplier": "Pemasok",
+            "product": "Produk",
+            "product-product": "Produk",
             "product-service": "Service",
+            "customer": "Pelanggan",
+            "customer-customer": "Pelanggan",
+            "customer-customer_group": "Kelompok Pelanggan",
             "administrator": "Administrator",
             "administrator-user": "Pengguna",
             "purchase_order": "Pembelian",
@@ -227,7 +240,7 @@
                 "taxable_supply": "Produk Kena Pajak",
                 "standard_rated_supply": "PPN",
                 "price_include_vat": "Harga Termasuk Pajak",
-                "remarks": "Remarks",
+                "remarks": "Keterangan",
                 "point": "Poin",
                 "use_serial_number": "Memakai Nomor Serial",
                 "has_expiry_date": "Tanggal Kadaluarsa",
@@ -278,7 +291,7 @@
                 "payment_term_type": "Ketentuan Pembayaran",
                 "payment_term": "Tempo",
                 "tax_id": "NPWP",
-                "remarks": "Remarks",
+                "remarks": "Keterangan",
                 "status": "Status",
                 "poc": {
                     "label": "Penanggung Jawab",
@@ -378,6 +391,321 @@
                 "address": "Alamat",
                 "city": "Kota",
                 "contact": "Kontak",
+                "remarks": "Keterangan",
+                "status": "Status"
+            }
+        }
+        ,
+        "employee": {
+            "table": {
+                "title": "Daftar Karyawan",
+                "cols": {
+                    "company": "Persusahaan",
+                    "name": "Nama",
+                    "email": "Email",
+                    "status": "Status"
+                }
+            },
+            "actions": {
+                "create": "Tambah Karyawan",
+                "edit": "Ubah Karyawan",
+                "show": "Tampilkan Karyawan",
+                "delete": "Hapus Karyawan"
+            },
+            "fields": {
+                "company_id": "Nama Perusahaan",
+                "name": "Nama",
+                "email": "Email",
+                "address": "Alamat",
+                "city": "Kota",
+                "postal_code": "Kode Pos",
+                "country": "Negara",
+                "tax_id": "Nomor Pajak",
+                "ic_num": "Nomor KTP",
+                "status": "Status",
+                "remarks": "Keterangan"
+            }
+        }
+        ,
+        "cash": {
+            "table": {
+                "title": "Daftar Kas",
+                "cols": {
+                    "code": "Kode",
+                    "name": "Nama",
+                    "is_bank": "Bank",
+                    "status": "Status"
+                }
+            },
+            "actions": {
+                "create": "Tambah Kas",
+                "edit": "Ubah Kas",
+                "show": "Tampilkan Kas",
+                "delete": "Hapus Kas"
+            },
+            "fields": {
+                "code": "Kode",
+                "name": "Nama",
+                "is_bank": "Bank",
+                "status": "Status"
+            }
+        }
+        ,
+        "capital": {
+            "table": {
+                "title": "Daftar Modal",
+                "cols": {
+                    "ref_number": "Ref Number",
+                    "date": "Tanggal",
+                    "investor": "Penanam Modal",
+                    "capital_group": "Kelompok Modal",
+                    "cash": "Kas",
+                    "capital_status": "Status Modal",
+                    "amount": "Jumlah",
+                    "remarks": "Keterangan"
+                }
+            },
+            "actions": {
+                "create": "Tambah Modal",
+                "edit": "Ubah Modal",
+                "show": "Tampilkan Modal",
+                "delete": "Hapus Modal"
+            },
+            "fields": {
+                "ref_number": "Ref Number",
+                "date": "Tanggal",
+                "investor": "Penanam Modal",
+                "capital_group": "Kelompok Modal",
+                "cash": "Kas",
+                "capital_status": "Status Modal",
+                "amount": "Jumlah",
+                "remarks": "Keterangan"
+            }
+        }
+        ,
+        "capital_group": {
+            "table": {
+                "title": "Daftar Kelompok Modal",
+                "cols": {
+                    "code": "Kode",
+                    "name": "Nama"
+                }
+            },
+            "actions": {
+                "create": "Tambah Kelompok Modal",
+                "edit": "Ubah Kelompok Modal",
+                "show": "Tampilkan Kelompok Modal",
+                "delete": "Hapus Kelompok Modal"
+            },
+            "fields": {
+                "company_id": "Perusahaan",
+                "code": "Kode",
+                "name": "Nama"
+            }
+        }
+        ,
+        "customer": {
+            "table": {
+                "title": "Daftar Pelanggan",
+                "cols": {
+                    "code": "Kode",
+                    "name": "Nama",
+                    "is_member": "Kartu Anggota",
+                    "customer_group_id": "Kelompok Pelanggan",
+                    "zone": "Daerah",
+                    "remarks": "Keterangan",
+                    "status": "Status"
+                }
+            },
+            "actions": {
+                "create": "Tambah Pelanggan",
+                "edit": "Ubah Pelanggan",
+                "show": "Tampilkan Pelanggan",
+                "delete": "Hapus Pelanggan"
+            },
+            "fields": {
+                "code": "Kode",
+                "name": "Nama",
+                "is_member": "Kartu Anggota",
+                "customer_group_id": "Kelompok Pelanggan",
+                "zone": "Daerah",
+                "max_open_invoice": "Batas Nota",
+                "max_outstanding_invoice": "Batas Nominal",
+                "max_invoice_age": "Batas Umur Nota",
+                "payment_term": "Tempo",
+                "address": "Alamat",
+                "city": "Kota",
+                "contact": "Kontak",
+                "tax_id": "Nomor Pajak",
+                "remarks": "Keterangan",
+                "status": "Status"
+            }
+        }
+        ,
+        "customer_group": {
+            "table": {
+                "title": "Daftar Kelompok Pelanggan",
+                "cols": {
+                    "code": "Kode",
+                    "name": "Nama",
+                    "remarks": "Keterangan",
+                    "cash_id": "Default Pembayaran"
+                }
+            },
+            "actions": {
+                "create": "Tambah Kelompok Pelanggan",
+                "edit": "Ubah Kelompok Pelanggan",
+                "show": "Tampilkan Kelompok Pelanggan",
+                "delete": "Hapus Kelompok Pelanggan"
+            },
+            "fields": {
+                "code": "Kode",
+                "name": "Nama",
+                "max_open_invoice": "Batas Nota",
+                "max_outstanding_invoice": "Batas Nominal",
+                "max_invoice_age": "Batas Umur Nota",
+                "payment_term": "Tempo",
+                "selling_point": "Poin Penjualan",
+                "selling_point_multiple": "Kelipatan Poin Penjualan",
+                "sell_at_cost": "Jual Dengan Harga Modal",
+                "price_markup_percent": "Kenaikan Harga Global %",
+                "price_markup_nominal": "Kenaikan Harga Global Rp",
+                "price_markdown_percent": "Diskon Global %",
+                "price_markdown_nominal": "Diskon Global Rp",
+                "round_on": "Pembulatan",
+                "round_digit": "Angka Pembulatan",
+                "remarks": "Keterangan",
+                "cash_id": "Default Pembayaran"
+            }
+        }
+        ,
+        "expense": {
+            "table": {
+                "title": "Daftar Pengeluaran",
+                "cols": {
+                    "branch_id": "Cabang",
+                    "code": "Kode",
+                    "date": "Tanggal",
+                    "cash_id": "Kas",
+                    "remarks": "Keterangan"
+                }
+            },
+            "actions": {
+                "create": "Tambah Pengeluaran",
+                "edit": "Ubah Pengeluaran",
+                "show": "Tampilkan Pengeluaran",
+                "delete": "Hapus Pengeluaran"
+            },
+            "fields": {
+                "branch_id": "Cabang",
+                "code": "Kode",
+                "date": "Tanggal",
+                "payment_term_type": "Tempo",
+                "expense_group_id": "Kelompok Pengeluaran",
+                "cash_id": "Kas",
+                "amount": "Nominal Langsung",
+                "amount_owed": "Nominal Terhutang",
+                "remarks": "Keterangan",
+                "posted": "Posted"
+            }
+        }
+        ,
+        "expense_group": {
+            "table": {
+                "title": "Daftar Kelompok Pengeluaran",
+                "cols": {
+                    "code": "Kode",
+                    "name": "Nama"
+                }
+            },
+            "actions": {
+                "create": "Tambah Kelompok Pengeluaran",
+                "edit": "Ubah Kelompok Pengeluaran",
+                "show": "Tampilkan Kelompok Pengeluaran",
+                "delete": "Hapus Kelompok Pengeluaran"
+            },
+            "fields": {
+                "code": "Kode",
+                "name": "Nama"
+            }
+        }
+        ,
+        "income": {
+            "table": {
+                "title": "Daftar Pendapatan",
+                "cols": {
+                    "branch_id": "Cabang",
+                    "code": "Kode",
+                    "date": "Tanggal",
+                    "cash_id": "Kas",
+                    "remarks": "Keterangan"
+                }
+            },
+            "actions": {
+                "create": "Tambah Pendapatan",
+                "edit": "Ubah Pendapatan",
+                "show": "Tampilkan Pendapatan",
+                "delete": "Hapus Pendapatan"
+            },
+            "fields": {
+                "branch_id": "Cabang",
+                "code": "Kode",
+                "date": "Tanggal",
+                "payment_term_type": "Tempo",
+                "income_group_id": "Income Group",
+                "cash_id": "Kas",
+                "amount": "Nominal Langsung",
+                "amount_owed": "Nominal Terhutang",
+                "remarks": "Keterangan",
+                "posted": "Posted"
+            }
+        }
+        ,
+        "income_group": {
+            "table": {
+                "title": "Daftar Kelompok Pendapatan",
+                "cols": {
+                    "code": "Kode",
+                    "name": "Nama"
+                }
+            },
+            "actions": {
+                "create": "Tambah Kelompok Pendapatan",
+                "edit": "Ubah Kelompok Pendapatan",
+                "show": "Tampilkan Kelompok Pendapatan",
+                "delete": "Hapus Kelompok Pendapatan"
+            },
+            "fields": {
+                "code": "Kode",
+                "name": "Nama"
+            }
+        }
+        ,
+        "investor": {
+            "table": {
+                "title": "Daftar Penananm Modal",
+                "cols": {
+                    "code": "Kode",
+                    "name": "Nama",
+                    "city": "Kota",
+                    "tax_number": "Nomor Pajak",
+                    "remarks": "Keterangan",
+                    "status": "Status"
+                }
+            },
+            "actions": {
+                "create": "Tambah Pemasok",
+                "edit": "Ubah Pemasok",
+                "show": "Tampilkan Pemasok",
+                "delete": "Hapus Pemasok"
+            },
+            "fields": {
+                "code": "Kode",
+                "name": "Nama",
+                "address": "Alamat",
+                "city": "Kota",
+                "contact": "Kontak",
+                "tax_number": "Nomor Pajak",
                 "remarks": "Keterangan",
                 "status": "Status"
             }

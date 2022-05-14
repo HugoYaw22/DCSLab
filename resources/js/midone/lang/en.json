@@ -8,11 +8,24 @@
             "company-company": "Company",
             "company-branch": "Branch",
             "company-warehouse": "Warehouse",
+            "company-employee": "Employee",
+            "cash": "Cash",
+            "cash-cash": "Cash",
+            "cash-capital": "Capital",
+            "cash-capital_group": "Capital Group",
+            "cash-expense": "Expense",
+            "cash-expense_group": "Expense Group",
+            "cash-income": "Income",
+            "cash-income_group": "Income Group",
+            "cash-investor": "Investor",
             "supplier": "Supplier",
             "supplier-supplier": "Supplier",
             "product": "Product",
             "product-product": "Product",
             "product-service": "Service",
+            "customer": "Customer",
+            "customer-customer": "Customer",
+            "customer-customer_group": "Customer Group",
             "administrator": "Administrator",
             "administrator-user": "User",
             "purchase_order": "Purchase Order",
@@ -378,6 +391,310 @@
                 "address": "Address",
                 "city": "City",
                 "contact": "Contact",
+                "remarks": "Remarks",
+                "status": "Status"
+            }
+        },
+        "employee": {
+            "table": {
+                "title": "Employee Lists",
+                "cols": {
+                    "company": "Company",
+                    "name": "Name",
+                    "email": "Email",
+                    "status": "Status"
+                }
+            },
+            "actions": {
+                "create": "Create Employee",
+                "edit": "Edit Employee",
+                "show": "Show Employee",
+                "delete": "Delete Employee"
+            },
+            "fields": {
+                "company_id": "Company Name",
+                "name": "Nama",
+                "email": "Email",
+                "address": "Address",
+                "city": "City",
+                "postal_code": "Postal Code",
+                "country": "Country",
+                "tax_id": "Tax ID",
+                "ic_num": "Ic Num",
+                "status": "Status",
+                "remarks": "Remarks"
+            }
+        },
+        "cash": {
+            "table": {
+                "title": "Cash Lists",
+                "cols": {
+                    "code": "Code",
+                    "name": "Name",
+                    "is_bank": "Bank",
+                    "status": "Status"
+                }
+            },
+            "actions": {
+                "create": "Create Cash",
+                "edit": "Edit Cash",
+                "show": "Show Cash",
+                "delete": "Delete Cash"
+            },
+            "fields": {
+                "code": "Code",
+                "name": "Nama",
+                "is_bank": "Bank",
+                "status": "Status"
+            }
+        },
+        "capital": {
+            "table": {
+                "title": "Capital Lists",
+                "cols": {
+                    "ref_number": "Ref Number",
+                    "date": "Date",
+                    "investor": "Investor",
+                    "capital_group": "Capital Group",
+                    "cash": "Cash",
+                    "capital_status": "Capital Status",
+                    "amount": "Amount",
+                    "remarks": "Remarks"
+                }
+            },
+            "actions": {
+                "create": "Create Capital",
+                "edit": "Edit Capital",
+                "show": "Show Capital",
+                "delete": "Delete Capital"
+            },
+            "fields": {
+                "ref_number": "Ref Number",
+                "date": "Date",
+                "investor": "Investor",
+                "capital_group": "Capital Group",
+                "cash": "Cash",
+                "capital_status": "Capital Status",
+                "amount": "Amount",
+                "remarks": "Remarks"
+            }
+        },
+        "capital_group": {
+            "table": {
+                "title": "Capital Group Lists",
+                "cols": {
+                    "code": "Code",
+                    "name": "Name"
+                }
+            },
+            "actions": {
+                "create": "Create Capital Group",
+                "edit": "Edit Capital Group",
+                "show": "Show Capital Group",
+                "delete": "Delete Capital Group"
+            },
+            "fields": {
+                "company_id": "Company",
+                "code": "Code",
+                "name": "Name"
+            }
+        },
+        "customer": {
+            "table": {
+                "title": "Customer Lists",
+                "cols": {
+                    "code": "Code",
+                    "name": "Name",
+                    "is_member": "Member Card",
+                    "customer_group_id": "Customer Group",
+                    "zone": "Zone",
+                    "remarks": "Remarks",
+                    "status": "Status"
+                }
+            },
+            "actions": {
+                "create": "Create Customer",
+                "edit": "Edit Customer",
+                "show": "Show Customer",
+                "delete": "Delete Customer"
+            },
+            "fields": {
+                "code": "Code",
+                "name": "Name",
+                "is_member": "Member Card",
+                "customer_group_id": "Customer Group",
+                "zone": "Zone",
+                "max_open_invoice": "Max Open Invoice",
+                "max_outstanding_invoice": "Max Outstanding Invoice",
+                "max_invoice_age": "Max Invoice Age",
+                "payment_term": "Payment Term",
+                "address": "Address",
+                "city": "City",
+                "contact": "Contact",
+                "tax_id": "Tax ID",
+                "remarks": "Remarks",
+                "status": "Status"
+            }
+        },
+        "customer_group": {
+            "table": {
+                "title": "Customer Group Lists",
+                "cols": {
+                    "code": "Code",
+                    "name": "Name",
+                    "remarks": "Remarks",
+                    "cash_id": "Default Cash Payment"
+                }
+            },
+            "actions": {
+                "create": "Create Customer Group",
+                "edit": "Edit Customer Group",
+                "show": "Show Customer Group",
+                "delete": "Delete Customer Group"
+            },
+            "fields": {
+                "code": "Code",
+                "name": "Name",
+                "max_open_invoice": "Max Open Invoice",
+                "max_outstanding_invoice": "Max Outstanding Invoice",
+                "max_invoice_age": "Max Invoice Age",
+                "payment_term": "Payment Term",
+                "selling_point": "Selling Point",
+                "selling_point_multiple": "Selling Point Multiple",
+                "sell_at_cost": "Sell At Cost",
+                "price_markup_percent": "Price Markup Percent",
+                "price_markup_nominal": "Price Markup Nominal",
+                "price_markdown_percent": "Price Markdown Percent",
+                "price_markdown_nominal": "Price Markdown Nominal",
+                "round_on": "Round On",
+                "round_digit": "Round Digit",
+                "remarks": "Remarks",
+                "cash_id": "Default Cash Payment"
+            }
+        },
+        "expense": {
+            "table": {
+                "title": "Expense Lists",
+                "cols": {
+                    "branch_id": "Branch",
+                    "code": "Code",
+                    "date": "Date",
+                    "cash_id": "Cash",
+                    "remarks": "Remarks"
+                }
+            },
+            "actions": {
+                "create": "Create Expense",
+                "edit": "Edit Expense",
+                "show": "Show Expense",
+                "delete": "Delete Expense"
+            },
+            "fields": {
+                "branch_id": "Branch",
+                "code": "Code",
+                "date": "Date",
+                "payment_term_type": "Payment Term Type",
+                "expense_group_id": "Expense Group",
+                "cash_id": "Cash",
+                "amount": "Amount",
+                "amount_owed": "Amount Owed",
+                "remarks": "Remarks",
+                "posted": "Posted"
+            }
+        },
+        "expense_group": {
+            "table": {
+                "title": "Expense Group Lists",
+                "cols": {
+                    "code": "Code",
+                    "name": "Name"
+                }
+            },
+            "actions": {
+                "create": "Create Expense Group",
+                "edit": "Edit Expense Group",
+                "show": "Show Expense Group",
+                "delete": "Delete Expense Group"
+            },
+            "fields": {
+                "code": "Code",
+                "name": "Name"
+            }
+        },
+        "income": {
+            "table": {
+                "title": "Income Lists",
+                "cols": {
+                    "branch_id": "Branch",
+                    "code": "Code",
+                    "date": "Date",
+                    "cash_id": "Cash",
+                    "remarks": "Remarks"
+                }
+            },
+            "actions": {
+                "create": "Create Income",
+                "edit": "Edit Income",
+                "show": "Show Income",
+                "delete": "Delete Income"
+            },
+            "fields": {
+                "branch_id": "Branch",
+                "code": "Code",
+                "date": "Date",
+                "payment_term_type": "Payment Term Type",
+                "income_group_id": "Income Group",
+                "cash_id": "Cash",
+                "amount": "Amount",
+                "amount_owed": "Amount Owed",
+                "remarks": "Remarks",
+                "posted": "Posted"
+            }
+        },
+        "income_group": {
+            "table": {
+                "title": "Income Group Lists",
+                "cols": {
+                    "code": "Code",
+                    "name": "Name"
+                }
+            },
+            "actions": {
+                "create": "Create Income Group",
+                "edit": "Edit Income Group",
+                "show": "Show Income Group",
+                "delete": "Delete Income Group"
+            },
+            "fields": {
+                "code": "Code",
+                "name": "Name"
+            }
+        },
+        "investor": {
+            "table": {
+                "title": "Investor Lists",
+                "cols": {
+                    "code": "Code",
+                    "name": "Name",
+                    "city": "City",
+                    "tax_number": "Tax Number",
+                    "remarks": "Remarks",
+                    "status": "Status"
+                }
+            },
+            "actions": {
+                "create": "Create Investor",
+                "edit": "Edit Investor",
+                "show": "Show Investor",
+                "delete": "Delete Investor"
+            },
+            "fields": {
+                "code": "Code",
+                "name": "Name",
+                "address": "Address",
+                "city": "City",
+                "contact": "Contact",
+                "tax_number": "Tax Number",
                 "remarks": "Remarks",
                 "status": "Status"
             }
