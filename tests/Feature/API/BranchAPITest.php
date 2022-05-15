@@ -396,7 +396,7 @@ class BranchAPITest extends APITestCase
 
         $api_edit->assertStatus(500);
         $api_edit->assertJsonStructure([
-            'code'
+            'code',
         ]);
     }
 

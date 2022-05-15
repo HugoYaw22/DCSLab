@@ -71,8 +71,8 @@ class BranchController extends BaseController
         } else {
             if (!$this->branchService->isUniqueCode($code, $company_id)) {
                 return response()->error([
-                    'code' => trans('rules.unique_code')
-                ]);
+                    'code' => [trans('rules.unique_code')]
+                ], 422);
             }
         }
 
@@ -111,8 +111,8 @@ class BranchController extends BaseController
         } else {
             if (!$this->branchService->isUniqueCode($code, $company_id, $id)) {
                 return response()->error([
-                    'code' => trans('rules.unique_code')
-                ]);
+                    'code' => [trans('rules.unique_code')]
+                ], 422);
             }
         }
 
