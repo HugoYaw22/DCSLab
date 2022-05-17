@@ -41,7 +41,7 @@ class InvestorRequest extends FormRequest
             case 'store':
                 $rules_store = [
                     'company_id' => ['required', 'bail'],
-                    'code' => ['required', 'max:255', new uniqueCode(table: 'branches', companyId: $companyId)],
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|min:3|max:255',
                     'tax_number' => 'required|integer|digits_between:1,255',
                     'status' => [new Enum(ActiveStatus::class)]
@@ -49,7 +49,7 @@ class InvestorRequest extends FormRequest
                 return array_merge($rules_store, $nullableArr);
             case 'update':
                 $rules_update = [
-                    'code' => new uniqueCode(table: 'branches', companyId: $companyId, exceptId: $this->route('id')),
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|min:3|max:255',
                     'tax_number' => 'required|integer|digits_between:1,255',
                     'status' => [new Enum(ActiveStatus::class)]

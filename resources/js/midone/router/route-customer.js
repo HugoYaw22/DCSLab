@@ -19,8 +19,8 @@ export default {
             }
         },
         {
-            path: root + '/customer' + '/customergroup',
-            name: 'side-menu-customer-customergroup',
+            path: root + '/customer' + '/customer_group',
+            name: 'side-menu-customer-customer_group',
             component: CustomerGroup,
             meta: { 
                 remember: true,

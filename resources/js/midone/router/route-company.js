@@ -3,7 +3,7 @@ import SideMenu from "@/layouts/side-menu/Main.vue";
 import Company from "@/views/company/Company.vue";
 import Branch from "@/views/branch/Branch.vue";
 import Warehouse from "@/views/warehouse/Warehouse.vue";
-import Employee from "@/views/Employee/Employee.vue";
+import Employee from "@/views/employee/Employee.vue";
 
 const root = '/dashboard';
 
