@@ -109,6 +109,12 @@ class DashboardServiceImpl implements DashboardService
             'title' => 'components.menu.company-warehouse'
         );
 
+        $employees = array(
+            'icon' => '',
+            'pageName' => 'side-menu-company-employee',
+            'title' => 'components.menu.company-employee'
+        );
+
         $root_array = array(
             'icon' => 'UmbrellaIcon',
             'pageName' => 'side-menu-company',
@@ -118,7 +124,7 @@ class DashboardServiceImpl implements DashboardService
         );
 
         if ($hasCompany || $hasDevRole)
-            array_push($root_array['subMenu'], $company, $branches, $warehouses);
+            array_push($root_array['subMenu'], $company, $branches, $warehouses, $employees);
         else 
             array_push($root_array['subMenu'], $company);
 
@@ -230,6 +236,72 @@ class DashboardServiceImpl implements DashboardService
         return $menu;
     }
 
+    private function createMenu_Cash(array $menu, bool $hasCompany, bool $hasDevRole): array
+    {
+        $cash = array(
+            'icon' => '',
+            'pageName' => 'side-menu-cash-cash',
+            'title' => 'components.menu.cash-cash'
+        );
+
+        $capital = array(
+            'icon' => '',
+            'pageName' => 'side-menu-cash-capital-capital',
+            'title' => 'components.menu.cash-capital-capital'
+        );
+
+        $capital_group = array(
+            'icon' => '',
+            'pageName' => 'side-menu-cash-capital-capital_group',
+            'title' => 'components.menu.cash-capital-capital_group'
+        );
+
+        $expense = array(
+            'icon' => '',
+            'pageName' => 'side-menu-cash-expense-expense',
+            'title' => 'components.menu.cash-expense-expense'
+        );
+
+        $expense_group = array(
+            'icon' => '',
+            'pageName' => 'side-menu-cash-expense-expense_group',
+            'title' => 'components.menu.cash-expense-expense_group'
+        );
+
+        $income = array(
+            'icon' => '',
+            'pageName' => 'side-menu-cash-income-income',
+            'title' => 'components.menu.cash-income-income'
+        );
+
+        $income_group = array(
+            'icon' => '',
+            'pageName' => 'side-menu-cash-income-income_group',
+            'title' => 'components.menu.cash-income-income_group'
+        );
+
+        $investor = array(
+            'icon' => '',
+            'pageName' => 'side-menu-cash-investor',
+            'title' => 'components.menu.cash-investor'
+        );
+
+        $root_array = array(
+            'icon' => 'PackageIcon',
+            'pageName' => 'side-menu-cash',
+            'title' => 'components.menu.cash',
+            'subMenu' => [
+            ]
+        );
+
+        array_push($root_array['subMenu'], $cash, $capital, $capital_group, $expense, $expense_group, $income, $income_group, $investor);
+
+        if ($hasCompany || $hasDevRole)
+            array_push($menu, $root_array);
+
+        return $menu;
+    }
+
     private function createMenu_Supplier(array $menu, bool $hasCompany, bool $hasDevRole): array
     {
         $supplier = array(
@@ -256,6 +328,31 @@ class DashboardServiceImpl implements DashboardService
 
     private function createMenu_Customer(array $menu, bool $hasCompany, bool $hasDevRole): array
     {
+        $customer = array(
+            'icon' => '',
+            'pageName' => 'side-menu-customer-customer',
+            'title' => 'components.menu.customer-customer'
+        );
+
+        $customer_group = array(
+            'icon' => '',
+            'pageName' => 'side-menu-customer-customer_group',
+            'title' => 'components.menu.customer-customer_group'
+        );
+
+        $root_array = array(
+            'icon' => 'PackageIcon',
+            'pageName' => 'side-menu-customer',
+            'title' => 'components.menu.customer',
+            'subMenu' => [
+            ]
+        );
+
+        array_push($root_array['subMenu'], $customer, $customer_group);
+
+        if ($hasCompany || $hasDevRole)
+            array_push($menu, $root_array);
+
         return $menu;
     }
 

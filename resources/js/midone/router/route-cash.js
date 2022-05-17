@@ -34,8 +34,8 @@ export default {
             }
         },
         {
-            path: root + '/cash' + '/capital' + '/capitalgroup',
-            name: 'side-menu-cash-capital-capitalgroup',
+            path: root + '/cash' + '/capital' + '/capital_group',
+            name: 'side-menu-cash-capital-capital_group',
             component: CapitalGroup,
             meta: { 
                 remember: true,
@@ -52,8 +52,8 @@ export default {
             }
         },
         {
-            path: root + '/cash' + '/expense' + '/expensegroup',
-            name: 'side-menu-cash-expense-expensegroup',
+            path: root + '/cash' + '/expense' + '/expense_group',
+            name: 'side-menu-cash-expense-expense_group',
             component: ExpenseGroup,
             meta: { 
                 remember: true,
@@ -70,8 +70,8 @@ export default {
             }
         },
         {
-            path: root + '/cash' + '/income' + '/incomegroup',
-            name: 'side-menu-cash-income-incomegroup',
+            path: root + '/cash' + '/income' + '/income_group',
+            name: 'side-menu-cash-income-income_group',
             component: IncomeGroup,
             meta: { 
                 remember: true,

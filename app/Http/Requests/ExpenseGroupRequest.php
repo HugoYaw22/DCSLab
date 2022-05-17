@@ -33,14 +33,14 @@ class ExpenseGroupRequest extends FormRequest
             case 'store':
                 $rules_store = [
                     'company_id' => ['required', 'bail'],
-                    'code' => ['required', 'max:255', new uniqueCode(table: 'branches', companyId: $companyId)],
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|max:255',
                 ];
                 return array_merge($rules_store);
             case 'update':
                 $rules_update = [
                     'company_id' => ['required', 'bail'],
-                    'code' => new uniqueCode(table: 'branches', companyId: $companyId, exceptId: $this->route('id')),
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|max:255',
                 ];
                 return array_merge($rules_update);
