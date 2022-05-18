@@ -44,7 +44,7 @@ class CustomerRequest extends FormRequest
             case 'store':
                 $rules_store = [
                     'customer_group_id' => ['required', 'bail'],
-                    'code' => ['required', 'max:255', new uniqueCode(table: 'branches', companyId: $companyId)],
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|min:3|max:255',
                     'max_open_invoice' => 'required|integer|digits_between:1,11',
                     'max_outstanding_invoice' => 'required|numeric|min:0|max:999999999999999',
@@ -56,7 +56,7 @@ class CustomerRequest extends FormRequest
             case 'update':
                 $rules_update = [
                     'customer_group_id' => ['required', 'bail'],
-                    'code' => new uniqueCode(table: 'branches', companyId: $companyId, exceptId: $this->route('id')),
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|min:3|max:255',
                     'max_open_invoice' => 'required|integer|digits_between:1,11',
                     'max_outstanding_invoice' => 'required|numeric|min:0|max:999999999999999',

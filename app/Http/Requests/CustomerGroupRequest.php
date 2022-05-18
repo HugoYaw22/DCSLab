@@ -38,7 +38,7 @@ class CustomerGroupRequest extends FormRequest
         switch($currentRouteMethod) {
             case 'store':
                 $rules_store = [
-                    'code' => ['required', 'max:255', new uniqueCode(table: 'branches', companyId: $companyId)],
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|min:3|max:255',
                     'max_open_invoice' => 'required|integer|digits_between:1,11',
                     'max_outstanding_invoice' => 'required|integer|digits_between:1,16',
@@ -56,7 +56,7 @@ class CustomerGroupRequest extends FormRequest
                 return array_merge($rules_store, $nullableArr);
             case 'update':
                 $rules_update = [         
-                    'code' => new uniqueCode(table: 'branches', companyId: $companyId, exceptId: $this->route('id')),
+                    'code' => ['required', 'max:255'],
                     'name' => 'required|min:3|max:255',
                     'max_open_invoice' => 'required|integer|digits_between:1,11',
                     'max_outstanding_invoice' => 'required|integer|digits_between:1,16',
