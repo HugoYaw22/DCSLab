@@ -1,17 +1,17 @@
 <template>
     <AlertPlaceholder :messages="alertErrors" />
     <div class="intro-y" v-if="mode === 'list'">
-        <DataList :title="t('views.branch.table.title')" :data="branchList" v-on:createNew="createNew" v-on:dataListChange="onDataListChange" :enableSearch="true">
+        <DataList :title="t('views.customer.table.title')" :data="customerList" v-on:createNew="createNew" v-on:dataListChange="onDataListChange" :enableSearch="true">
            <template v-slot:table="tableProps">
                 <table class="table table-report -mt-2">
                     <thead>
                         <tr>
-                            <th class="whitespace-nowrap">{{ t('views.branch.table.cols.code') }}</th>
-                            <th class="whitespace-nowrap">{{ t('views.branch.table.cols.name') }}</th>
-                            <th class="whitespace-nowrap">{{ t('views.branch.table.cols.is_member') }}</th>
-                            <th class="whitespace-nowrap">{{ t('views.branch.table.cols.customer_group_id') }}</th>
-                            <th class="whitespace-nowrap">{{ t('views.branch.table.cols.remarks') }}</th>
-                            <th class="whitespace-nowrap">{{ t('views.branch.table.cols.status') }}</th>
+                            <th class="whitespace-nowrap">{{ t('views.customer.table.cols.code') }}</th>
+                            <th class="whitespace-nowrap">{{ t('views.customer.table.cols.name') }}</th>
+                            <th class="whitespace-nowrap">{{ t('views.customer.table.cols.is_member') }}</th>
+                            <th class="whitespace-nowrap">{{ t('views.customer.table.cols.customer_group_id') }}</th>
+                            <th class="whitespace-nowrap">{{ t('views.customer.table.cols.remarks') }}</th>
+                            <th class="whitespace-nowrap">{{ t('views.customer.table.cols.status') }}</th>
                             <th class="whitespace-nowrap"></th>
                         </tr>
                     </thead>
@@ -47,30 +47,30 @@
                             <tr :class="{'intro-x':true, 'hidden transition-all': expandDetail !== itemIdx}">
                                 <td colspan="6">
                                     <div class="flex flex-row">
-                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.branch.fields.code') }}</div>
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.customer.fields.code') }}</div>
                                         <div class="flex-1">{{ item.code }}</div>
                                     </div>
                                     <div class="flex flex-row">
-                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.branch.fields.name') }}</div>
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.customer.fields.name') }}</div>
                                         <div class="flex-1">{{ item.name }}</div>
                                     </div>
                                     <div class="flex flex-row">
-                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.branch.fields.is_member') }}</div>
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.customer.fields.is_member') }}</div>
                                         <div class="flex-1">
                                             <span v-if="item.is_member === 'ACTIVE'">{{ t('components.dropdown.values.is_memberDDL.active') }}</span>
                                             <span v-if="item.is_member === 'INACTIVE'">{{ t('components.dropdown.values.is_memberDDL.inactive') }}</span>
                                         </div>
                                     </div>
                                     <div class="flex flex-row">
-                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.branch.fields.customer_group_id') }}</div>
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.customer.fields.customer_group_id') }}</div>
                                         <div class="flex-1">{{ item.customer_group.name }}</div>
                                     </div>
                                     <div class="flex flex-row">
-                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.branch.fields.remarks') }}</div>
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.customer.fields.remarks') }}</div>
                                         <div class="flex-1">{{ item.remarks }}</div>
                                     </div>
                                     <div class="flex flex-row">
-                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.branch.fields.status') }}</div>
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.customer.fields.status') }}</div>
                                         <div class="flex-1">
                                             <span v-if="item.status === 'ACTIVE'">{{ t('components.dropdown.values.statusDDL.active') }}</span>
                                             <span v-if="item.status === 'INACTIVE'">{{ t('components.dropdown.values.statusDDL.inactive') }}</span>
@@ -104,17 +104,17 @@
 
     <div class="intro-y box" v-if="mode !== 'list'">
         <div class="flex flex-col sm:flex-row items-center p-5 border-b border-gray-200 dark:border-dark-5">
-            <h2 class="font-medium text-base mr-auto" v-if="mode === 'create'">{{ t('views.branch.actions.create') }}</h2>
-            <h2 class="font-medium text-base mr-auto" v-if="mode === 'edit'">{{ t('views.branch.actions.edit') }}</h2>
+            <h2 class="font-medium text-base mr-auto" v-if="mode === 'create'">{{ t('views.customer.actions.create') }}</h2>
+            <h2 class="font-medium text-base mr-auto" v-if="mode === 'edit'">{{ t('views.customer.actions.edit') }}</h2>
         </div>
         <div class="loader-container">
-            <VeeForm id="branchForm" class="p-5" @submit="onSubmit" @invalid-submit="invalidSubmit" v-slot="{ handleReset, errors }">
+            <VeeForm id="customerForm" class="p-5" @submit="onSubmit" @invalid-submit="invalidSubmit" v-slot="{ handleReset, errors }">
                 <div class="p-5">
                     <!-- #region Code -->
                     <div class="mb-3">
-                        <label for="inputCode" class="form-label">{{ t('views.branch.fields.code') }}</label>
+                        <label for="inputCode" class="form-label">{{ t('views.customer.fields.code') }}</label>
                         <div class="flex items-center">
-                            <VeeField id="inputCode" name="code" type="text" :class="{'form-control':true, 'border-danger': errors['code']}" :placeholder="t('views.branch.fields.code')" :label="t('views.branch.fields.code')" rules="required" @blur="reValidate(errors)" v-model="branch.code" :readonly="branch.code === '[AUTO]'" />
+                            <VeeField id="inputCode" name="code" type="text" :class="{'form-control':true, 'border-danger': errors['code']}" :placeholder="t('views.customer.fields.code')" :label="t('views.customer.fields.code')" rules="required" @blur="reValidate(errors)" v-model="customer.code" :readonly="customer.code === '[AUTO]'" />
                             <button type="button" class="btn btn-secondary mx-1" @click="generateCode" v-show="mode === 'create'">{{ t('components.buttons.auto') }}</button>
                         </div>
                         <ErrorMessage name="code" class="text-danger" />
@@ -123,16 +123,16 @@
 
                     <!-- #region Name -->
                     <div class="mb-3">
-                        <label for="inputName" class="form-label">{{ t('views.branch.fields.name') }}</label>
-                        <VeeField id="inputName" name="name" type="text" :class="{'form-control':true, 'border-danger': errors['name']}" :placeholder="t('views.branch.fields.name')" :label="t('views.branch.fields.name')" rules="required" @blur="reValidate(errors)" v-model="branch.name" />
+                        <label for="inputName" class="form-label">{{ t('views.customer.fields.name') }}</label>
+                        <VeeField id="inputName" name="name" type="text" :class="{'form-control':true, 'border-danger': errors['name']}" :placeholder="t('views.customer.fields.name')" :label="t('views.customer.fields.name')" rules="required" @blur="reValidate(errors)" v-model="customer.name" />
                         <ErrorMessage name="name" class="text-danger" />
                     </div>
                     <!-- #endregion -->
 
                     <!-- #region Is Member -->
                     <div class="mb-3">
-                        <label for="is_member" class="form-label">{{ t('views.branch.fields.is_member') }}</label>
-                        <VeeField as="select" id="is_member" name="is_member" :class="{'form-control form-select':true, 'border-danger': errors['is_member']}" v-model="branch.is_member" rules="required" @blur="reValidate(errors)">
+                        <label for="is_member" class="form-label">{{ t('views.customer.fields.is_member') }}</label>
+                        <VeeField as="select" id="is_member" name="is_member" :class="{'form-control form-select':true, 'border-danger': errors['is_member']}" v-model="customer.is_member" rules="required" @blur="reValidate(errors)">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in is_memberDDL" :key="c.code" :value="c.code">{{ t(c.name) }}</option>
                         </VeeField>
@@ -142,9 +142,9 @@
 
                     <!-- #region Customer Group -->
                     <div class="mb-3">
-                        <label class="form-label" for="inputCustomerGroup">{{ t('views.branch.fields.customer_group_id') }}</label>
+                        <label class="form-label" for="inputCustomerGroup">{{ t('views.customer.fields.customer_group_id') }}</label>
                         
-                        <VeeField as="select" id="customer_group_id" name="customer_group_id" :class="{'form-control form-select':true, 'border-danger': errors['customer_group_id']}" v-model="branch.company.hId" :label="t('views.branch.fields.customer_group_id')" rules="required" @blur="reValidate(errors)" :readonly>
+                        <VeeField as="select" id="customer_group_id" name="customer_group_id" :class="{'form-control form-select':true, 'border-danger': errors['customer_group_id']}" v-model="customer.company.hId" :label="t('views.customer.fields.customer_group_id')" rules="required" @blur="reValidate(errors)" :readonly>
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in companyDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>
@@ -152,38 +152,52 @@
                     </div>
                     <!-- #endregion -->
 
-                    <!-- #region Addresss -->
+                    <!-- #region Sales Territory -->
                     <div class="mb-3">
-                        <label for="inputAddress" class="form-label">{{ t('views.branch.fields.address') }}</label>
-                        <textarea id="inputAddress" name="address" type="text" class="form-control" :placeholder="t('views.branch.fields.address')" v-model="branch.address" rows="3"></textarea>
-                    </div>
-                    <!-- #endregion -->
-
-                    <!-- #region City -->
-                    <div class="mb-3">
-                        <label for="inputCity" class="form-label">{{ t('views.branch.fields.city') }}</label>
-                        <input id="inputCity" name="city" type="text" class="form-control" :placeholder="t('views.branch.fields.city')" v-model="branch.city" />
+                        <label for="inputSalesTerritory" class="form-label">{{ t('views.customer.fields.sales_territory') }}</label>
+                        <input id="inputSalesTerritory" name="sales_territory" type="text" class="form-control" :placeholder="t('views.customer.fields.sales_territory')" v-model="customer.sales_territory" />
                     </div>
                     <!--  #endregion -->
 
-                    <!-- #region Contact -->
+                    <!-- #region Max Open Invoice -->
                     <div class="mb-3">
-                        <label for="inputContact" class="form-label">{{ t('views.branch.fields.contact') }}</label>
-                        <input id="inputContact" name="contact" type="text" class="form-control" :placeholder="t('views.branch.fields.contact')" v-model="branch.contact" />
+                        <label for="inputMaxOpenInvoice" class="form-label">{{ t('views.customer.fields.max_open_invoice') }}</label>
+                        <input id="inputMaxOpenInvoice" name="max_open_invoice" type="text" class="form-control" :placeholder="t('views.customer.fields.max_open_invoice')" v-model="customer.max_open_invoice" />
+                    </div>
+                    <!-- #endregion -->
+
+                    <!-- #region Max Outstanding Invoice -->
+                    <div class="mb-3">
+                        <label for="inputMaxOutstandingInvoice" class="form-label">{{ t('views.customer.fields.max_outstanding_invoice') }}</label>
+                        <input id="inputMaxOutstandingInvoice" name="max_outstanding_invoice" type="text" class="form-control" :placeholder="t('views.customer.fields.max_outstanding_invoice')" v-model="customer.max_outstanding_invoice" />
+                    </div>
+                    <!-- #endregion -->
+
+                    <!-- #region Max Invoice Age -->
+                    <div class="mb-3">
+                        <label for="inputMaxInvoiceAge" class="form-label">{{ t('views.customer.fields.max_invoice_age') }}</label>
+                        <input id="inputMaxInvoiceAge" name="max_invoice_age" type="text" class="form-control" :placeholder="t('views.customer.fields.max_invoice_age')" v-model="customer.max_invoice_age" />
+                    </div>
+                    <!-- #endregion -->
+
+                    <!-- #region Tax Id -->
+                    <div class="mb-3">
+                        <label for="inputTaxId" class="form-label">{{ t('views.customer.fields.tax_id') }}</label>
+                        <input id="inputTaxId" name="tax_id" type="text" class="form-control" :placeholder="t('views.customer.fields.tax_id')" v-model="customer.tax_id" />
                     </div>
                     <!-- #endregion -->
 
                     <!-- #region Remarks -->
                     <div class="mb-3">
-                        <label for="inputRemarks" class="form-label">{{ t('views.branch.fields.remarks') }}</label>
-                        <textarea id="inputRemarks" name="remarks" type="text" class="form-control" :placeholder="t('views.branch.fields.remarks')" v-model="branch.remarks" rows="3"></textarea>
+                        <label for="inputRemarks" class="form-label">{{ t('views.customer.fields.remarks') }}</label>
+                        <textarea id="inputRemarks" name="remarks" type="text" class="form-control" :placeholder="t('views.customer.fields.remarks')" v-model="customer.remarks" rows="3"></textarea>
                     </div>
                     <!-- #endregion -->
 
                     <!-- #region Status -->
                     <div class="mb-3">
-                        <label for="status" class="form-label">{{ t('views.branch.fields.status') }}</label>
-                        <VeeField as="select" id="status" name="status" :class="{'form-control form-select':true, 'border-danger': errors['status']}" v-model="branch.status" rules="required" @blur="reValidate(errors)">
+                        <label for="status" class="form-label">{{ t('views.customer.fields.status') }}</label>
+                        <VeeField as="select" id="status" name="status" :class="{'form-control form-select':true, 'border-danger': errors['status']}" v-model="customer.status" rules="required" @blur="reValidate(errors)">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in statusDDL" :key="c.code" :value="c.code">{{ t(c.name) }}</option>
                         </VeeField>
@@ -237,19 +251,32 @@ const expandDetail = ref(null);
 //#endregion
 
 //#region Data - Views
-const branchList = ref({});
-const branch = ref({
-    company: { 
+const customerList = ref({});
+const customer = ref({
+    code: '',
+    name: '',
+    is_member: '',
+    customer_group: { 
         hId: '',
         name: '' 
     },
-    code: '',
-    name: '',
-    address: '',
-    city: '',
-    contact: '',
+    zone: '',
+    max_open_invoice: '0',
+    max_outstanding_invoice: '0',
+    max_invoice_age: '0',
+    payment_term: '0',
+    customer_address: [
+        {
+            hId: '',
+            address: '',
+            city: '',
+            contact: '',
+            remarks: ''
+        }
+    ],
+    tax_id: '',
     remarks: '',
-    status: 'ACTIVE',
+    status: '1',
 });
 const statusDDL = ref([]);
 const companyDDL = ref([]);
@@ -258,7 +285,7 @@ const companyDDL = ref([]);
 //#region onMounted
 onMounted(() => {
     if (selectedUserCompany.value !== '') {
-        getAllBranches({ page: 1 });
+        getAllCustomers({ page: 1 });
         getDDLSync();
     } else  {
         
@@ -281,15 +308,15 @@ const setMode = () => {
     if (sessionStorage.getItem('DCSLAB_LAST_ENTITY') !== null) createNew();
 }
 
-const getAllBranches = (args) => {
-    branchList.value = {};
+const getAllCustomers = (args) => {
+    customerList.value = {};
     if (args.pageSize === undefined) args.pageSize = 10;
     if (args.search === undefined) args.search = '';
 
     let companyId = selectedUserCompany.value;
 
-    axios.get(route('api.get.db.company.branch.read', { "companyId": companyId, "page": args.page, "perPage": args.pageSize, "search": args.search })).then(response => {
-        branchList.value = response.data;
+    axios.get(route('api.get.db.customer.customer.read', { "companyId": companyId, "page": args.page, "perPage": args.pageSize, "search": args.search })).then(response => {
+        customerList.value = response.data;
         loading.value = false;
     });
 }
@@ -317,11 +344,11 @@ const getDDLSync = () => {
 const onSubmit = (values, actions) => {
     loading.value = true;
 
-    var formData = new FormData(dom('#branchForm')[0]); 
+    var formData = new FormData(dom('#customerForm')[0]); 
     formData.append('company_id', selectedUserCompany.value);
     
     if (mode.value === 'create') {
-        axios.post(route('api.post.db.company.branch.save'), formData).then(response => {
+        axios.post(route('api.post.db.customer.customer.save'), formData).then(response => {
             backToList();
         }).catch(e => {
             handleError(e, actions);
@@ -329,7 +356,7 @@ const onSubmit = (values, actions) => {
             loading.value = false;
         });
     } else if (mode.value === 'edit') {
-        axios.post(route('api.post.db.company.branch.edit', branch.value.hId), formData).then(response => {
+        axios.post(route('api.post.db.customer.customer.edit', customer.value.hId), formData).then(response => {
             actions.resetForm();
             backToList();
         }).catch(e => {
@@ -366,19 +393,32 @@ const reValidate = (errors) => {
     alertErrors.value = errors;
 }
 
-const emptyBranch = () => {
+const emptyCustomer = () => {
     return {
-        company: {
-            hId: '',
-            name: ''
-        },
         code: '[AUTO]',
         name: '',
-        address: '',
-        city: '',
-        contact: '',
+        is_member: '',
+        customer_group: { 
+            hId: '',
+            name: '' 
+        },
+        zone: '',
+        max_open_invoice: '0',
+        max_outstanding_invoice: '0',
+        max_invoice_age: '0',
+        payment_term: '0',
+        customer_address: [
+            {
+                hId: '',
+                address: '',
+                city: '',
+                contact: '',
+                remarks: ''
+            }
+        ],
+        tax_id: '',
         remarks: '',
-        status: 'ACTIVE',
+        status: '1',
     }
 }
 
@@ -390,31 +430,31 @@ const createNew = () => {
     mode.value = 'create';
     
     if (sessionStorage.getItem('DCSLAB_LAST_ENTITY') !== null) {
-        branch.value = JSON.parse(sessionStorage.getItem('DCSLAB_LAST_ENTITY'));
+        customer.value = JSON.parse(sessionStorage.getItem('DCSLAB_LAST_ENTITY'));
         sessionStorage.removeItem('DCSLAB_LAST_ENTITY');
     } else {
-        branch.value = emptyBranch();
+        customer.value = emptyCustomer();
     }
-    branch.value.company.hId = _.find(companyDDL.value, { 'hId': selectedUserCompany.value });
+    customer.value.company.hId = _.find(companyDDL.value, { 'hId': selectedUserCompany.value });
 }
 
 const onDataListChange = ({page, pageSize, search}) => {
-    getAllBranches({page, pageSize, search});
+    getAllCustomers({page, pageSize, search});
 }
 
 const editSelected = (index) => {
     mode.value = 'edit';
-    branch.value = branchList.value.data[index];
+    customer.value = customerList.value.data[index];
 }
 
 const deleteSelected = (index) => {
-    deleteId.value = branchList.value.data[index].hId;
+    deleteId.value = customerList.value.data[index].hId;
     deleteModalShow.value = true;
 }
 
 const confirmDelete = () => {
     deleteModalShow.value = false;
-    axios.post(route('api.post.db.company.branch.delete', deleteId.value)).then(response => {
+    axios.post(route('api.post.db.customer.customer.delete', deleteId.value)).then(response => {
         backToList();
     }).catch(e => {
         alertErrors.value = e.response.data;
@@ -432,7 +472,7 @@ const backToList = () => {
     sessionStorage.removeItem('DCSLAB_LAST_ENTITY');
 
     mode.value = 'list';
-    getAllBranches({ page: branchList.value.current_page, pageSize: branchList.value.per_page });
+    getAllCustomers({ page: customerList.value.current_page, pageSize: customerList.value.per_page });
 }
 
 const toggleDetail = (idx) => {
@@ -444,8 +484,8 @@ const toggleDetail = (idx) => {
 }
 
 const generateCode = () => {
-    if (branch.value.code === '[AUTO]') branch.value.code = '';
-    else  branch.value.code = '[AUTO]'
+    if (customer.value.code === '[AUTO]') customer.value.code = '';
+    else  customer.value.code = '[AUTO]'
 }
 //#endregion
 
@@ -455,12 +495,12 @@ const generateCode = () => {
 //#region Watcher
 watch(selectedUserCompany, () => {
     if (selectedUserCompany.value !== '') {
-        getAllBranches({ page: 1 });
+        getAllCustomers({ page: 1 });
         getDDLSync();
     }
 });
 
-watch(branch, (newV) => {
+watch(customer, (newV) => {
     if (mode.value == 'create') sessionStorage.setItem('DCSLAB_LAST_ENTITY', JSON.stringify(newV));
 }, { deep: true });
 //#endregion
