@@ -34,7 +34,67 @@ class CompanyServiceTest extends ServiceTestCase
         }
     }
 
-    public function test_call_read_when_user_have_companies()
+    public function test_call_save_with_all_field_filled()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_save_with_minimal_field_filled()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_save_with_existing_code()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_save_with_null_param()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_save_with_empty_string_param()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_edit_with_all_field_filled()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_edit_with_minimal_field_filled()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_edit_with_existing_code()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_edit_with_null_param()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_delete()
+    {
+                $this->assertTrue(false);$this->assertTrue(false);
+    }
+
+    public function test_call_delete_nonexistance_id()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_delete_default_company()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_read_when_user_have_companies_read_with_empty_search()
     {
         $usr = User::has('companies')->get()->first();
 
@@ -44,7 +104,27 @@ class CompanyServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_doesnt_have_companies()
+    public function test_call_read_when_user_have_companies_with_special_char_in_search()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_read_when_user_have_companies_with_negative_value_in_perpage_param()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_read_when_user_have_companies_without_pagination()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_read_when_user_have_companies_with_null_param()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_read_when_user_doesnt_have_companies_with_empty_search()
     {
         $usr = User::doesnthave('companies')->get();
 
@@ -59,5 +139,25 @@ class CompanyServiceTest extends ServiceTestCase
 
         $this->assertInstanceOf(Paginator::class, $response);
         $this->assertNotNull($response);
+    }
+
+    public function test_call_read_when_user_doesnt_have_companies_with_special_char_in_search()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_read_when_user_doesnt_have_companies_with_negative_value_in_perpage_param()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_read_when_user_doesnt_have_companies_without_pagination()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function test_call_read_when_user_doesnt_have_companies_with_null_param()
+    {
+        $this->assertTrue(false);
     }
 }
