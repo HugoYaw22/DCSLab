@@ -6,11 +6,11 @@
                 <table class="table table-report -mt-2">
                     <thead>
                         <tr>
-                            <th class="whitespace-nowrap">{{ t('views.income.table.cols.income_id') }}</th>
+                            <th class="whitespace-nowrap">{{ t('views.income.table.cols.branch_id') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.income.table.cols.code') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.income.table.cols.date') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.income.table.cols.payment_term_type') }}</th>
-                            <th class="whitespace-nowrap">{{ t('views.income.table.cols.income_id') }}</th>
+                            <th class="whitespace-nowrap">{{ t('views.income.table.cols.income_group_id') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.income.table.cols.cash_id') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.income.table.cols.amount') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.income.table.cols.amount_owed') }}</th>
@@ -22,11 +22,11 @@
                     <tbody>
                         <template v-if="tableProps.dataList !== undefined" v-for="(item, itemIdx) in tableProps.dataList.data">
                             <tr class="intro-x">
-                                <td>{{ item.income.name }}</td>
+                                <td>{{ item.branch.name }}</td>
                                 <td>{{ item.code }}</td>
                                 <td>{{ item.date }}</td>
                                 <td>{{ item.payment_term_type }}</td>
-                                <td>{{ item.income.name }}</td>
+                                <td>{{ item.income_group.name }}</td>
                                 <td>{{ item.cash.name }}</td>
                                 <td>{{ item.amount }}</td>
                                 <td>{{ item.amount_owed }}</td>
@@ -52,8 +52,8 @@
                             <tr :class="{'intro-x':true, 'hidden transition-all': expandDetail !== itemIdx}">
                                 <td colspan="6">
                                     <div class="flex flex-row">
-                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.income.fields.company_id') }}</div>
-                                        <div class="flex-1">{{ item.income.name }}</div>
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.income.fields.branch_id') }}</div>
+                                        <div class="flex-1">{{ item.branch.name }}</div>
                                     </div>
                                     <div class="flex flex-row">
                                         <div class="ml-5 w-48 text-right pr-5">{{ t('views.income.fields.code') }}</div>
@@ -108,14 +108,14 @@
         <div class="loader-container">
             <VeeForm id="incomeForm" class="p-5" @submit="onSubmit" @invalid-submit="invalidSubmit" v-slot="{ handleReset, errors }">
                 <div class="p-5">
-                    <!-- #region Income Group -->
+                    <!-- #region Branch -->
                     <div class="mb-3">
-                        <label class="form-label" for="inputIncomeGroupId">{{ t('views.income.fields.income') }}</label>
-                        <VeeField as="select" id="income" name="income" :class="{'form-control form-select':true, 'border-danger': errors['income']}" v-model="income.company.hId" :label="t('views.income.fields.income')" rules="required" @blur="reValidate(errors)" :readonly>
+                        <label class="form-label" for="inputBranchId">{{ t('views.income.fields.branch') }}</label>
+                        <VeeField as="select" id="branch" name="branch" :class="{'form-control form-select':true, 'border-danger': errors['branch']}" v-model="branch.company.hId" :label="t('views.branch.fields.branch')" rules="required" @blur="reValidate(errors)" :readonly>
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in companyDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>
-                        <ErrorMessage name="income" class="text-danger" />
+                        <ErrorMessage name="branch" class="text-danger" />
                     </div>
                     <!-- #endregion -->
                     
@@ -148,9 +148,9 @@
                     <!-- #region Income Group -->
                     <div class="mb-3">
                         <label class="form-label" for="inputIncomeGroupId">{{ t('views.income.fields.income') }}</label>
-                        <VeeField as="select" id="income_group_id" name="income_group_id" :class="{'form-control form-select':true, 'border-danger': errors['income_group_id']}" v-model="income_group_id.company.hId" :label="t('views.income_group_id.fields.income_group_id')" rules="required" @blur="reValidate(errors)" :readonly>
+                        <VeeField as="select" id="income_group" name="income_group" :class="{'form-control form-select':true, 'border-danger': errors['income_group']}" v-model="income_group.company.hId" :label="t('views.income_group_id.fields.income_group_id')" rules="required" @blur="reValidate(errors)" :readonly>
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
-                            <option v-for="c in companyDDL" :value="c.hId">{{ c.name }}</option>
+                            <option v-for="c in income_groupDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>
                         <ErrorMessage name="income_group_id" class="text-danger" />
                     </div>
@@ -158,12 +158,12 @@
 
                     <!-- #region Cassh -->
                     <div class="mb-3">
-                        <label class="form-label" for="inputCashId">{{ t('views.income.fields.income') }}</label>
-                        <VeeField as="select" id="cash_id" name="cash_id" :class="{'form-control form-select':true, 'border-danger': errors['cash_id']}" v-model="cash_id.company.hId" :label="t('views.cash_id.fields.cash_id')" rules="required" @blur="reValidate(errors)" :readonly>
+                        <label class="form-label" for="inputCashId">{{ t('views.income.fields.cash') }}</label>
+                        <VeeField as="select" id="cash" name="cash" :class="{'form-control form-select':true, 'border-danger': errors['cash']}" v-model="cash.company.hId" :label="t('views.cash.fields.cash')" rules="required" @blur="reValidate(errors)" :readonly>
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in companyDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>
-                        <ErrorMessage name="cash_id" class="text-danger" />
+                        <ErrorMessage name="cash" class="text-danger" />
                     </div>
                     <!-- #endregion -->
 
@@ -252,6 +252,7 @@ const income = ref({
     },
     branch: { 
         hId: '',
+        name: ''
     },
     code: '',
     date: '',
@@ -269,8 +270,10 @@ const income = ref({
     remarks: '',
     posted: 'ACTIVE',
 });
-const statusDDL = ref([]);
-const companyDDL = ref([]);
+const branchDDL = ref([]);
+const income_groupDDL = ref([]);
+const cashDDL = ref([]);
+const postedDDL = ref([]);
 //#endregion
 
 //#region onMounted
@@ -313,22 +316,34 @@ const getAllIncomes = (args) => {
 }
 
 const getDDL = () => {
-    if (getCachedDDL('statusDDL') == null) {
-        axios.get(route('api.get.db.common.ddl.list.statuses')).then(response => {
-            statusDDL.value = response.data;
-            setCachedDDL('statusDDL', response.data);
+    if (getCachedDDL('postedDDL') == null) {
+        axios.get(route('api.get.db.common.ddl.list.posted')).then(response => {
+            postedDDL.value = response.data;
+            setCachedDDL('postedDDL', response.data);
         });    
     } else {
-        statusDDL.value = getCachedDDL('statusDDL');
+        postedDDL.value = getCachedDDL('postedDDL');
     }
 }
 
 const getDDLSync = () => {
-    axios.get(route('api.get.db.company.company.read.all_active', {
+    axios.get(route('api.get.db.company.branch.read.all_active', {
             companyId: selectedUserCompany.value,
             paginate: false
         })).then(response => {
-            companyDDL.value = response.data;
+            branchDDL.value = response.data;
+    });
+    axios.get(route('api.get.db.cash.cash.read.all_active', {
+            companyId: selectedUserCompany.value,
+            paginate: false
+        })).then(response => {
+            cashyDDL.value = response.data;
+    });
+    axios.get(route('api.get.db.cash.investor.read.all_active', {
+            companyId: selectedUserCompany.value,
+            paginate: false
+        })).then(response => {
+            investorDDL.value = response.data;
     });
 }
 
@@ -391,6 +406,7 @@ const emptyIncome = () => {
         },
         branch: { 
             hId: '',
+            name: ''
         },
         code: '',
         date: '',

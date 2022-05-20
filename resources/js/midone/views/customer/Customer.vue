@@ -278,8 +278,9 @@ const customer = ref({
     remarks: '',
     status: '1',
 });
+const is_memberDDL = ref([]);
 const statusDDL = ref([]);
-const companyDDL = ref([]);
+const customer_groupDDL = ref([]);
 //#endregion
 
 //#region onMounted
@@ -322,6 +323,14 @@ const getAllCustomers = (args) => {
 }
 
 const getDDL = () => {
+    if (getCachedDDL('is_memberDDL') == null) {
+        axios.get(route('api.get.db.common.ddl.list.is_members')).then(response => {
+            is_memberDDL.value = response.data;
+            setCachedDDL('is_memberDDL', response.data);
+        });    
+    } else {
+        is_memberDDL.value = getCachedDDL('is_memberDDL');
+    }
     if (getCachedDDL('statusDDL') == null) {
         axios.get(route('api.get.db.common.ddl.list.statuses')).then(response => {
             statusDDL.value = response.data;
@@ -333,11 +342,11 @@ const getDDL = () => {
 }
 
 const getDDLSync = () => {
-    axios.get(route('api.get.db.company.company.read.all_active', {
+    axios.get(route('api.get.db.customer.customer_group.read.all_active', {
             companyId: selectedUserCompany.value,
             paginate: false
         })).then(response => {
-            companyDDL.value = response.data;
+            customer_groupDDL.value = response.data;
     });
 }
 
