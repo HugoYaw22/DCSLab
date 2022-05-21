@@ -323,11 +323,23 @@ const getDDL = () => {
 }
 
 const getDDLSync = () => {
-    axios.get(route('api.get.db.company.company.read.all_active', {
+    axios.get(route('api.get.db.cash.investor.read.all_active', {
             companyId: selectedUserCompany.value,
             paginate: false
         })).then(response => {
-            companyDDL.value = response.data;
+            investorDDL.value = response.data;
+    });
+    axios.get(route('api.get.db.cash.capital_group.read.all_active', {
+            companyId: selectedUserCompany.value,
+            paginate: false
+        })).then(response => {
+            capital_groupDDL.value = response.data;
+    });
+    axios.get(route('api.get.db.cash.cash.read.all_active', {
+            companyId: selectedUserCompany.value,
+            paginate: false
+        })).then(response => {
+            cashDDL.value = response.data;
     });
 }
 
