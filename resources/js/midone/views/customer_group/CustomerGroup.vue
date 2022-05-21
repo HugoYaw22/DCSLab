@@ -182,8 +182,8 @@
 
                     <!-- #region Round On -->
                     <div class="mb-3">
-                        <label for="inputRoles" class="form-label">{{ t('views.customer_group.fields.round_on') }}</label>
-                        <div as="select" multiple v-slot="{ value }" :class="{'form-control':true, 'border-danger':errors['round_on[]']}" id="inputRoles" name="round_on[]" size="6" v-model="customer_group.selected_round_on" rules="required" :label="t('views.customer_group.fields.round_on')" @blur="reValidate(errors)">
+                        <label for="inputRoundOn" class="form-label">{{ t('views.customer_group.fields.round_on') }}</label>
+                        <div as="select" multiple v-slot="{ value }" :class="{'form-control':true, 'border-danger':errors['round_on[]']}" id="inputRoundOn" name="round_on[]" size="6" v-model="customer_group.selected_round_on" rules="required" :label="t('views.customer_group.fields.round_on')" @blur="reValidate(errors)">
                             <option v-for="r in round_onDDL" :key="r.hId" :value="r.hId" :selected="value.includes(r.hId)">{{ r.display_name }}</option>
                         </div>
                     </div>

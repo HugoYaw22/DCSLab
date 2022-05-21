@@ -2,7 +2,7 @@ import SideMenu from "@/layouts/side-menu/Main.vue";
 
 import Cash from "@/views/cash/Cash.vue";
 import Capital from "@/views/capital/Capital.vue";
-import CapitalGroup from "@/views/capitalgroup/CapitalGroup.vue";
+import CapitalGroup from "@/views/capital_group/CapitalGroup.vue";
 import Expense from "@/views/expense/Expense.vue";
 import ExpenseGroup from "@/views/expense_group/ExpenseGroup.vue";
 import Income from "@/views/income/Income.vue";

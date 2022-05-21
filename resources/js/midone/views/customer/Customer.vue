@@ -144,7 +144,7 @@
                     <div class="mb-3">
                         <label class="form-label" for="inputCustomerGroup">{{ t('views.customer.fields.customer_group_id') }}</label>
                         
-                        <VeeField as="select" id="customer_group_id" name="customer_group_id" :class="{'form-control form-select':true, 'border-danger': errors['customer_group_id']}" v-model="customer.company.hId" :label="t('views.customer.fields.customer_group_id')" rules="required" @blur="reValidate(errors)" :readonly>
+                        <VeeField as="select" id="customer_group_id" name="customer_group_id" :class="{'form-control form-select':true, 'border-danger': errors['customer_group_id']}" v-model="customer.company.hId" :label="t('views.customer.fields.customer_group_id')" rules="required" @blur="reValidate(errors)">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in companyDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>

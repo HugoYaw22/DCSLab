@@ -111,7 +111,7 @@
                     <!-- #region Branch -->
                     <div class="mb-3">
                         <label class="form-label" for="inputBranchId">{{ t('views.expense.fields.branch') }}</label>
-                        <VeeField as="select" id="branch" name="branch" :class="{'form-control form-select':true, 'border-danger': errors['branch']}" v-model="branch.company.hId" :label="t('views.branch.fields.branch')" rules="required" @blur="reValidate(errors)" :readonly>
+                        <VeeField as="select" id="branch" name="branch" :class="{'form-control form-select':true, 'border-danger': errors['branch']}" v-model="branch.company.hId" :label="t('views.branch.fields.branch')" rules="required" @blur="reValidate(errors)">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in companyDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>
@@ -148,7 +148,7 @@
                     <!-- #region Expense Group -->
                     <div class="mb-3">
                         <label class="form-label" for="inputExpenseGroupId">{{ t('views.expense.fields.expense') }}</label>
-                        <VeeField as="select" id="expense_group" name="expense_group" :class="{'form-control form-select':true, 'border-danger': errors['expense_group']}" v-model="expense_group.company.hId" :label="t('views.expense_group_id.fields.expense_group_id')" rules="required" @blur="reValidate(errors)" :readonly>
+                        <VeeField as="select" id="expense_group" name="expense_group" :class="{'form-control form-select':true, 'border-danger': errors['expense_group']}" v-model="expense_group.company.hId" :label="t('views.expense_group_id.fields.expense_group_id')" rules="required" @blur="reValidate(errors)">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in expense_groupDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>
@@ -159,7 +159,7 @@
                     <!-- #region Cassh -->
                     <div class="mb-3">
                         <label class="form-label" for="inputCashId">{{ t('views.expense.fields.cash') }}</label>
-                        <VeeField as="select" id="cash" name="cash" :class="{'form-control form-select':true, 'border-danger': errors['cash']}" v-model="cash.company.hId" :label="t('views.cash.fields.cash')" rules="required" @blur="reValidate(errors)" :readonly>
+                        <VeeField as="select" id="cash" name="cash" :class="{'form-control form-select':true, 'border-danger': errors['cash']}" v-model="cash.company.hId" :label="t('views.cash.fields.cash')" rules="required" @blur="reValidate(errors)">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in companyDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>
