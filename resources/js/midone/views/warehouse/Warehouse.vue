@@ -107,7 +107,7 @@
                     <!-- #region Company -->
                     <div class="mb-3">
                         <label class="form-label" for="inputCompany_id">{{ t('views.warehouse.fields.company_id') }}</label>
-                        <VeeField as="select" id="company_id" name="company_id" :class="{'form-control form-select':true, 'border-danger': errors['company_id']}" v-model="warehouse.company.hId" :label="t('views.warehouse.fields.company_id')" rules="required" @blur="reValidate(errors)">
+                        <VeeField as="select" id="company_id" name="company_id" :class="{'form-control form-select':true, 'border-danger': errors['company_id']}" v-model="warehouse.company.hId" :label="t('views.warehouse.fields.company_id')" rules="required" @blur="reValidate(errors)" :disabled="mode === 'edit'">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in companyDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>
@@ -118,7 +118,7 @@
                     <!-- #region Branch -->
                     <div class="mb-3">
                         <label class="form-label" for="inputBranch_id">{{ t('views.warehouse.fields.branch_id') }}</label>
-                        <VeeField as="select" id="branch_id" name="branch_id" :class="{'form-control form-select':true, 'border-danger': errors['branch_id']}" v-model="warehouse.branch.hId" :label="t('views.warehouse.fields.branch_id')" rules="required" @blur="reValidate(errors)">
+                        <VeeField as="select" id="branch_id" name="branch_id" :class="{'form-control form-select':true, 'border-danger': errors['branch_id']}" v-model="warehouse.branch.hId" :label="t('views.warehouse.fields.branch_id')" rules="required" @blur="reValidate(errors)" :disabled="mode === 'edit'">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in branchDDL" :value="c.hId">{{ c.name }}</option>
                         </VeeField>
@@ -226,6 +226,7 @@ const mode = ref('list');
 const loading = ref(false);
 const alertErrors = ref([]);
 const deleteId = ref('');
+const deleteModalShow = ref(false);
 const expandDetail = ref(null);
 //#endregion
 
@@ -305,10 +306,16 @@ const getDDL = () => {
 
 const getDDLSync = () => {
     axios.get(route('api.get.db.company.company.read.all_active', {
-            companyId: selectedUserCompany.value,
-            paginate: false
-        })).then(response => {
-            companyDDL.value = response.data;
+        companyId: selectedUserCompany.value,
+        paginate: false
+    })).then(response => {
+        companyDDL.value = response.data;
+    });
+
+    axios.get(route('api.get.db.company.branch.read.by.company', {
+        companyId: selectedUserCompany.value
+    })).then(response => {
+        branchDDL.value = response.data;
     });
 }
 
@@ -316,7 +323,6 @@ const onSubmit = (values, actions) => {
     loading.value = true;
 
     var formData = new FormData(dom('#warehouseForm')[0]); 
-    formData.append('company_id', selectedUserCompany.value);
     
     if (mode.value === 'create') {
         axios.post(route('api.post.db.company.warehouse.save'), formData).then(response => {
@@ -327,6 +333,11 @@ const onSubmit = (values, actions) => {
             loading.value = false;
         });
     } else if (mode.value === 'edit') {
+        formData.append('company_id', selectedUserCompany.value);
+
+        var branchId = document.getElementById("branch_id");
+        formData.append('branch_id', branchId.value);
+        
         axios.post(route('api.post.db.company.warehouse.edit', warehouse.value.hId), formData).then(response => {
             actions.resetForm();
             backToList();

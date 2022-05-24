@@ -38,6 +38,7 @@ Route::bind('id', function ($id) {
 });
 
 Route::post('auth', [ApiAuthController::class, 'auth', 'middleware' => 'throttle:3,1'])->name('api.auth');
+Route::post('signup', [ApiAuthController::class, 'signup'])->name('api.signup');
 
 Route::group(['prefix' => 'get', 'middleware' => ['auth:sanctum', 'throttle:100,1'], 'as' => 'api.get'], function () {
     Route::group(['prefix' => 'dashboard', 'as' => '.db'], function() {
@@ -51,6 +52,7 @@ Route::group(['prefix' => 'get', 'middleware' => ['auth:sanctum', 'throttle:100,
             });
             Route::group(['prefix' => 'branch', 'as' => '.branch'], function() {
                 Route::get('read', [BranchController::class, 'read'])->name('.read');
+                Route::get('read/by/company', [BranchController::class, 'getBranchByCompanyId'])->name('.read.by.company');
             });
             Route::group(['prefix' => 'warehouse', 'as' => '.warehouse'], function() {
                 Route::get('read', [WarehouseController::class, 'read'])->name('.read');
