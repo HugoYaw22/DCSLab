@@ -2,17 +2,13 @@
 
 namespace Tests\Feature\Service;
 
-use TypeError;
 use App\Models\Branch;
 use App\Models\Company;
 use Tests\ServiceTestCase;
 use App\Services\BranchService;
 use App\Actions\RandomGenerator;
-use Illuminate\Support\Collection;
-use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BranchServiceTest extends ServiceTestCase
 {
@@ -28,48 +24,10 @@ class BranchServiceTest extends ServiceTestCase
             $this->artisan('db:seed', ['--class' => 'BranchTableSeeder']);
     }
 
-    public function test_call_read_with_empty_search()
-    {
-        $response = $this->service->read(1,'', true, 10);
-
-        $this->assertInstanceOf(Paginator::class, $response);
-        $this->assertNotNull($response);
-    }
-
-    public function test_call_read_with_special_char_in_search()
-    {
-        $response = $this->service->read(1,'&', true, 10);
-
-        $this->assertNotNull($response);
-        $this->assertInstanceOf(Paginator::class, $response);
-    }
-
-    public function test_call_read_with_negative_value_in_perpage_param()
-    {
-        $response = $this->service->read(-1,'', true, -10);
-
-        $this->assertInstanceOf(Paginator::class, $response);
-        $this->assertNotNull($response);
-    }
-
-    public function test_call_read_without_pagination()
-    {
-        $response = $this->service->read(1,'', false, 10);
-
-        $this->assertInstanceOf(Collection::class, $response);
-    }
-
-    public function test_call_read_with_null_param()
-    {
-        $this->expectException(TypeError::class);
-
-        $this->service->read(null, null, null);
-    }
-
-    public function test_call_create()
+    public function test_call_save_with_all_field_filled()
     {
         $company_id = Company::inRandomOrder()->get()[0]->id;
-        $code = (new RandomGenerator())->generateNumber(1, 9999);
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
         $city = $this->faker->city;
@@ -77,20 +35,65 @@ class BranchServiceTest extends ServiceTestCase
         $remarks = null;
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
-        $response = $this->service->create(
-            $company_id,
-            $code,
-            $name,
-            $address,
-            $city,
-            $contact,
-            $remarks,
-            $status
+        $this->service->create(
+            company_id: $company_id,
+            code: $code,
+            name: $name,
+            address: $address,
+            city: $city,
+            contact: $contact,
+            remarks: $remarks,
+            status: $status
         );
 
-        $this->assertNotNull($response);
+        $this->assertDatabaseHas('branches', [
+            'company_id' => $company_id,
+            'code' => $code,
+            'name' => $name
+        ]);
+    }
+
+    public function test_call_save_with_minimal_field_filled()
+    {
+        $company_id = Company::inRandomOrder()->get()[0]->id;
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
+        $name = $this->faker->name;
+        $address = null;
+        $city = null;
+        $contact = null;
+        $remarks = null;
+        $status = (new RandomGenerator())->generateNumber(0, 1);
+
+        $this->service->create(
+            company_id: $company_id,
+            code: $code,
+            name: $name,
+            address: $address,
+            city: $city,
+            contact: $contact,
+            remarks: $remarks,
+            status: $status
+        );
 
         $this->assertDatabaseHas('branches', [
+            'company_id' => $company_id,
+            'code' => $code,
+            'name' => $name
+        ]);
+    }
+
+    public function test_call_edit_with_all_field_filled()
+    {
+        $company_id = Company::inRandomOrder()->get()[0]->id;
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
+        $name = $this->faker->name;
+        $address = $this->faker->address;
+        $city = $this->faker->city;
+        $contact = $this->faker->e164PhoneNumber;
+        $remarks = null;
+        $status = (new RandomGenerator())->generateNumber(0, 1);
+
+        $branch = Branch::create([
             'company_id' => $company_id,
             'code' => $code,
             'name' => $name,
@@ -98,73 +101,93 @@ class BranchServiceTest extends ServiceTestCase
             'city' => $city,
             'contact' => $contact,
             'remarks' => $remarks,
-            'status' => $status,
+            'status' => $status
+        ]);
+        $id = $branch->id;
+
+        $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
+        $newName = $this->faker->name;
+        $newAddress = $this->faker->address;
+        $newCity = $this->faker->city;
+        $newContact = $this->faker->e164PhoneNumber;
+        $newRemarks = null;
+        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+
+        $this->service->update(
+            id: $id,
+            company_id: $company_id,
+            code: $newCode,
+            name: $newName,
+            address: $newAddress,
+            city: $newCity,
+            contact: $newContact,
+            remarks: $newRemarks,
+            status: $newStatus
+        );
+
+        $this->assertDatabaseHas('branches', [
+            'id' => $id,
+            'company_id' => $company_id,
+            'code' => $newCode,
+            'name' => $newName
         ]);
     }
 
-    public function test_call_update()
+    public function test_call_edit_with_minimal_field_filled()
     {
         $company_id = Company::inRandomOrder()->get()[0]->id;
-        $code = (new RandomGenerator())->generateNumber(1, 9999);
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $address = $this->faker->address;
-        $city = $this->faker->city;
-        $contact = $this->faker->e164PhoneNumber;
+        $address = null;
+        $city = null;
+        $contact = null;
         $remarks = null;
-        $status = 1;
+        $status = (new RandomGenerator())->generateNumber(0, 1);
 
-        $response = $this->service->create(
-            $company_id,
-            $code,
-            $name,
-            $address,
-            $city,
-            $contact,
-            $remarks,
-            $status
-        );
-
-        $this->assertNotNull($response);
-
-        $code_new = (new RandomGenerator())->generateNumber(1, 9999);
-        $name_new = $this->faker->name;
-        $address_new = $this->faker->address;
-        $city_new = $this->faker->city;
-        $contact_new = $this->faker->e164PhoneNumber;
-        $remarks_new = $this->faker->word;
-        $status_new = (new RandomGenerator())->generateNumber(0, 1);
-
-        $response_edit = $this->service->update(
-            id: $response->id,
-            company_id: $company_id,
-            code: $code_new,
-            name: $name_new,
-            address: $address_new,
-            city: $city_new,
-            contact: $contact_new,
-            remarks: $remarks_new,
-            status: $status_new
-        );
-
-        $this->assertNotNull($response_edit);
-        
-        $this->assertDatabaseHas('branches', [
-            'id' => $response_edit->id,
+        $branch = Branch::create([
             'company_id' => $company_id,
-            'code' => $code_new,
-            'name' => $name_new,
-            'address' => $address_new,
-            'city' => $city_new,
-            'contact' => $contact_new,
-            'remarks' => $remarks_new,
-            'status' => $status_new
+            'code' => $code,
+            'name' => $name,
+            'address' => $address,
+            'city' => $city,
+            'contact' => $contact,
+            'remarks' => $remarks,
+            'status' => $status
+        ]);
+        $id = $branch->id;
+
+        $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
+        $newName = $this->faker->name;
+        $newAddress = null;
+        $newCity = null;
+        $newContact = null;
+        $newRemarks = null;
+        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+
+        $this->service->update(
+            id: $id,
+            company_id: $company_id,
+            code: $newCode,
+            name: $newName,
+            address: $newAddress,
+            city: $newCity,
+            contact: $newContact,
+            remarks: $newRemarks,
+            status: $newStatus
+        );
+
+        $this->assertDatabaseHas('branches', [
+            'id' => $id,
+            'company_id' => $company_id,
+            'code' => $newCode,
+            'name' => $newName
         ]);
     }
 
     public function test_call_delete()
     {
         $company_id = Company::inRandomOrder()->get()[0]->id;
-        $code = (new RandomGenerator())->generateNumber(1, 9999);
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
         $city = $this->faker->city;
@@ -172,32 +195,61 @@ class BranchServiceTest extends ServiceTestCase
         $remarks = null;
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
-        $response = $this->service->create(
-            $company_id,
-            $code,
-            $name,
-            $address,
-            $city,
-            $contact,
-            $remarks,
-            $status
-        );
-
-        $id = $response->id;
+        $branch = Branch::create([
+            'company_id' => $company_id,
+            'code' => $code,
+            'name' => $name,
+            'address' => $address,
+            'city' => $city,
+            'contact' => $contact,
+            'remarks' => $remarks,
+            'status' => $status
+        ]);
+        $id = $branch->id;
 
         $this->service->delete($id);
-        
+
         $this->assertSoftDeleted('branches', [
             'id' => $id
         ]);
     }
 
-    public function test_call_delete_with_nonexistence_id()
+    public function test_call_read_when_user_have_branches_read_with_empty_search()
     {
-        $max_int = 2147483647;
-        
-        $response = $this->service->delete($max_int);
+        $companyId = Company::inRandomOrder()->get()[0]->id;
 
-        $this->assertFalse($response);
+        $response = $this->service->read(
+            companyId: $companyId, 
+            search: '', 
+            paginate: true, 
+            page: 1,
+            perPage: 10,
+            useCache: false
+        );
+
+        $this->assertInstanceOf(Paginator::class, $response);
+        $this->assertNotNull($response);
+    }
+
+    public function test_call_read_when_user_have_companies_with_special_char_in_search()
+    {
+        $companyId = Company::inRandomOrder()->get()[0]->id;
+        $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
+        $paginate = true;
+        $page = 1;
+        $perPage = 10;
+        $useCache = false;
+
+        $response = $this->service->read(
+            companyId: $companyId, 
+            search: $search, 
+            paginate: $paginate, 
+            page: $page,
+            perPage: $perPage,
+            useCache: $useCache
+        );
+
+        $this->assertInstanceOf(Paginator::class, $response);
+        $this->assertNotNull($response);
     }
 }
