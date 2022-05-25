@@ -3,15 +3,14 @@
 namespace Tests\Feature\Service;
 
 use App\Models\User;
-use App\Services\CompanyService;
-use App\Services\UserService;
-use Database\Seeders\CompanyTableSeeder;
-use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Collection;
 use Tests\ServiceTestCase;
-use TypeError;
+use App\Services\UserService;
+use App\Actions\RandomGenerator;
+use App\Models\Company;
+use App\Services\CompanyService;
+use Database\Seeders\CompanyTableSeeder;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class CompanyServiceTest extends ServiceTestCase
 {
@@ -36,69 +35,188 @@ class CompanyServiceTest extends ServiceTestCase
 
     public function test_call_save_with_all_field_filled()
     {
-        $this->assertTrue(false);
+        $user = User::has('companies')->get()->first();
+
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
+        $name = $this->faker->name;
+        $address = $this->faker->address;
+        $default = 0;
+        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $userId = $user->id;
+
+        $this->service->create(
+            $code,
+            $name,
+            $address,
+            $default,
+            $status,
+            $userId
+        );
+
+        $this->assertDatabaseHas('companies', [
+            'code' => $code,
+            'name' => $name
+        ]);
     }
 
     public function test_call_save_with_minimal_field_filled()
     {
-        $this->assertTrue(false);
-    }
+        $user = User::has('companies')->get()->first();
 
-    public function test_call_save_with_existing_code()
-    {
-        $this->assertTrue(false);
-    }
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
+        $name = $this->faker->name;
+        $address = null;
+        $default = 0;
+        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $userId = $user->id;
 
-    public function test_call_save_with_null_param()
-    {
-        $this->assertTrue(false);
-    }
+        $this->service->create(
+            $code,
+            $name,
+            $address,
+            $default,
+            $status,
+            $userId
+        );
 
-    public function test_call_save_with_empty_string_param()
-    {
-        $this->assertTrue(false);
+        $this->assertDatabaseHas('companies', [
+            'code' => $code,
+            'name' => $name
+        ]);
     }
 
     public function test_call_edit_with_all_field_filled()
     {
-        $this->assertTrue(false);
+        $user = User::has('companies')->get()->first();
+
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
+        $name = $this->faker->name;
+        $address = $this->faker->address;
+        $default = 0;
+        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $userId = $user->id;
+
+        $company = Company::create([
+            'code' => $code,
+            'name' => $name,
+            'address' => $address,
+            'default' => $default,
+            'status' => $status,
+            'userId' => $userId
+        ]);
+        $id = $company->id;
+
+        $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
+        $newName = $this->faker->name;
+        $newAddress = $this->faker->address;
+        $newDefault = 0;
+        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+
+        $this->service->update(
+            id: $id,
+            code: $newCode,
+            name: $newName,
+            address: $newAddress,
+            default: $newDefault,
+            status: $newStatus
+        );
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $id,
+            'code' => $newCode,
+            'name' => $newName
+        ]);
     }
 
     public function test_call_edit_with_minimal_field_filled()
     {
-        $this->assertTrue(false);
-    }
+        $user = User::has('companies')->get()->first();
 
-    public function test_call_edit_with_existing_code()
-    {
-        $this->assertTrue(false);
-    }
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
+        $name = $this->faker->name;
+        $address = null;
+        $default = 0;
+        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $userId = $user->id;
 
-    public function test_call_edit_with_null_param()
-    {
-        $this->assertTrue(false);
+        $company = Company::create([
+            'code' => $code,
+            'name' => $name,
+            'address' => $address,
+            'default' => $default,
+            'status' => $status,
+            'userId' => $userId
+        ]);
+        $id = $company->id;
+
+        $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
+        $newName = $this->faker->name;
+        $newAddress = null;
+        $newDefault = 0;
+        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+
+        $this->service->update(
+            id: $id,
+            code: $newCode,
+            name: $newName,
+            address: $newAddress,
+            default: $newDefault,
+            status: $newStatus
+        );
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $id,
+            'code' => $newCode,
+            'name' => $newName,
+            'address' => $newAddress,
+            'default' => $newDefault,
+            'status' => $newStatus
+        ]);
     }
 
     public function test_call_delete()
     {
-                $this->assertTrue(false);$this->assertTrue(false);
-    }
+        $user = User::has('companies')->get()->first();
 
-    public function test_call_delete_nonexistance_id()
-    {
-        $this->assertTrue(false);
-    }
+        $code = (new RandomGenerator())->generateAlphaNumeric(5);
+        $name = $this->faker->name;
+        $address = $this->faker->address;
+        $default = 0;
+        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $userId = $user->id;
 
-    public function test_call_delete_default_company()
-    {
-        $this->assertTrue(false);
+        $company = Company::create([
+            'code' => $code,
+            'name' => $name,
+            'address' => $address,
+            'default' => $default,
+            'status' => $status,
+            'userId' => $userId
+        ]);
+        $id = $company->id;
+
+        $this->service->delete(
+            userId: $userId, 
+            id: $id
+        );
+
+        $this->assertSoftDeleted('companies', [
+            'id' => $id
+        ]);
     }
 
     public function test_call_read_when_user_have_companies_read_with_empty_search()
     {
-        $usr = User::has('companies')->get()->first();
+        $user = User::has('companies')->get()->first();
 
-        $response = $this->service->read($usr->id, '', true, 10);
+        $response = $this->service->read(
+            userId: $user->id, 
+            search: '', 
+            paginate: true, 
+            page: 1,
+            perPage: 10,
+            useCache: false
+        );
 
         $this->assertInstanceOf(Paginator::class, $response);
         $this->assertNotNull($response);
@@ -106,36 +224,47 @@ class CompanyServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_companies_with_special_char_in_search()
     {
-        $this->assertTrue(false);
-    }
+        $user = User::has('companies')->get()->first();
 
-    public function test_call_read_when_user_have_companies_with_negative_value_in_perpage_param()
-    {
-        $this->assertTrue(false);
-    }
+        $userId = $user->id;
+        $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
+        $paginate = true;
+        $page = 1;
+        $perPage = 10;
+        $useCache = false;
 
-    public function test_call_read_when_user_have_companies_without_pagination()
-    {
-        $this->assertTrue(false);
-    }
+        $response = $this->service->read(
+            userId: $userId, 
+            search: $search, 
+            paginate: $paginate, 
+            page: $page,
+            perPage: $perPage,
+            useCache: $useCache
+        );
 
-    public function test_call_read_when_user_have_companies_with_null_param()
-    {
-        $this->assertTrue(false);
+        $this->assertInstanceOf(Paginator::class, $response);
+        $this->assertNotNull($response);
     }
 
     public function test_call_read_when_user_doesnt_have_companies_with_empty_search()
     {
-        $usr = User::doesnthave('companies')->get();
+        $user = User::doesnthave('companies')->get();
 
-        if ($usr->count() == 0) {
+        if ($user->count() == 0) {
             $email = $this->faker->email;
-            $selectedUsr = $this->userService->register('testing', $email, 'password', 'on');
+            $selectedUser = $this->userService->register('testing', $email, 'password', 'on');
         } else {
-            $selectedUsr = $usr->shuffle()->first();
+            $selectedUser = $user->shuffle()->first();
         }
 
-        $response = $this->service->read($selectedUsr->id, '', true, 10);
+        $response = $this->service->read(
+            userId: $selectedUser->id, 
+            search: '', 
+            paginate: true, 
+            page: 1,
+            perPage: 10,
+            useCache: false
+        );
 
         $this->assertInstanceOf(Paginator::class, $response);
         $this->assertNotNull($response);
@@ -143,21 +272,25 @@ class CompanyServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_doesnt_have_companies_with_special_char_in_search()
     {
-        $this->assertTrue(false);
-    }
+        $user = User::doesnthave('companies')->get();
 
-    public function test_call_read_when_user_doesnt_have_companies_with_negative_value_in_perpage_param()
-    {
-        $this->assertTrue(false);
-    }
+        if ($user->count() == 0) {
+            $email = $this->faker->email;
+            $selectedUser = $this->userService->register('testing', $email, 'password', 'on');
+        } else {
+            $selectedUser = $user->shuffle()->first();
+        }
 
-    public function test_call_read_when_user_doesnt_have_companies_without_pagination()
-    {
-        $this->assertTrue(false);
-    }
+        $response = $this->service->read(
+            userId: $selectedUser->id, 
+            search: " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~", 
+            paginate: true, 
+            page: 1,
+            perPage: 10,
+            useCache: false
+        );
 
-    public function test_call_read_when_user_doesnt_have_companies_with_null_param()
-    {
-        $this->assertTrue(false);
+        $this->assertInstanceOf(Paginator::class, $response);
+        $this->assertNotNull($response);
     }
 }
