@@ -60,11 +60,11 @@ class WarehouseServiceImpl implements WarehouseService
         } catch (Exception $e) {
             DB::rollBack();
             Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
-            return Config::get('const.ERROR_RETURN_VALUE');
         } finally {
             $execution_time = microtime(true) - $timer_start;
             Log::channel('perfs')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' ('.number_format($execution_time, 1).'s)');
         }
+        return Config::get('const.ERROR_RETURN_VALUE');
     }
 
     public function read(
@@ -91,7 +91,7 @@ class WarehouseServiceImpl implements WarehouseService
 
             if (!$companyId) return null;
 
-            $warehouse = Warehouse::with('company')
+            $warehouse = Warehouse::with('company', 'branch')
                         ->whereCompanyId($companyId);
     
             if (empty($search)) {
@@ -158,11 +158,11 @@ class WarehouseServiceImpl implements WarehouseService
         } catch (Exception $e) {
             DB::rollBack();
             Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
-            return Config::get('const.ERROR_RETURN_VALUE');
         } finally {
             $execution_time = microtime(true) - $timer_start;
             Log::channel('perfs')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' ('.number_format($execution_time, 1).'s)');
         }
+        return Config::get('const.ERROR_RETURN_VALUE');
     }
 
     public function delete(int $id): bool

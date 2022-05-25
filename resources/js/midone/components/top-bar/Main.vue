@@ -6,19 +6,24 @@
             <DropdownToggle tag="div" class="cursor-pointer" role="button">
               <div class="flex flex-row">
                 <UmbrellaIcon class="dark:text-slate-300 mr-2" />
-                <LoadingIcon icon="puff" v-if="selectedCompany === ''"/> <div class="text-gray-700 dark:text-slate-300" v-else><strong>{{ selectedCompany }}</strong></div>
+                <LoadingIcon icon="puff" v-if="selectedCompany === ''"/> <div class="text-gray-700 dark:text-slate-300" v-else><strong>{{ selectedCompany }} {{ selectedBranch === '' ? '': '- ' + selectedBranch }}</strong></div>
               </div>
               </DropdownToggle>
-              <DropdownMenu class="w-56">
+              <DropdownMenu class="w-96">
                 <DropdownContent class="dark:bg-dark-6">
                   <template v-for="(c, cIdx) in userCompanyLists">
-                    <DropdownHeader>{{ c.name }}</DropdownHeader>
+                    <DropdownHeader>{{ c.name }} </DropdownHeader>
                     <DropdownDivider />
-                    <DropDownItem >
-                      <a href="" @click.prevent="switchCompany(c.hId)" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-dark-3 rounded-md">
-                        <span :class="{ 'underline': c.name === selectedCompany, 'font-medium': c.default === 1 }">{{ c.name }}</span>
-                      </a>
-                    </DropDownItem>
+                      <template v-if="!c.branches && c.branches.length == 0">
+                          <DropdownItem href="" @click.prevent="switchCompany(c.hId)" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-dark-3 rounded-md">
+                            <span :class="{ 'underline': c.name === selectedCompany, 'font-medium': c.default === 1 }">{{ c.name }}</span>
+                          </DropdownItem>
+                      </template>
+                      <template v-else v-for="(br, brIdx) in c.branches">
+                        <DropdownItem href="" @click.prevent="switchBranch(c.hId, br.hId)" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-dark-3 rounded-md">
+                          <span :class="{ 'underline': br.name === selectedBranch }">{{ br.name }}</span>
+                        </DropdownItem>
+                      </template>
                   </template>
                 </DropdownContent>
               </DropdownMenu>            
@@ -38,16 +43,12 @@
       </DropdownToggle>
       <DropdownMenu class="w-56">
         <DropdownContent tag="div">
-          <DropDownItem>
-            <a href="" @click.prevent="switchLanguage('en')" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-dark-3 rounded-md">
+            <DropdownItem href="" @click.prevent="switchLanguage('en')" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-dark-3 rounded-md">
               <img alt="English" :src="assetPath('us.png')" class="w-4 h-4 mr-2" /> <span :class="{ 'font-medium': currentLanguage === 'en' }">English</span>
-            </a>
-          </DropDownItem>
-          <DropDownItem>
-            <a href="" @click.prevent="switchLanguage('id')" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-dark-3 rounded-md">
+            </DropdownItem>
+            <DropdownItem href="" @click.prevent="switchLanguage('id')" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-dark-3 rounded-md">
               <img alt="Bahasa Indonesia" :src="assetPath('id.png')" class="w-4 h-4 mr-2" /> <span :class="{ 'font-medium': currentLanguage === 'id' }">Bahasa Indonesia</span>
-            </a>            
-          </DropDownItem>
+            </DropdownItem>
         </DropdownContent>
       </DropdownMenu>
     </Dropdown>
@@ -120,10 +121,12 @@ const router = useRouter();
 const userContextStore = useUserContextStore();
 const userContext = computed(() => userContextStore.userContext);
 const selectedUserCompany = computed(() => userContextStore.selectedUserCompany);
+const selectedUserBranch = computed(() => userContextStore.selectedUserBranch);
 
 const slideOverShow = ref(false);
 
 const selectedCompany = ref('');
+const selectedBranch = ref('');
 
 const userCompanyLists = computed(() => {
   if (userContext.value.companies !== undefined && userContext.value.companies.length > 0) {
@@ -142,12 +145,18 @@ const currentLanguage = computed(() => {
   return getLang();
 });
 
-function switchCompany(hId) {
+const switchCompany = (hId) => {
   setSelectedCompany(userCompanyLists.value, hId);
   tailwind.Dropdown.getOrCreateInstance(document.querySelector("#company-dropdown")).hide();
 }
 
-function setSelectedCompany(companyLists, selected) {
+const switchBranch = (company_hId, branch_hId) => {
+  setSelectedCompany(userCompanyLists.value, company_hId);
+  setSelectedBranch(userCompanyLists.value, company_hId, branch_hId);
+  tailwind.Dropdown.getOrCreateInstance(document.querySelector("#company-dropdown")).hide();
+}
+
+const setSelectedCompany = (companyLists, selected) => {
   if (companyLists.length === 0) return;
 
   if (selected === '') {
@@ -164,7 +173,30 @@ function setSelectedCompany(companyLists, selected) {
   }
 }
 
-function goTo(page) {
+const setSelectedBranch = (companyLists, selectedCompanyId, selectedBranchId) => {
+  if (selectedCompanyId === '') {
+    let defaultCompany = _.find(companyLists, { default: true });
+    let mainBranch = _.find(defaultCompany.branches, { is_main: true });
+
+    if (mainBranch) {
+      selectedBranch.value = mainBranch.name
+      userContextStore.setSelectedUserBranch(mainBranch.hId);
+    }
+  } else {
+    _.forEach(companyLists, function(item) {
+      if (selectedCompanyId === item.hId) {
+        let branch = _.find(item.branches, { hId: selectedBranchId });
+        
+        if (branch) {
+          selectedBranch.value = branch.name
+          userContextStore.setSelectedUserBranch(branch.hId);
+        }
+      }
+    });
+  }
+}
+
+const goTo = (page) => {
   switch(page) {
     case 'profile':
       router.push({ name: 'side-menu-dashboard-profile' });
@@ -179,7 +211,7 @@ function goTo(page) {
     tailwind.Dropdown.getOrCreateInstance(document.querySelector("#main-dropdown")).hide();
 }
 
-function logout() {
+const logout = () => {
   tailwind.Dropdown.getOrCreateInstance(document.querySelector("#main-dropdown")).hide();
   axios.post('/logout').then(response => {
     sessionStorage.clear();
