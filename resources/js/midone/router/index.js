@@ -39,16 +39,24 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    if (to.matched.some(r => r.meta.skipBeforeEach) && to.meta.skipBeforeEach) next();
+    if (to.matched.some(r => r.meta.skipBeforeEach) && to.meta.skipBeforeEach) {
+        next();
+        return;
+    }
 
     const userContextStore = useUserContextStore();
-    if (userContextStore.userContext.name === undefined) next();
+    if (userContextStore.userContext.name === undefined) {
+        next();
+        return;
+    }
 
     multiguard([
         guards.canUserAccess(to, userContextStore.userContext, next),
         guards.checkPasswordExpiry(userContextStore.userContext, next), 
         guards.checkUserStatus(userContextStore.userContext, next)
     ]);
+
+    next();
 });
 
 router.afterEach((to, from) => {
