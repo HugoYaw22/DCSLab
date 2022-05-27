@@ -21,7 +21,10 @@ if (mix.inProduction()) {
             plugins: [
                 new webpack.DefinePlugin({
                     __VUE_OPTIONS_API__: true,
-                    __VUE_PROD_DEVTOOLS__: false
+                    __VUE_PROD_DEVTOOLS__: false,
+                    __VUE_I18N_FULL_INSTALL__: true,
+                    __VUE_I18N_LEGACY_API__ : true,
+                    __INTLIFY_PROD_DEVTOOLS__ : false
                 })
             ]
         })
@@ -35,7 +38,7 @@ if (mix.inProduction()) {
             require('cssnano')
         ])
         .js('resources/js/midone/main.js','public/js/midone/main.js')
-        .vue()
+        .vue({ version: 3 })
         .version()
     ;
 
@@ -43,7 +46,7 @@ if (mix.inProduction()) {
     mix
         .webpackConfig({
             stats: {
-                children: true
+                children: false
             },
             devtool: 'source-map'
         })
@@ -55,7 +58,7 @@ if (mix.inProduction()) {
     mix
         .webpackConfig({
             stats: {
-                children: true
+                children: false
             },
             devtool: 'source-map',
             resolve: {
@@ -66,7 +69,10 @@ if (mix.inProduction()) {
             plugins: [
                 new webpack.DefinePlugin({
                     __VUE_OPTIONS_API__: true,
-                    __VUE_PROD_DEVTOOLS__: false
+                    __VUE_PROD_DEVTOOLS__: false,
+                    __VUE_I18N_FULL_INSTALL__: true,
+                    __VUE_I18N_LEGACY_API__ : true,
+                    __INTLIFY_PROD_DEVTOOLS__ : false
                 })
             ]
         })
@@ -80,7 +86,7 @@ if (mix.inProduction()) {
         ])
         .js('resources/js/midone/main.js','public/js/midone/main.js')
         .sourceMaps()
-        .vue()
+        .vue({ version: 3 })
     ;
 }
 
