@@ -8,7 +8,7 @@
                         <tr>
                             <th class="whitespace-nowrap">{{ t('views.employee.table.cols.name') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.employee.table.cols.email') }}</th>
-                            <th class="whitespace-nowrap">Join Date</th>
+                            <th class="whitespace-nowrap">{{ t('views.employee.table.cols.join_date') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.employee.table.cols.status') }}</th>
                             <th class="whitespace-nowrap"></th>
                         </tr>
@@ -250,15 +250,15 @@ const expandDetail = ref(null);
 //#region Data - Views
 const employeeList = ref({});
 const employee = ref({
-    user: {
-        company: { 
+    company: { 
             hId: '',
-            name: '' 
+            name: '',
         },
+    user: [
         hId: '',
         name: '',
         email: '',
-        profile: {
+        profile: [
             hId: '',
             img_path: '',
             address: '',
@@ -269,12 +269,13 @@ const employee = ref({
             ic_num: '',
             remarks: '',
             status: 1,
-        },
-    },
+        ],
+    ],
     join_date: '',
     status: 1,
 });
 const companyDDL = ref([]);
+const countriesDDL = ref([]);
 const statusDDL = ref([]);
 //#endregion
 
@@ -318,6 +319,15 @@ const getAllEmployees = (args) => {
 }
 
 const getDDL = () => {
+    if (getCachedDDL('countriesDDL') == null) {
+        axios.get(route('api.get.db.common.ddl.list.countries')).then(response => {
+            countriesDDL.value = response.data;
+            setCachedDDL('countriesDDL', response.data);
+        });
+    } else {
+        countriesDDL.value = getCachedDDL('countriesDDL');
+    }
+    
     if (getCachedDDL('statusDDL') == null) {
         axios.get(route('api.get.db.common.ddl.list.statuses')).then(response => {
             statusDDL.value = response.data;
@@ -352,6 +362,8 @@ const onSubmit = (values, actions) => {
             loading.value = false;
         });
     } else if (mode.value === 'edit') {
+        formData.append('company_id', selectedUserCompany.value);
+
         axios.post(route('api.post.db.company.employee.edit', employee.value.hId), formData).then(response => {
             actions.resetForm();
             backToList();
@@ -391,29 +403,30 @@ const reValidate = (errors) => {
 
 const emptyEmployee = () => {
     return {
-        user: {
         company: { 
             hId: '',
-            name: '' 
+            name: '',
         },
-        hId: '',
-        name: '',
-        email: '',
-        profile: {
+        user: [
             hId: '',
-            img_path: '',
-            address: '',
-            city: '',
-            postal_code: '',
-            country: '',
-            tax_id: '',
-            ic_num: '',
-            remarks: '',
-            status: 1,
-        },
+            name: '',
+            email: '',
+            profile: [
+                hId: '',
+                img_path: '',
+                address: '',
+                city: '',
+                postal_code: '',
+                country: '',
+                tax_id: '',
+                ic_num: '',
+                remarks: '',
+                status: 1,
+            ],
+        ],
+        join_date: '',
+        status: 1,
     },
-    join_date: '',
-    status: 1,
 }
 
 const resetAlertErrors = () => {
@@ -427,9 +440,11 @@ const createNew = () => {
         employee.value = JSON.parse(sessionStorage.getItem('DCSLAB_LAST_ENTITY'));
         sessionStorage.removeItem('DCSLAB_LAST_ENTITY');
     } else {
-        employee.value = emptyEmployee();
+        employee.value = emptyBranch();
+
+        let c = _.find(companyDDL.value, { 'hId': selectedUserCompany.value });
+        if (c) employee.value.company.hId = c.hId;
     }
-    employee.value.company.hId = _.find(companyDDL.value, { 'hId': selectedUserCompany.value });
 }
 
 const onDataListChange = ({page, pageSize, search}) => {
@@ -477,13 +492,36 @@ const toggleDetail = (idx) => {
     }
 }
 
+const handleUpload = (e) => {
+    const files = e.target.files;
+
+    let filename = files[0].name;
+
+    const fileReader = new FileReader()
+    fileReader.addEventListener('load', () => {
+        employee.user.value.profile.img_path = fileReader.result
+    })
+    fileReader.readAsDataURL(files[0])
+}
+
+//#region Computed
+const retrieveImage = computed(() => {
+    if (employee.user.value.profile.img_path && employee.user.value.profile.img_path !== '') {
+        if (employee.user.value.profile.img_path.includes('data:image')) {
+            return employee.user.value.profile.img_path;
+        } else {
+            return '/storage/' + employee.user.value.profile.img_path;
+        }
+    } else {
+        return '/images/def-user.png';
+    }
+});
+//#endregion
+
 const generateCode = () => {
     if (employee.value.code === '[AUTO]') employee.value.code = '';
     else  employee.value.code = '[AUTO]'
 }
-//#endregion
-
-//#region Computed
 //#endregion
 
 //#region Watcher

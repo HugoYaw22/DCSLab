@@ -181,12 +181,14 @@
                     <!-- #endregion -->
 
                     <!-- #region Round On -->
-                    <div class="mb-3">
+                    <!-- <select class="mb-3">
                         <label for="inputRoundOn" class="form-label">{{ t('views.customer_group.fields.round_on') }}</label>
-                        <div as="select" multiple v-slot="{ value }" :class="{'form-control':true, 'border-danger':errors['round_on[]']}" id="inputRoundOn" name="round_on[]" size="6" v-model="customer_group.selected_round_on" rules="required" :label="t('views.customer_group.fields.round_on')" @blur="reValidate(errors)">
-                            <option v-for="r in round_onDDL" :key="r.hId" :value="r.hId" :selected="value.includes(r.hId)">{{ r.display_name }}</option>
-                        </div>
-                    </div>
+                        <select as="select" id="inputRoundOn" name="round_on" :class="{'form-control form-select':true, 'border-danger': errors['round_on']}" v-model="customer_group.round_on" rules="required" :placeholder="t('views.customer_group.fields.round_on')" :label="t('views.customer_group.fields.round_on')" @blur="reValidate(errors)">
+                            <option value="">{{ t('components.dropdown.placeholder') }}</option>
+                            <option v-for="c in round_onDDL" :key="c.name" :value="c.name">{{ c.name }}</option>
+                        </select>
+                        <ErrorMessage name="round_on" class="text-danger" />
+                    </select> -->
                     <!-- #endregion -->
 
                     <!-- #region Round Digit -->
