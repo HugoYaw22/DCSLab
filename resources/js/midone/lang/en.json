@@ -415,6 +415,7 @@
                 "company_id": "Company Name",
                 "name": "Nama",
                 "email": "Email",
+                "img_path": "Img Path",
                 "address": "Address",
                 "city": "City",
                 "postal_code": "Postal Code",
@@ -422,6 +423,7 @@
                 "tax_id": "Tax ID",
                 "ic_num": "Ic Num",
                 "status": "Status",
+                "join_date": "Join Date",
                 "remarks": "Remarks"
             }
         },
