@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Service;
 
-use App\Models\Warehouse;
-use App\Models\Company;
-use Tests\ServiceTestCase;
-use App\Services\WarehouseService;
-use App\Actions\RandomGenerator;
 use App\Models\Branch;
+use App\Models\Company;
+use App\Models\Warehouse;
+use Tests\ServiceTestCase;
+use App\Actions\RandomGenerator;
+use App\Services\WarehouseService;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Contracts\Pagination\Paginator;
 
@@ -21,14 +21,23 @@ class WarehouseServiceTest extends ServiceTestCase
 
         $this->service = app(WarehouseService::class);
 
-        if (Warehouse::count() < 2)
+        if (Company::count() < 2) {
+            $this->artisan('db:seed', ['--class' => 'CompanyTableSeeder']);
+        }
+
+        if (Branch::count() < 2) {
+            $this->artisan('db:seed', ['--class' => 'BranchTableSeeder']);
+        }
+
+        if (Warehouse::count() < 2) {
             $this->artisan('db:seed', ['--class' => 'WarehouseTableSeeder']);
+        }
     }
 
     public function test_call_save_with_all_field_filled()
     {
-        $company_id = Company::has('branches')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('warehouses')->inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
@@ -59,8 +68,8 @@ class WarehouseServiceTest extends ServiceTestCase
 
     public function test_call_save_with_minimal_field_filled()
     {
-        $company_id = Company::has('branches')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('warehouses')->inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = null;
@@ -91,8 +100,8 @@ class WarehouseServiceTest extends ServiceTestCase
 
     public function test_call_edit_with_all_field_filled()
     {
-        $company_id = Company::has('branches')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('warehouses')->inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
@@ -146,8 +155,8 @@ class WarehouseServiceTest extends ServiceTestCase
 
     public function test_call_edit_with_minimal_field_filled()
     {
-        $company_id = Company::has('branches')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('warehouses')->inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = null;
@@ -201,8 +210,8 @@ class WarehouseServiceTest extends ServiceTestCase
 
     public function test_call_delete()
     {
-        $company_id = Company::has('branches')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('warehouses')->inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
@@ -233,7 +242,8 @@ class WarehouseServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_warehouses_read_with_empty_search()
     {
-        $companyId = Company::has('branches')->inRandomOrder()->first()->id;
+        $warehouseId = Warehouse::inRandomOrder()->first()->id;
+        $companyId = Warehouse::where('id', '=', $warehouseId)->first()->company_id;
 
         $response = $this->service->read(
             companyId: $companyId, 
@@ -250,7 +260,9 @@ class WarehouseServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_warehouses_with_special_char_in_search()
     {
-        $companyId = Company::inRandomOrder()->get()[0]->id;
+        $warehouseId = Warehouse::inRandomOrder()->first()->id;
+        $companyId = Warehouse::where('id', '=', $warehouseId)->first()->company_id;
+
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
         $paginate = true;
         $page = 1;

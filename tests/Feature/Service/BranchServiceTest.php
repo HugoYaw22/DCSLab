@@ -32,6 +32,7 @@ class BranchServiceTest extends ServiceTestCase
         $address = $this->faker->address;
         $city = $this->faker->city;
         $contact = $this->faker->e164PhoneNumber;
+        $is_main = (new RandomGenerator())->generateNumber(0, 1);
         $remarks = $this->faker->sentence;
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -42,6 +43,7 @@ class BranchServiceTest extends ServiceTestCase
             address: $address,
             city: $city,
             contact: $contact,
+            is_main : $is_main,
             remarks: $remarks,
             status: $status
         );
@@ -61,6 +63,7 @@ class BranchServiceTest extends ServiceTestCase
         $address = null;
         $city = null;
         $contact = null;
+        $is_main = (new RandomGenerator())->generateNumber(0, 1);
         $remarks = null;
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -71,6 +74,7 @@ class BranchServiceTest extends ServiceTestCase
             address: $address,
             city: $city,
             contact: $contact,
+            is_main : $is_main,
             remarks: $remarks,
             status: $status
         );
@@ -90,6 +94,7 @@ class BranchServiceTest extends ServiceTestCase
         $address = $this->faker->address;
         $city = $this->faker->city;
         $contact = $this->faker->e164PhoneNumber;
+        $is_main = (new RandomGenerator())->generateNumber(0, 1);
         $remarks = $this->faker->sentence;
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -100,6 +105,7 @@ class BranchServiceTest extends ServiceTestCase
             'address' => $address,
             'city' => $city,
             'contact' => $contact,
+            'is_main' => $is_main,
             'remarks' => $remarks,
             'status' => $status
         ]);
@@ -110,6 +116,7 @@ class BranchServiceTest extends ServiceTestCase
         $newAddress = $this->faker->address;
         $newCity = $this->faker->city;
         $newContact = $this->faker->e164PhoneNumber;
+        $newIsMain = (new RandomGenerator())->generateNumber(0, 1);
         $newRemarks = $this->faker->sentence;
         $newStatus = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -121,6 +128,7 @@ class BranchServiceTest extends ServiceTestCase
             address: $newAddress,
             city: $newCity,
             contact: $newContact,
+            is_main: $newIsMain,
             remarks: $newRemarks,
             status: $newStatus
         );
@@ -141,6 +149,7 @@ class BranchServiceTest extends ServiceTestCase
         $address = null;
         $city = null;
         $contact = null;
+        $is_main = (new RandomGenerator())->generateNumber(0, 1);
         $remarks = null;
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -151,6 +160,7 @@ class BranchServiceTest extends ServiceTestCase
             'address' => $address,
             'city' => $city,
             'contact' => $contact,
+            'is_main' => $is_main,
             'remarks' => $remarks,
             'status' => $status
         ]);
@@ -161,6 +171,7 @@ class BranchServiceTest extends ServiceTestCase
         $newAddress = null;
         $newCity = null;
         $newContact = null;
+        $newIsMain = (new RandomGenerator())->generateNumber(0, 1);
         $newRemarks = null;
         $newStatus = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -172,6 +183,7 @@ class BranchServiceTest extends ServiceTestCase
             address: $newAddress,
             city: $newCity,
             contact: $newContact,
+            is_main: $newIsMain,
             remarks: $newRemarks,
             status: $newStatus
         );
@@ -192,6 +204,7 @@ class BranchServiceTest extends ServiceTestCase
         $address = $this->faker->address;
         $city = $this->faker->city;
         $contact = $this->faker->e164PhoneNumber;
+        $is_main = (new RandomGenerator())->generateNumber(0, 1);
         $remarks = $this->faker->sentence;
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -202,6 +215,7 @@ class BranchServiceTest extends ServiceTestCase
             'address' => $address,
             'city' => $city,
             'contact' => $contact,
+            'is_main' => $is_main,
             'remarks' => $remarks,
             'status' => $status
         ]);
