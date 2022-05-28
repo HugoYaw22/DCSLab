@@ -343,6 +343,7 @@
                     "company": "Perusahaan",
                     "code": "Kode",
                     "name": "Nama",
+                    "is_main": "Cabang Utama",
                     "remarks": "Keterangan",
                     "status": "Status"
                 }
@@ -360,6 +361,7 @@
                 "address": "Alamat",
                 "city": "Kota",
                 "contact": "Kontak",
+                "is_main": "Utama",
                 "remarks": "Keterangan",
                 "status": "Status"
             }

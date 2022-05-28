@@ -344,6 +344,7 @@
                     "company": "Company",
                     "code": "Code",
                     "name": "Name",
+                    "is_main": "Main Branch",
                     "remarks": "Remarks",
                     "status": "Status"
                 }
@@ -361,6 +362,7 @@
                 "address": "Address",
                 "city": "City",
                 "contact": "Contact",
+                "is_main" : "Is Main",
                 "remarks": "Remarks",
                 "status": "Status"
             }
