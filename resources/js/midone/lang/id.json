@@ -418,6 +418,7 @@
                 "company_id": "Nama Perusahaan",
                 "name": "Nama",
                 "email": "Email",
+                "img_path": "Gambar",
                 "address": "Alamat",
                 "city": "Kota",
                 "postal_code": "Kode Pos",
@@ -425,6 +426,7 @@
                 "tax_id": "Nomor Pajak",
                 "ic_num": "Nomor KTP",
                 "status": "Status",
+                "join_date": "Tanggal Bergabung",
                 "remarks": "Keterangan"
             }
         }
