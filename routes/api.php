@@ -53,6 +53,7 @@ Route::group(['prefix' => 'get', 'middleware' => ['auth:sanctum', 'throttle:100,
             Route::group(['prefix' => 'branch', 'as' => '.branch'], function() {
                 Route::get('read', [BranchController::class, 'read'])->name('.read');
                 Route::get('read/by/company', [BranchController::class, 'getBranchByCompanyId'])->name('.read.by.company');
+                Route::get('main', [BranchController::class, 'getMainBranchByCompanyId'])->name('.main');
             });
             Route::group(['prefix' => 'warehouse', 'as' => '.warehouse'], function() {
                 Route::get('read', [WarehouseController::class, 'read'])->name('.read');
@@ -167,6 +168,7 @@ Route::group(['prefix' => 'get', 'middleware' => ['auth:sanctum', 'throttle:100,
                 Route::get('list/countries', [CommonController::class, 'getCountries'])->name('.list.countries');
                 Route::get('list/is_bank', [CommonController::class, 'getStatus'])->name('.list.is_bank');
                 Route::get('list/statuses', [CommonController::class, 'getStatus'])->name('.list.statuses');
+                Route::get('list/confirmationdialog', [CommonController::class, 'getConfirmationDialog'])->name('.list.confirmationdialog');
             });
 
             Route::group(['prefix' => 'tools', 'as' => '.tools'], function() {
