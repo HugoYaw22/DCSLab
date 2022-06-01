@@ -43,6 +43,7 @@ class DashboardServiceImpl implements DashboardService
         $menu = $this->createMenu_Dashboard($menu, $showDemoMenu);
         $menu = $this->createMenu_Company($menu, $hasOnlyUserRole, $hasCompany, $hasDevRole);
         $menu = $this->createMenu_Product($menu, $hasCompany, $hasDevRole);
+        $menu = $this->createMenu_Cash($menu, $hasCompany, $hasDevRole);
         $menu = $this->createMenu_Supplier($menu, $hasCompany, $hasDevRole);
         $menu = $this->createMenu_Customer($menu, $hasCompany, $hasDevRole);
         $menu = $this->createMenu_PurchaseOrder($menu, $hasCompany, $hasDevRole);
@@ -246,38 +247,62 @@ class DashboardServiceImpl implements DashboardService
 
         $capital = array(
             'icon' => '',
-            'pageName' => 'side-menu-cash-capital-capital',
-            'title' => 'components.menu.cash-capital-capital'
+            'pageName' => 'side-menu-devtool-example',
+            'title' => 'components.menu.devtool-capital',
+            'subMenu' => [
+            ]
         );
 
-        $capital_group = array(
+        $capital_ex1 = array(
             'icon' => '',
-            'pageName' => 'side-menu-cash-capital-capital_group',
-            'title' => 'components.menu.cash-capital-capital_group'
+            'pageName' => 'side-menu-devtool-example-ex1',
+            'title' => 'components.menu.devtool-capital-ex1'
+        );
+
+        $capital_group_ex2 = array(
+            'icon' => '',
+            'pageName' => 'side-menu-devtool-example-ex2',
+            'title' => 'components.menu.devtool-capital-group-ex2'
         );
 
         $expense = array(
             'icon' => '',
-            'pageName' => 'side-menu-cash-expense-expense',
-            'title' => 'components.menu.cash-expense-expense'
+            'pageName' => 'side-menu-devtool-example',
+            'title' => 'components.menu.devtool-expense',
+            'subMenu' => [
+            ]
         );
 
-        $expense_group = array(
+        $expense_ex1 = array(
             'icon' => '',
-            'pageName' => 'side-menu-cash-expense-expense_group',
-            'title' => 'components.menu.cash-expense-expense_group'
+            'pageName' => 'side-menu-devtool-example-ex1',
+            'title' => 'components.menu.devtool-expense-ex1'
+        );
+
+        $expense_group_ex2 = array(
+            'icon' => '',
+            'pageName' => 'side-menu-devtool-example-ex2',
+            'title' => 'components.menu.devtool-expense-group-ex2'
         );
 
         $income = array(
             'icon' => '',
-            'pageName' => 'side-menu-cash-income-income',
-            'title' => 'components.menu.cash-income-income'
+            'pageName' => 'side-menu-devtool-example',
+            'title' => 'components.menu.devtool-income',
+            'subMenu' => [
+            ]
         );
 
-        $income_group = array(
+        $income_ex1 = array(
             'icon' => '',
-            'pageName' => 'side-menu-cash-income-income_group',
-            'title' => 'components.menu.cash-income-income_group'
+            'pageName' => 'side-menu-devtool-example-ex1',
+            'title' => 'components.menu.devtool-income-ex1'
+        );
+
+        $income_group_ex2 = array(
+            'icon' => '',
+            'pageName' => 'side-menu-devtool-example-ex2',
+            'title' => 'components.menu.devtool-income-group-ex2'
         );
 
         $investor = array(
@@ -294,7 +319,18 @@ class DashboardServiceImpl implements DashboardService
             ]
         );
 
-        array_push($root_array['subMenu'], $cash, $capital, $capital_group, $expense, $expense_group, $income, $income_group, $investor);
+        array_push($root_array['subMenu'], $cash);
+        array_push($root_array['subMenu'], $capital);
+        array_push($capital['subMenu'], $capital_ex1);
+        array_push($capital['subMenu'], $capital_group_ex2);
+        array_push($root_array['subMenu'], $expense);
+        array_push($expense['subMenu'], $expense_ex1);
+        array_push($expense['subMenu'], $expense_group_ex2);
+        array_push($root_array['subMenu'], $income);
+        array_push($income['subMenu'], $income_ex1);
+        array_push($income['subMenu'], $income_group_ex2);
+        array_push($root_array['subMenu'], $investor);
+
 
         if ($hasCompany || $hasDevRole)
             array_push($menu, $root_array);
@@ -348,7 +384,8 @@ class DashboardServiceImpl implements DashboardService
             ]
         );
 
-        array_push($root_array['subMenu'], $customer, $customer_group);
+        array_push($root_array['subMenu'], $customer);
+        array_push($root_array['subMenu'], $customer_group);
 
         if ($hasCompany || $hasDevRole)
             array_push($menu, $root_array);
