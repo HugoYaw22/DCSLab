@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Employee;
+use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 interface EmployeeService
 {
@@ -20,7 +22,7 @@ interface EmployeeService
         int $page,
         int $perPage = 10,
         bool $useCache = true
-    );
+    ): Paginator|Collection|null;
 
     public function update(
         int $id,

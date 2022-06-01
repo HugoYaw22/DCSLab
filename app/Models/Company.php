@@ -33,6 +33,8 @@ use Spatie\Activitylog\LogOptions;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Enums\ActiveStatus;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
