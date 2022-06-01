@@ -247,62 +247,62 @@ class DashboardServiceImpl implements DashboardService
 
         $capital = array(
             'icon' => '',
-            'pageName' => 'side-menu-devtool-example',
-            'title' => 'components.menu.devtool-capital',
+            'pageName' => 'side-menu-cash-capital',
+            'title' => 'components.menu.cash-capital',
             'subMenu' => [
             ]
         );
 
         $capital_ex1 = array(
             'icon' => '',
-            'pageName' => 'side-menu-devtool-example-ex1',
-            'title' => 'components.menu.devtool-capital-ex1'
+            'pageName' => 'side-menu-cash-capital-ex1',
+            'title' => 'components.menu.cash-capital-ex1'
         );
 
         $capital_group_ex2 = array(
             'icon' => '',
-            'pageName' => 'side-menu-devtool-example-ex2',
-            'title' => 'components.menu.devtool-capital-group-ex2'
+            'pageName' => 'side-menu-cash-capital-ex2',
+            'title' => 'components.menu.cash-capital-group-ex2'
         );
 
         $expense = array(
             'icon' => '',
-            'pageName' => 'side-menu-devtool-example',
-            'title' => 'components.menu.devtool-expense',
+            'pageName' => 'side-menu-cash-expense',
+            'title' => 'components.menu.cash-expense',
             'subMenu' => [
             ]
         );
 
         $expense_ex1 = array(
             'icon' => '',
-            'pageName' => 'side-menu-devtool-example-ex1',
-            'title' => 'components.menu.devtool-expense-ex1'
+            'pageName' => 'side-menu-cash-expense-ex1',
+            'title' => 'components.menu.cash-expense-ex1'
         );
 
         $expense_group_ex2 = array(
             'icon' => '',
-            'pageName' => 'side-menu-devtool-example-ex2',
-            'title' => 'components.menu.devtool-expense-group-ex2'
+            'pageName' => 'side-menu-cash-expense-ex2',
+            'title' => 'components.menu.cash-expense-group-ex2'
         );
 
         $income = array(
             'icon' => '',
-            'pageName' => 'side-menu-devtool-example',
-            'title' => 'components.menu.devtool-income',
+            'pageName' => 'side-menu-cash-income',
+            'title' => 'components.menu.cash-income',
             'subMenu' => [
             ]
         );
 
         $income_ex1 = array(
             'icon' => '',
-            'pageName' => 'side-menu-devtool-example-ex1',
-            'title' => 'components.menu.devtool-income-ex1'
+            'pageName' => 'side-menu-cash-income-ex1',
+            'title' => 'components.menu.cash-income-ex1'
         );
 
         $income_group_ex2 = array(
             'icon' => '',
-            'pageName' => 'side-menu-devtool-example-ex2',
-            'title' => 'components.menu.devtool-income-group-ex2'
+            'pageName' => 'side-menu-cash-income-ex2',
+            'title' => 'components.menu.cash-income-group-ex2'
         );
 
         $investor = array(
