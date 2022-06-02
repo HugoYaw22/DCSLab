@@ -33,17 +33,8 @@ class Employee extends Model
 
     protected static $logOnlyDirty = true;
 
-
     protected $hidden = [
-        'id',
-        'user_id',
-        'company_id',
-        'created_by',
-        'updated_by',
-        'deleted_by',
-        'created_at',
-        'updated_at',
-        'deleted_at'
+
     ];
 
     protected $appends = ['hId'];

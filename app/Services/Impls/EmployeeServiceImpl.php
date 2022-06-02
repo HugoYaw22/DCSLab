@@ -6,16 +6,26 @@ use Exception;
 use App\Models\User;
 
 use App\Models\Employee;
+use App\Traits\CacheHelper;
 use App\Services\UserService;
 use App\Actions\RandomGenerator;
 use App\Services\EmployeeService;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class EmployeeServiceImpl implements EmployeeService
 {
+    use CacheHelper;
+
+    public function __construct()
+    {
+        
+    }
+    
     public function create(
         int $company_id,
         array $user,
@@ -53,11 +63,11 @@ class EmployeeServiceImpl implements EmployeeService
         } catch (Exception $e) {
             DB::rollBack();
             Log::debug('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.$e);
-            return Config::get('const.ERROR_RETURN_VALUE');
         } finally {
             $execution_time = microtime(true) - $timer_start;
             Log::channel('perfs')->info('['.session()->getId().'-'.(is_null(auth()->user()) ? '':auth()->id()).'] '.__METHOD__.' ('.number_format($execution_time, 1).'s)');
         }
+        return Config::get('const.ERROR_RETURN_VALUE');
     }
 
     public function read(
@@ -67,7 +77,7 @@ class EmployeeServiceImpl implements EmployeeService
         int $page,
         int $perPage = 10,
         bool $useCache = true
-    )
+    ): Paginator|Collection|null
     {
         $timer_start = microtime(true);
 
