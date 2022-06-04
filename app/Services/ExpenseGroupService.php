@@ -10,7 +10,6 @@ interface ExpenseGroupService
         int $company_id,
         string $code,
         string $name,
-        int $status,
     ): ?ExpenseGroup;
 
     public function read(
@@ -27,7 +26,6 @@ interface ExpenseGroupService
         int $company_id,
         string $code,
         string $name,
-        int $status,
     ): ?ExpenseGroup;
 
     public function delete(int $id): bool;

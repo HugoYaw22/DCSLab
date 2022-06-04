@@ -21,22 +21,23 @@ class CustomerGroupServiceImpl implements CustomerGroupService
     
     public function create(
         int $company_id,
-        int $cash_id,
         string $code,
         string $name,
-        int $max_open_invoice = null,
-        int $max_outstanding_invoice = null,
-        int $max_invoice_age = null,
-        int $payment_term = null,
+        ?int $max_open_invoice = null,
+        ?int $max_outstanding_invoice = null,
+        ?int $max_invoice_age = null,
+        ?int $payment_term = null,
         int $selling_point,
-        string $selling_point_multiple = null,
+        ?string $selling_point_multiple = null,
         ?int $sell_at_cost = null,
-        int $price_markup_percent = null,
-        int $price_markup_nominal = null,
+        ?int $price_markup_percent = null,
+        ?int $price_markup_nominal = null,
+        int $price_markdown_percent,
         int $price_markdown_nominal,
         int $round_on = null,
         ?int $round_digit = null,
         ?int $remarks = null,
+        ?int $cash_id = null,
     ): ?CustomerGroup
     {
         DB::beginTransaction();
@@ -49,7 +50,6 @@ class CustomerGroupServiceImpl implements CustomerGroupService
 
             $customerGroup = new CustomerGroup();
             $customerGroup->company_id = $company_id;
-            $customerGroup->cash_id = $cash_id;
             $customerGroup->code = $code;
             $customerGroup->name = $name;
             $customerGroup->max_open_invoice = $max_open_invoice;
@@ -60,10 +60,12 @@ class CustomerGroupServiceImpl implements CustomerGroupService
             $customerGroup->sell_at_cost = $sell_at_cost;
             $customerGroup->price_markup_percent = $price_markup_percent;
             $customerGroup->price_markup_nominal = $price_markup_nominal;
+            $customerGroup->price_markdown_percent = $price_markdown_percent;
             $customerGroup->price_markdown_nominal = $price_markdown_nominal;
             $customerGroup->round_on = $round_on;
             $customerGroup->round_digit = $round_digit;
             $customerGroup->remarks = $remarks;
+            $customerGroup->cash_id = $cash_id;
 
             $customerGroup->save();
 
@@ -177,22 +179,23 @@ class CustomerGroupServiceImpl implements CustomerGroupService
     public function update(
         int $id,
         int $company_id,
-        int $cash_id,
         string $code,
         string $name,
-        int $max_open_invoice = null,
-        int $max_outstanding_invoice = null,
-        int $max_invoice_age = null,
-        int $payment_term = null,
+        ?int $max_open_invoice = null,
+        ?int $max_outstanding_invoice = null,
+        ?int $max_invoice_age = null,
+        ?int $payment_term = null,
         int $selling_point,
-        string $selling_point_multiple = null,
+        ?string $selling_point_multiple = null,
         ?int $sell_at_cost = null,
-        int $price_markup_percent = null,
-        int $price_markup_nominal = null,
+        ?int $price_markup_percent = null,
+        ?int $price_markup_nominal = null,
+        int $price_markdown_percent,
         int $price_markdown_nominal,
         int $round_on = null,
         ?int $round_digit = null,
         ?int $remarks = null,
+        ?int $cash_id = null,
     ): ?CustomerGroup
     {
         DB::beginTransaction();
@@ -207,7 +210,6 @@ class CustomerGroupServiceImpl implements CustomerGroupService
     
             $customerGroup->update([
                 'company_id' => $company_id,
-                'cash_id' => $cash_id,
                 'code' => $code,
                 'name' => $name,
                 'max_open_invoice' => $max_open_invoice,
@@ -219,10 +221,12 @@ class CustomerGroupServiceImpl implements CustomerGroupService
                 'sell_at_cost' => $sell_at_cost,
                 'price_markup_percent' => $price_markup_percent,
                 'price_markup_nominal' => $price_markup_nominal,
+                'price_markdown_percent' => $price_markdown_percent,
                 'price_markdown_nominal' => $price_markdown_nominal,
                 'round_on' => $round_on,
                 'round_digit' => $round_digit,
                 'remarks' => $remarks,
+                'cash_id' => $cash_id,
             ]);
 
             DB::commit();

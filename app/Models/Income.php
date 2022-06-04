@@ -20,6 +20,7 @@ class Income extends Model
     use SoftDeletes;
     
     protected $fillable = [
+        'company_id',
         'branch_id',
         'income_group_id',
         'cash_id',

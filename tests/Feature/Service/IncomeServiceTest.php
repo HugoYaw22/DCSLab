@@ -24,17 +24,14 @@ class IncomeServiceTest extends ServiceTestCase
         parent::setUp();
 
         $this->service = app(IncomeService::class);
-
-        if (Income::count() < 2)
-            $this->artisan('db:seed', ['--class' => 'IncomeTableSeeder']);
     }
 
     public function test_call_save_with_all_field_filled()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('incomes')->inRandomOrder()->first()->id;
-        $income_group_id = IncomeGroup::has('incomes')->inRandomOrder()->first()->id;
-        $cash_id = Cash::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $income_group_id = IncomeGroup::inRandomOrder()->first()->id;
+        $cash_id = Cash::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $date = Carbon::now()->toDateTimeString();
         $payment_term_type = $this->faker->creditCardType;
@@ -74,9 +71,9 @@ class IncomeServiceTest extends ServiceTestCase
 
     public function test_call_save_with_minimal_field_filled()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('incomes')->inRandomOrder()->first()->id;
-        $income_group_id = IncomeGroup::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $income_group_id = IncomeGroup::inRandomOrder()->first()->id;
         $cash_id = null;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $date = Carbon::now()->toDateTimeString();
@@ -117,10 +114,10 @@ class IncomeServiceTest extends ServiceTestCase
 
     public function test_call_edit_with_all_field_filled()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('incomes')->inRandomOrder()->first()->id;
-        $income_group_id = IncomeGroup::has('incomes')->inRandomOrder()->first()->id;
-        $cash_id = Cash::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $income_group_id = IncomeGroup::inRandomOrder()->first()->id;
+        $cash_id = Cash::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $date = Carbon::now()->toDateTimeString();
         $payment_term_type = $this->faker->creditCardType;
@@ -144,10 +141,10 @@ class IncomeServiceTest extends ServiceTestCase
         ]);
         $id = $income->id;
 
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
-        $newBranchId = Branch::has('incomes')->inRandomOrder()->first()->id;
-        $newIncomeGroupId = IncomeGroup::has('incomes')->inRandomOrder()->first()->id;
-        $newCashId = Cash::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $newBranchId = Branch::inRandomOrder()->first()->id;
+        $newIncomeGroupId = IncomeGroup::inRandomOrder()->first()->id;
+        $newCashId = Cash::inRandomOrder()->first()->id;
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newDate = Carbon::now()->toDateTimeString();
         $newPaymentTermType = $this->faker->creditCardType;
@@ -189,9 +186,9 @@ class IncomeServiceTest extends ServiceTestCase
 
     public function test_call_edit_with_minimal_field_filled()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('incomes')->inRandomOrder()->first()->id;
-        $income_group_id = IncomeGroup::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $income_group_id = IncomeGroup::inRandomOrder()->first()->id;
         $cash_id = null;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $date = Carbon::now()->toDateTimeString();
@@ -216,9 +213,9 @@ class IncomeServiceTest extends ServiceTestCase
         ]);
         $id = $income->id;
 
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
-        $newBranchId = Branch::has('incomes')->inRandomOrder()->first()->id;
-        $newIncomeGroupId = IncomeGroup::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $newBranchId = Branch::inRandomOrder()->first()->id;
+        $newIncomeGroupId = IncomeGroup::inRandomOrder()->first()->id;
         $newCashId = null;
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newDate = Carbon::now()->toDateTimeString();
@@ -261,10 +258,10 @@ class IncomeServiceTest extends ServiceTestCase
 
     public function test_call_delete()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
-        $branch_id = Branch::has('incomes')->inRandomOrder()->first()->id;
-        $income_group_id = IncomeGroup::has('incomes')->inRandomOrder()->first()->id;
-        $cash_id = Cash::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::inRandomOrder()->first()->id;
+        $income_group_id = IncomeGroup::inRandomOrder()->first()->id;
+        $cash_id = Cash::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $date = Carbon::now()->toDateTimeString();
         $payment_term_type = $this->faker->creditCardType;
@@ -297,7 +294,7 @@ class IncomeServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_incomes_read_with_empty_search()
     {
-        $companyId = Company::has('incomes')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
 
         $response = $this->service->read(
             companyId: $companyId, 
@@ -314,7 +311,7 @@ class IncomeServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_incomes_with_special_char_in_search()
     {
-        $companyId = Company::has('incomes')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
         $paginate = true;
         $page = 1;

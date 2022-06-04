@@ -30,7 +30,7 @@ class ExpenseServiceImpl implements ExpenseService
         string $amount,
         string $amount_owed,
         ?string $remarks = null,
-        int $posted,
+        ?int $posted = null,
     ): ?Expense
     {
         DB::beginTransaction();
@@ -175,7 +175,7 @@ class ExpenseServiceImpl implements ExpenseService
         string $amount,
         string $amount_owed,
         ?string $remarks = null,
-        int $posted,
+        ?int $posted = null,
     ): ?Expense
     {
         DB::beginTransaction();

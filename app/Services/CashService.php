@@ -9,8 +9,8 @@ interface CashService
     public function create(
         int $company_id,
         string $code,
-        string $name,
-        ?int $is_bank = null,
+        ?string $name = null,
+        int $is_bank,
         int $status,
     ): ?Cash;
 
@@ -27,8 +27,8 @@ interface CashService
         int $id,
         int $company_id,
         string $code,
-        string $name,
-        ?int $is_bank = null,
+        ?string $name = null,
+        int $is_bank,
         int $status,
     ): ?Cash;
 

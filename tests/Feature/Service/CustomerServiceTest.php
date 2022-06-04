@@ -19,14 +19,11 @@ class CustomerServiceTest extends ServiceTestCase
         parent::setUp();
 
         $this->service = app(CustomerService::class);
-
-        if (Customer::count() < 2)
-            $this->artisan('db:seed', ['--class' => 'CustomerTableSeeder']);
     }
 
     public function test_call_save_with_all_field_filled()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
@@ -57,7 +54,7 @@ class CustomerServiceTest extends ServiceTestCase
 
     public function test_call_save_with_minimal_field_filled()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = null;
@@ -88,7 +85,7 @@ class CustomerServiceTest extends ServiceTestCase
 
     public function test_call_edit_with_all_field_filled()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
@@ -143,7 +140,7 @@ class CustomerServiceTest extends ServiceTestCase
 
     public function test_call_edit_with_minimal_field_filled()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = null;
@@ -198,7 +195,7 @@ class CustomerServiceTest extends ServiceTestCase
 
     public function test_call_delete()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $address = $this->faker->address;
@@ -230,7 +227,7 @@ class CustomerServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_customers_read_with_empty_search()
     {
-        $companyId = Company::has('customers')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
 
         $response = $this->service->read(
             companyId: $companyId, 
@@ -247,7 +244,7 @@ class CustomerServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_customers_with_special_char_in_search()
     {
-        $companyId = Company::has('customers')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
         $paginate = true;
         $page = 1;

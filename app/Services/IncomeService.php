@@ -14,8 +14,8 @@ interface IncomeService
         string $code,
         ?string $date = null,
         string $payment_term_type,
-        string $amount,
-        string $amount_owed,
+        int $amount,
+        int $amount_owed,
         ?string $remarks = null,
         int $posted,
     ): ?Income;
@@ -38,8 +38,8 @@ interface IncomeService
         string $code,
         ?string $date = null,
         string $payment_term_type,
-        string $amount,
-        string $amount_owed,
+        int $amount,
+        int $amount_owed,
         ?string $remarks = null,
         int $posted,
     ): ?Income;

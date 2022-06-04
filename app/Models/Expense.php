@@ -21,6 +21,7 @@ class Expense extends Model
     use SoftDeletes;
     
     protected $fillable = [
+        'company_id',
         'branch_id',
         'expense_group_id',
         'cash_id',

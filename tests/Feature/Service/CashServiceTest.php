@@ -19,14 +19,11 @@ class CashServiceTest extends ServiceTestCase
         parent::setUp();
 
         $this->service = app(CashService::class);
-
-        if (Cash::count() < 2)
-            $this->artisan('db:seed', ['--class' => 'CashTableSeeder']);
     }
 
     public function test_call_save_with_all_field_filled()
     {
-        $company_id = Company::has('cashes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $is_bank = (new RandomGenerator())->generateNumber(0, 1);
@@ -49,7 +46,7 @@ class CashServiceTest extends ServiceTestCase
 
     public function test_call_save_with_minimal_field_filled()
     {
-        $company_id = Company::has('cashes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = null;
         $is_bank = (new RandomGenerator())->generateNumber(0, 1);
@@ -66,28 +63,26 @@ class CashServiceTest extends ServiceTestCase
         $this->assertDatabaseHas('cashes', [
             'company_id' => $company_id,
             'code' => $code,
-            'name' => $name,
-            'is_bank' => $is_bank,
-            'status' => $status
+            'name' => $name
         ]);
     }
 
     public function test_call_edit_with_all_field_filled()
     {
-        $company_id = Company::has('cashes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $is_bank = (new RandomGenerator())->generateNumber(0, 1);
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
-        $branch = Cash::create([
+        $cash = Cash::create([
             'company_id' => $company_id,
             'code' => $code,
             'name' => $name,
             'is_bank' => $is_bank,
             'status' => $status
         ]);
-        $id = $branch->id;
+        $id = $cash->id;
 
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newName = $this->faker->name;
@@ -107,28 +102,26 @@ class CashServiceTest extends ServiceTestCase
             'id' => $id,
             'company_id' => $company_id,
             'code' => $newCode,
-            'name' => $newName,
-            'is_bank' => $newIsBank,
-            'status' => $newStatus
+            'name' => $newName
         ]);
     }
 
     public function test_call_edit_with_minimal_field_filled()
     {
-        $company_id = Company::has('cashes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = null;
         $is_bank = (new RandomGenerator())->generateNumber(0, 1);
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
-        $branch = Cash::create([
+        $cash = Cash::create([
             'company_id' => $company_id,
             'code' => $code,
             'name' => $name,
             'is_bank' => $is_bank,
             'status' => $status
         ]);
-        $id = $branch->id;
+        $id = $cash->id;
 
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newName = null;
@@ -148,28 +141,26 @@ class CashServiceTest extends ServiceTestCase
             'id' => $id,
             'company_id' => $company_id,
             'code' => $newCode,
-            'name' => $newName,
-            'is_bank' => $newIsBank,
-            'status' => $newStatus
+            'name' => $newName
         ]);
     }
 
     public function test_call_delete()
     {
-        $company_id = Company::has('cashes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
         $is_bank = (new RandomGenerator())->generateNumber(0, 1);
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
-        $branch = Cash::create([
+        $cash = Cash::create([
             'company_id' => $company_id,
             'code' => $code,
             'name' => $name,
             'is_bank' => $is_bank,
             'status' => $status
         ]);
-        $id = $branch->id;
+        $id = $cash->id;
 
         $this->service->delete($id);
 
@@ -180,7 +171,7 @@ class CashServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_cashes_read_with_empty_search()
     {
-        $companyId = Company::has('cashes')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
 
         $response = $this->service->read(
             companyId: $companyId, 
@@ -197,7 +188,7 @@ class CashServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_cashes_with_special_char_in_search()
     {
-        $companyId = Company::has('cashes')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
         $paginate = true;
         $page = 1;
