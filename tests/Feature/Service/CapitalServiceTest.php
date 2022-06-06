@@ -8,8 +8,8 @@ use App\Models\Capital;
 use App\Models\Company;
 use App\Models\Investor;
 use Tests\ServiceTestCase;
-use App\Models\CustomerGroup;
 use App\Actions\RandomGenerator;
+use App\Models\CapitalGroup;
 use App\Services\CapitalService;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -29,7 +29,7 @@ class CapitalServiceTest extends ServiceTestCase
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
-        $group_id = CustomerGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $group_id = CapitalGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = (new RandomGenerator())->generateNumber(1, 9999);
         $date = Carbon::now()->toDateTimeString();
@@ -66,7 +66,7 @@ class CapitalServiceTest extends ServiceTestCase
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
-        $group_id = CustomerGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $group_id = CapitalGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = null;
         $date = Carbon::now()->toDateTimeString();
@@ -82,7 +82,7 @@ class CapitalServiceTest extends ServiceTestCase
             ref_number: $ref_number,
             date: $date,
             capital_status: $capital_status,
-            amount : $amount,
+            amount: $amount,
             remarks: $remarks,
         );
 
@@ -103,7 +103,7 @@ class CapitalServiceTest extends ServiceTestCase
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
-        $group_id = CustomerGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $group_id = CapitalGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = (new RandomGenerator())->generateNumber(1, 9999);
         $date = Carbon::now()->toDateTimeString();
@@ -125,7 +125,7 @@ class CapitalServiceTest extends ServiceTestCase
         $id = $capital->id;
 
         $newInvestorId = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
-        $newGroupId = CustomerGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $newGroupId = CapitalGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $newCashId = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $newRefNumber = (new RandomGenerator())->generateNumber(1, 9999);
         $newDate = Carbon::now()->toDateTimeString();
@@ -142,7 +142,7 @@ class CapitalServiceTest extends ServiceTestCase
             ref_number: $newRefNumber,
             date: $newDate,
             capital_status: $newCapitalStatus,
-            amount : $newAmount,
+            amount: $newAmount,
             remarks: $newRemarks
         );
 
@@ -164,7 +164,7 @@ class CapitalServiceTest extends ServiceTestCase
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
-        $group_id = CustomerGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $group_id = CapitalGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = null;
         $date = Carbon::now()->toDateTimeString();
@@ -186,7 +186,7 @@ class CapitalServiceTest extends ServiceTestCase
         $id = $capital->id;
 
         $newInvestorId = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
-        $newGroupId = CustomerGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $newGroupId = CapitalGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $newCashId = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $newRefNumber = null;
         $newDate = Carbon::now()->toDateTimeString();
@@ -203,7 +203,7 @@ class CapitalServiceTest extends ServiceTestCase
             ref_number: $newRefNumber,
             date: $newDate,
             capital_status: $newCapitalStatus,
-            amount : $newAmount,
+            amount: $newAmount,
             remarks: $newRemarks
         );
 
@@ -225,7 +225,7 @@ class CapitalServiceTest extends ServiceTestCase
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
-        $group_id = CustomerGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $group_id = CapitalGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = (new RandomGenerator())->generateNumber(1, 9999);
         $date = Carbon::now()->toDateTimeString();

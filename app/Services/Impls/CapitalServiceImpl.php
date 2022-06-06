@@ -23,10 +23,10 @@ class CapitalServiceImpl implements CapitalService
         int $company_id,
         int $investor_id,
         int $group_id,
-        int $cash_id,
+        ?int $cash_id = null,
         ?int $ref_number = null,
-        ?string $date = null,
-        int $capial_status,
+        string $date,
+        int $capital_status,
         int $amount,
         ?string $remarks = null,
     ): ?Capital
@@ -42,7 +42,7 @@ class CapitalServiceImpl implements CapitalService
             $capital->cash_id = $cash_id;
             $capital->ref_number = $ref_number;
             $capital->date = $date;
-            $capital->capial_status = $capial_status;
+            $capital->capital_status = $capital_status;
             $capital->amount = $amount;
             $capital->remarks = $remarks;
 
@@ -160,10 +160,10 @@ class CapitalServiceImpl implements CapitalService
         int $company_id,
         int $investor_id,
         int $group_id,
-        int $cash_id,
+        ?int $cash_id = null,
         ?int $ref_number = null,
-        ?string $date = null,
-        int $capial_status,
+        string $date,
+        int $capital_status,
         int $amount,
         ?string $remarks = null,
     ): ?Capital
@@ -181,7 +181,7 @@ class CapitalServiceImpl implements CapitalService
                 'cash_id' => $cash_id,
                 'ref_number' => $ref_number,
                 'date' => $date,
-                'capial_status' => $capial_status,
+                'capital_status' => $capital_status,
                 'amount' => $amount,
                 'remarks' => $remarks,
             ]);

@@ -25,12 +25,12 @@ class ExpenseServiceImpl implements ExpenseService
         int $expense_group_id,
         ?int $cash_id = null,
         string $code,
-        ?string $date = null,
+        string $date,
         string $payment_term_type,
-        string $amount,
-        string $amount_owed,
+        int $amount,
+        int $amount_owed,
         ?string $remarks = null,
-        ?int $posted = null,
+        int $posted,
     ): ?Expense
     {
         DB::beginTransaction();
@@ -170,12 +170,12 @@ class ExpenseServiceImpl implements ExpenseService
         int $expense_group_id,
         ?int $cash_id = null,
         string $code,
-        ?string $date = null,
+        string $date,
         string $payment_term_type,
-        string $amount,
-        string $amount_owed,
+        int $amount,
+        int $amount_owed,
         ?string $remarks = null,
-        ?int $posted = null,
+        int $posted,
     ): ?Expense
     {
         DB::beginTransaction();

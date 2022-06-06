@@ -17,7 +17,7 @@ interface CustomerService
         int $max_outstanding_invoice,
         int $max_invoice_age,
         int $payment_term,
-        int $tax_id,
+        ?int $tax_id = null,
         ?string $remarks = null,
         int $status,
     ): ?Customer;
@@ -43,7 +43,7 @@ interface CustomerService
         int $max_outstanding_invoice,
         int $max_invoice_age,
         int $payment_term,
-        int $tax_id,
+        ?int $tax_id = null,
         ?string $remarks = null,
         int $status,
     ): ?Customer;

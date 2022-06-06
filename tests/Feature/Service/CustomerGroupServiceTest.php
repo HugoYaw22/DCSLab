@@ -91,19 +91,19 @@ class CustomerGroupServiceTest extends ServiceTestCase
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $max_open_invoice = null;
-        $max_outstanding_invoice = null;
-        $max_invoice_age = null;
-        $payment_term = null;
+        $max_open_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_outstanding_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_invoice_age = (new RandomGenerator())->generateNumber(5);
+        $payment_term = (new RandomGenerator())->generateNumber(5);
         $selling_point = (new RandomGenerator())->generateNumber(4);
-        $selling_point_multiple = null;
+        $selling_point_multiple = (new RandomGenerator())->generateNumber(4);
         $sell_at_cost = null;
-        $price_markup_percent = null;
-        $price_markup_nominal = null;
+        $price_markup_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markup_nominal = (new RandomGenerator())->generateNumber(4);
         $price_markdown_percent = (new RandomGenerator())->generateNumber(4);
         $price_markdown_nominal = (new RandomGenerator())->generateNumber(4);
-        $round_on = null;
-        $round_digit = null;
+        $round_on = (new RandomGenerator())->generateNumber(1, 3);
+        $round_digit = (new RandomGenerator())->generateNumber(4);
         $remarks = null;
         $cash_id = null;
 
@@ -130,6 +130,7 @@ class CustomerGroupServiceTest extends ServiceTestCase
 
         $this->assertDatabaseHas('customer_groups', [
             'company_id' => $company_id,
+            'cash_id' => $cash_id,
             'code' => $code,
             'name' => $name,
             'max_open_invoice' => $max_open_invoice,
@@ -145,8 +146,7 @@ class CustomerGroupServiceTest extends ServiceTestCase
             'price_markdown_nominal' => $price_markdown_nominal,
             'round_on' => $round_on,
             'round_digit' => $round_digit,
-            'remarks' => $remarks,
-            'cash_id' => $cash_id
+            'remarks' => $remarks
         ]);
     }
 
@@ -155,21 +155,21 @@ class CustomerGroupServiceTest extends ServiceTestCase
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $max_open_invoice = null;
-        $max_outstanding_invoice = null;
-        $max_invoice_age = null;
-        $payment_term = null;
+        $max_open_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_outstanding_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_invoice_age = (new RandomGenerator())->generateNumber(5);
+        $payment_term = (new RandomGenerator())->generateNumber(5);
         $selling_point = (new RandomGenerator())->generateNumber(4);
-        $selling_point_multiple = null;
+        $selling_point_multiple = (new RandomGenerator())->generateNumber(4);
         $sell_at_cost = null;
-        $price_markup_percent = null;
-        $price_markup_nominal = null;
+        $price_markup_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markup_nominal = (new RandomGenerator())->generateNumber(4);
         $price_markdown_percent = (new RandomGenerator())->generateNumber(4);
         $price_markdown_nominal = (new RandomGenerator())->generateNumber(4);
         $round_on = (new RandomGenerator())->generateNumber(1, 3);
         $round_digit = (new RandomGenerator())->generateNumber(4);
         $remarks = null;
-        $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $cash_id = null;
 
         $customer_group = CustomerGroup::create([
             'company_id' => $company_id,
@@ -262,10 +262,10 @@ class CustomerGroupServiceTest extends ServiceTestCase
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $max_open_invoice = (new RandomGenerator())->generateNumber(4);
-        $max_outstanding_invoice = (new RandomGenerator())->generateNumber(4);
-        $max_invoice_age = (new RandomGenerator())->generateNumber(4);
-        $payment_term = (new RandomGenerator())->generateNumber(1, 365);
+        $max_open_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_outstanding_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_invoice_age = (new RandomGenerator())->generateNumber(5);
+        $payment_term = (new RandomGenerator())->generateNumber(5);
         $selling_point = (new RandomGenerator())->generateNumber(4);
         $selling_point_multiple = (new RandomGenerator())->generateNumber(4);
         $sell_at_cost = null;
@@ -273,8 +273,8 @@ class CustomerGroupServiceTest extends ServiceTestCase
         $price_markup_nominal = (new RandomGenerator())->generateNumber(4);
         $price_markdown_percent = (new RandomGenerator())->generateNumber(4);
         $price_markdown_nominal = (new RandomGenerator())->generateNumber(4);
-        $round_on = null;
-        $round_digit = null;
+        $round_on = (new RandomGenerator())->generateNumber(1, 3);
+        $round_digit = (new RandomGenerator())->generateNumber(4);
         $remarks = null;
         $cash_id = null;
 
@@ -303,19 +303,19 @@ class CustomerGroupServiceTest extends ServiceTestCase
         $company_id = Company::inRandomOrder()->first()->id;
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newName = $this->faker->name;
-        $newMaxOpenInvoice = null;
-        $newMaxOutstandingInvoice = null;
-        $newMaxInvoiceAge = null;
-        $newPaymentTerm = null;
+        $newMaxOpenInvoice = (new RandomGenerator())->generateNumber(5);
+        $newMaxOutstandingInvoice = (new RandomGenerator())->generateNumber(5);
+        $newMaxInvoiceAge = (new RandomGenerator())->generateNumber(5);
+        $newPaymentTerm = (new RandomGenerator())->generateNumber(5);
         $newSellingPoint = (new RandomGenerator())->generateNumber(4);
-        $newSellingPointMultiple = null;
+        $newSellingPointMultiple = (new RandomGenerator())->generateNumber(5);
         $newSellAtCost = null;
-        $newPriceMarkupPercent = null;
-        $newPriceMarkupNominal = null;
+        $newPriceMarkupPercent = (new RandomGenerator())->generateNumber(5);
+        $newPriceMarkupNominal = (new RandomGenerator())->generateNumber(5);
         $newMarkdownPercent = (new RandomGenerator())->generateNumber(4);
         $newMarkdownNominal = (new RandomGenerator())->generateNumber(4);
-        $newRoundOn = null;
-        $newRoundDigit = null;
+        $newRoundOn = (new RandomGenerator())->generateNumber(1, 3);
+        $newRoundDigit = (new RandomGenerator())->generateNumber(4);
         $newRemarks = null;
         $newCashId = null;
 

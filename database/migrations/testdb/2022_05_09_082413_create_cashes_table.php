@@ -17,7 +17,7 @@ class CreateCashesTable extends Migration
             $table->bigIncrements('id');
             $table->foreignId('company_id')->references('id')->on('companies');
             $table->string('code');
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->integer('is_bank');
             $table->integer('status');
             $table->unsignedBigInteger('created_by')->default(0);

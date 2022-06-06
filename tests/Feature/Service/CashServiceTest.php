@@ -48,7 +48,7 @@ class CashServiceTest extends ServiceTestCase
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
-        $name = null;
+        $name = $this->faker->name;
         $is_bank = (new RandomGenerator())->generateNumber(0, 1);
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -110,7 +110,7 @@ class CashServiceTest extends ServiceTestCase
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
-        $name = null;
+        $name = $this->faker->name;
         $is_bank = (new RandomGenerator())->generateNumber(0, 1);
         $status = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -124,7 +124,7 @@ class CashServiceTest extends ServiceTestCase
         $id = $cash->id;
 
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
-        $newName = null;
+        $newName = $this->faker->name;
         $newIsBank = (new RandomGenerator())->generateNumber(0, 1);
         $newStatus = (new RandomGenerator())->generateNumber(0, 1);
 

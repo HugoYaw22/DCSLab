@@ -18,7 +18,7 @@ class CreateCustomerGroupsTable extends Migration
             $table->foreignId('company_id')->references('id')->on('companies');
             $table->foreignId('cash_id')->nullable()->references('id')->on('cashes');
             $table->string('code');
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->integer('max_open_invoice')->default(0);
             $table->decimal('max_outstanding_invoice', $precision = 16, $scale = 8)->default(0);
             $table->integer('max_invoice_age')->default(0);

@@ -35,7 +35,7 @@ class ExpenseServiceTest extends ServiceTestCase
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $date = Carbon::now()->toDateTimeString();
         $payment_term_type = $this->faker->creditCardType;
-        $amount = (new RandomGenerator())->generateAlphaNumeric(6);
+        $amount = (new RandomGenerator())->generateNumber(6);
         $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
         $posted = (new RandomGenerator())->generateNumber(0, 1);
@@ -121,7 +121,7 @@ class ExpenseServiceTest extends ServiceTestCase
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $date = Carbon::now()->toDateTimeString();
         $payment_term_type = $this->faker->creditCardType;
-        $amount = (new RandomGenerator())->generateAlphaNumeric(6);
+        $amount = (new RandomGenerator())->generateNumber(6);
         $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
         $posted = (new RandomGenerator())->generateNumber(0, 1);
@@ -148,8 +148,8 @@ class ExpenseServiceTest extends ServiceTestCase
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newDate = Carbon::now()->toDateTimeString();
         $newPaymentTermType = $this->faker->creditCardType;
-        $newAmount = (new RandomGenerator())->generateAlphaNumeric(6);
-        $newAmountOwed = $this->faker->amount_owed;
+        $newAmount = (new RandomGenerator())->generateNumber(6);
+        $newAmountOwed = (new RandomGenerator())->generateNumber(6);
         $newRemarks = $this->faker->sentence;
         $newPosted = (new RandomGenerator())->generateNumber(0, 1);
 
@@ -193,10 +193,10 @@ class ExpenseServiceTest extends ServiceTestCase
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $date = Carbon::now()->toDateTimeString();
         $payment_term_type = $this->faker->creditCardType;
-        $amount = (new RandomGenerator())->generateAlphaNumeric(6);
+        $amount = (new RandomGenerator())->generateNumber(6);
         $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
-        $posted = null;
+        $posted = (new RandomGenerator())->generateNumber(0, 1);
 
         $expense = Expense::create([
             'company_id' => $company_id,
@@ -220,10 +220,10 @@ class ExpenseServiceTest extends ServiceTestCase
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newDate = Carbon::now()->toDateTimeString();
         $newPaymentTermType = $this->faker->creditCardType;
-        $newAmount = (new RandomGenerator())->generateAlphaNumeric(6);
-        $newAmountOwed = $this->faker->amount_owed;
+        $newAmount = (new RandomGenerator())->generateNumber(6);
+        $newAmountOwed = (new RandomGenerator())->generateNumber(6);
         $newRemarks = $this->faker->sentence;
-        $newPosted = null;
+        $newPosted = (new RandomGenerator())->generateNumber(0, 1);
 
         $this->service->update(
             id: $id,
@@ -265,7 +265,7 @@ class ExpenseServiceTest extends ServiceTestCase
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $date = Carbon::now()->toDateTimeString();
         $payment_term_type = $this->faker->creditCardType;
-        $amount = (new RandomGenerator())->generateAlphaNumeric(6);
+        $amount = (new RandomGenerator())->generateNumber(6);
         $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
         $posted = (new RandomGenerator())->generateNumber(0, 1);

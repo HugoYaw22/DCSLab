@@ -19,7 +19,7 @@ class CreateCustomersTable extends Migration
             $table->foreignId('customer_group_id')->references('id')->on('customer_groups');
             $table->string('code');
             $table->integer('is_member');
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->string('zone')->nullable();
             $table->integer('max_open_invoice')->default(0);
             $table->decimal('max_outstanding_invoice', $precision = 16, $scale = 8)->default(0);
