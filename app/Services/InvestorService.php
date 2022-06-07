@@ -10,6 +10,12 @@ interface InvestorService
         int $company_id,
         string $code,
         string $name,
+        ?string $contact = null,
+        ?string $city = null,
+        ?string $address = null,
+        ?string $tax_number = null,
+        ?string $remarks = null,
+        int $status,
     ): ?Investor;
 
     public function read(
@@ -26,6 +32,12 @@ interface InvestorService
         int $company_id,
         string $code,
         string $name,
+        ?string $contact = null,
+        ?string $city = null,
+        ?string $address = null,
+        ?string $tax_number = null,
+        ?string $remarks = null,
+        int $status,
     ): ?Investor;
 
     public function delete(int $id): bool;

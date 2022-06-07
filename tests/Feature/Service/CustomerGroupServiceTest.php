@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Service;
 
-use App\Models\CustomerGroup;
+use App\Models\Cash;
 use App\Models\Company;
 use Tests\ServiceTestCase;
-use App\Services\CustomerGroupService;
+use App\Models\CustomerGroup;
 use App\Actions\RandomGenerator;
+use App\Services\CustomerGroupService;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Contracts\Pagination\Paginator;
 
@@ -19,218 +20,403 @@ class CustomerGroupServiceTest extends ServiceTestCase
         parent::setUp();
 
         $this->service = app(CustomerGroupService::class);
-
-        if (CustomerGroup::count() < 2)
-            $this->artisan('db:seed', ['--class' => 'CustomerGroupTableSeeder']);
     }
 
     public function test_call_save_with_all_field_filled()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $address = $this->faker->address;
-        $city = $this->faker->city;
-        $contact = $this->faker->e164PhoneNumber;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
-        $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $max_open_invoice = (new RandomGenerator())->generateNumber(3);
+        $max_outstanding_invoice = (new RandomGenerator())->generateNumber(4);
+        $max_invoice_age = (new RandomGenerator())->generateNumber(4);
+        $payment_term = (new RandomGenerator())->generateNumber(3);
+        $selling_point = (new RandomGenerator())->generateNumber(4);
+        $selling_point_multiple = (new RandomGenerator())->generateNumber(4);
+        $sell_at_cost = (new RandomGenerator())->generateNumber(4);
+        $price_markup_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markup_nominal = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_nominal = (new RandomGenerator())->generateNumber(4);
+        $round_on = (new RandomGenerator())->generateNumber(1, 3);
+        $round_digit = (new RandomGenerator())->generateNumber(4);
+        $remarks = null;
+        $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
 
         $this->service->create(
             company_id: $company_id,
             code: $code,
             name: $name,
-            address: $address,
-            city: $city,
-            contact: $contact,
-            is_main : $is_main,
+            max_open_invoice: $max_open_invoice,
+            max_outstanding_invoice: $max_outstanding_invoice,
+            max_invoice_age: $max_invoice_age,
+            payment_term : $payment_term,
+            selling_point: $selling_point,
+            selling_point_multiple: $selling_point_multiple,
+            sell_at_cost: $sell_at_cost,
+            price_markup_percent: $price_markup_percent,
+            price_markup_nominal: $price_markup_nominal,
+            price_markdown_percent : $price_markdown_percent,
+            price_markdown_nominal: $price_markdown_nominal,
+            round_on: $round_on,
+            round_digit: $round_digit,
             remarks: $remarks,
-            status: $status
+            cash_id: $cash_id
         );
 
-        $this->assertDatabaseHas('customers', [
+        $this->assertDatabaseHas('customer_groups', [
             'company_id' => $company_id,
             'code' => $code,
-            'name' => $name
+            'name' => $name,
+            'max_open_invoice' => $max_open_invoice,
+            'max_outstanding_invoice' => $max_outstanding_invoice,
+            'max_invoice_age' => $max_invoice_age,
+            'payment_term' => $payment_term,
+            'selling_point' => $selling_point,
+            'selling_point_multiple' => $selling_point_multiple,
+            'sell_at_cost' => $sell_at_cost,
+            'price_markup_percent' => $price_markup_percent,
+            'price_markup_nominal' => $price_markup_nominal,
+            'price_markdown_percent' => $price_markdown_percent,
+            'price_markdown_nominal' => $price_markdown_nominal,
+            'round_on' => $round_on,
+            'round_digit' => $round_digit,
+            'remarks' => $remarks,
+            'cash_id' => $cash_id
         ]);
     }
 
     public function test_call_save_with_minimal_field_filled()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $address = null;
-        $city = null;
-        $contact = null;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $max_open_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_outstanding_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_invoice_age = (new RandomGenerator())->generateNumber(5);
+        $payment_term = (new RandomGenerator())->generateNumber(5);
+        $selling_point = (new RandomGenerator())->generateNumber(4);
+        $selling_point_multiple = (new RandomGenerator())->generateNumber(4);
+        $sell_at_cost = null;
+        $price_markup_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markup_nominal = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_nominal = (new RandomGenerator())->generateNumber(4);
+        $round_on = (new RandomGenerator())->generateNumber(1, 3);
+        $round_digit = (new RandomGenerator())->generateNumber(4);
         $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $cash_id = null;
 
         $this->service->create(
             company_id: $company_id,
             code: $code,
             name: $name,
-            address: $address,
-            city: $city,
-            contact: $contact,
-            is_main : $is_main,
+            max_open_invoice: $max_open_invoice,
+            max_outstanding_invoice: $max_outstanding_invoice,
+            max_invoice_age: $max_invoice_age,
+            payment_term : $payment_term,
+            selling_point: $selling_point,
+            selling_point_multiple: $selling_point_multiple,
+            sell_at_cost: $sell_at_cost,
+            price_markup_percent: $price_markup_percent,
+            price_markup_nominal: $price_markup_nominal,
+            price_markdown_percent : $price_markdown_percent,
+            price_markdown_nominal: $price_markdown_nominal,
+            round_on: $round_on,
+            round_digit: $round_digit,
             remarks: $remarks,
-            status: $status
+            cash_id: $cash_id
         );
 
-        $this->assertDatabaseHas('customers', [
+        $this->assertDatabaseHas('customer_groups', [
             'company_id' => $company_id,
+            'cash_id' => $cash_id,
             'code' => $code,
-            'name' => $name
+            'name' => $name,
+            'max_open_invoice' => $max_open_invoice,
+            'max_outstanding_invoice' => $max_outstanding_invoice,
+            'max_invoice_age' => $max_invoice_age,
+            'payment_term' => $payment_term,
+            'selling_point' => $selling_point,
+            'selling_point_multiple' => $selling_point_multiple,
+            'sell_at_cost' => $sell_at_cost,
+            'price_markup_percent' => $price_markup_percent,
+            'price_markup_nominal' => $price_markup_nominal,
+            'price_markdown_percent' => $price_markdown_percent,
+            'price_markdown_nominal' => $price_markdown_nominal,
+            'round_on' => $round_on,
+            'round_digit' => $round_digit,
+            'remarks' => $remarks
         ]);
     }
 
     public function test_call_edit_with_all_field_filled()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $address = $this->faker->address;
-        $city = $this->faker->city;
-        $contact = $this->faker->e164PhoneNumber;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
-        $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $max_open_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_outstanding_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_invoice_age = (new RandomGenerator())->generateNumber(5);
+        $payment_term = (new RandomGenerator())->generateNumber(5);
+        $selling_point = (new RandomGenerator())->generateNumber(4);
+        $selling_point_multiple = (new RandomGenerator())->generateNumber(4);
+        $sell_at_cost = null;
+        $price_markup_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markup_nominal = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_nominal = (new RandomGenerator())->generateNumber(4);
+        $round_on = (new RandomGenerator())->generateNumber(1, 3);
+        $round_digit = (new RandomGenerator())->generateNumber(4);
+        $remarks = null;
+        $cash_id = null;
 
-        $branch = CustomerGroup::create([
+        $customer_group = CustomerGroup::create([
             'company_id' => $company_id,
+            'cash_id' => $cash_id,
             'code' => $code,
             'name' => $name,
-            'address' => $address,
-            'city' => $city,
-            'contact' => $contact,
-            'is_main' => $is_main,
-            'remarks' => $remarks,
-            'status' => $status
+            'max_open_invoice' => $max_open_invoice,
+            'max_outstanding_invoice' => $max_outstanding_invoice,
+            'max_invoice_age' => $max_invoice_age,
+            'payment_term' => $payment_term,
+            'selling_point' => $selling_point,
+            'selling_point_multiple' => $selling_point_multiple,
+            'sell_at_cost' => $sell_at_cost,
+            'price_markup_percent' => $price_markup_percent,
+            'price_markup_nominal' => $price_markup_nominal,
+            'price_markdown_percent' => $price_markdown_percent,
+            'price_markdown_nominal' => $price_markdown_nominal,
+            'round_on' => $round_on,
+            'round_digit' => $round_digit,
+            'remarks' => $remarks
         ]);
-        $id = $branch->id;
+        $id = $customer_group->id;
 
+        $company_id = Company::inRandomOrder()->first()->id;
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newName = $this->faker->name;
-        $newAddress = $this->faker->address;
-        $newCity = $this->faker->city;
-        $newContact = $this->faker->e164PhoneNumber;
-        $newIsMain = (new RandomGenerator())->generateNumber(0, 1);
-        $newRemarks = $this->faker->sentence;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newMaxOpenInvoice = (new RandomGenerator())->generateNumber(4);
+        $newMaxOutstandingInvoice = (new RandomGenerator())->generateNumber(4);
+        $newMaxInvoiceAge = (new RandomGenerator())->generateNumber(4);
+        $newPaymentTerm = (new RandomGenerator())->generateNumber(1, 365);
+        $newSellingPoint = (new RandomGenerator())->generateNumber(4);
+        $newSellingPointMultiple = (new RandomGenerator())->generateNumber(4);
+        $newSellAtCost = (new RandomGenerator())->generateNumber(4);
+        $newPriceMarkupPercent = (new RandomGenerator())->generateNumber(4);
+        $newPriceMarkupNominal = (new RandomGenerator())->generateNumber(4);
+        $newMarkdownPercent = (new RandomGenerator())->generateNumber(4);
+        $newMarkdownNominal = (new RandomGenerator())->generateNumber(4);
+        $newRoundOn = (new RandomGenerator())->generateNumber(1, 3);
+        $newRoundDigit = (new RandomGenerator())->generateNumber(4);
+        $newRemarks = null;
+        $newCashId = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
 
         $this->service->update(
             id: $id,
             company_id: $company_id,
             code: $newCode,
             name: $newName,
-            address: $newAddress,
-            city: $newCity,
-            contact: $newContact,
-            is_main: $newIsMain,
+            max_open_invoice: $newMaxOpenInvoice,
+            max_outstanding_invoice: $newMaxOutstandingInvoice,
+            max_invoice_age: $newMaxInvoiceAge,
+            payment_term : $newPaymentTerm,
+            selling_point: $newSellingPoint,
+            selling_point_multiple: $newSellingPointMultiple,
+            sell_at_cost: $newSellAtCost,
+            price_markup_percent: $newPriceMarkupPercent,
+            price_markup_nominal: $newPriceMarkupNominal,
+            price_markdown_percent : $newMarkdownPercent,
+            price_markdown_nominal: $newMarkdownNominal,
+            round_on: $newRoundOn,
+            round_digit: $newRoundDigit,
             remarks: $newRemarks,
-            status: $newStatus
+            cash_id: $newCashId
         );
 
-        $this->assertDatabaseHas('customers', [
+        $this->assertDatabaseHas('customer_groups', [
             'id' => $id,
             'company_id' => $company_id,
             'code' => $newCode,
-            'name' => $newName
+            'name' => $newName,
+            'max_open_invoice' => $newMaxOpenInvoice,
+            'max_outstanding_invoice' => $newMaxOutstandingInvoice,
+            'max_invoice_age' => $newMaxInvoiceAge,
+            'payment_term' => $newPaymentTerm,
+            'selling_point' => $newSellingPoint,
+            'selling_point_multiple' => $newSellingPointMultiple,
+            'sell_at_cost' => $newSellAtCost,
+            'price_markup_percent' => $newPriceMarkupPercent,
+            'price_markup_nominal' => $newPriceMarkupNominal,
+            'price_markdown_percent' => $newMarkdownPercent,
+            'price_markdown_nominal' => $newMarkdownNominal,
+            'round_on' => $newRoundOn,
+            'round_digit' => $newRoundDigit,
+            'remarks' => $newRemarks,
+            'cash_id' => $newCashId
         ]);
     }
 
     public function test_call_edit_with_minimal_field_filled()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $address = null;
-        $city = null;
-        $contact = null;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $max_open_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_outstanding_invoice = (new RandomGenerator())->generateNumber(5);
+        $max_invoice_age = (new RandomGenerator())->generateNumber(5);
+        $payment_term = (new RandomGenerator())->generateNumber(5);
+        $selling_point = (new RandomGenerator())->generateNumber(4);
+        $selling_point_multiple = (new RandomGenerator())->generateNumber(4);
+        $sell_at_cost = null;
+        $price_markup_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markup_nominal = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_nominal = (new RandomGenerator())->generateNumber(4);
+        $round_on = (new RandomGenerator())->generateNumber(1, 3);
+        $round_digit = (new RandomGenerator())->generateNumber(4);
         $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $cash_id = null;
 
-        $branch = CustomerGroup::create([
+        $customer_group = CustomerGroup::create([
             'company_id' => $company_id,
             'code' => $code,
             'name' => $name,
-            'address' => $address,
-            'city' => $city,
-            'contact' => $contact,
-            'is_main' => $is_main,
+            'max_open_invoice' => $max_open_invoice,
+            'max_outstanding_invoice' => $max_outstanding_invoice,
+            'max_invoice_age' => $max_invoice_age,
+            'payment_term' => $payment_term,
+            'selling_point' => $selling_point,
+            'selling_point_multiple' => $selling_point_multiple,
+            'sell_at_cost' => $sell_at_cost,
+            'price_markup_percent' => $price_markup_percent,
+            'price_markup_nominal' => $price_markup_nominal,
+            'price_markdown_percent' => $price_markdown_percent,
+            'price_markdown_nominal' => $price_markdown_nominal,
+            'round_on' => $round_on,
+            'round_digit' => $round_digit,
             'remarks' => $remarks,
-            'status' => $status
+            'cash_id' => $cash_id
         ]);
-        $id = $branch->id;
+        $id = $customer_group->id;
 
+        $company_id = Company::inRandomOrder()->first()->id;
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newName = $this->faker->name;
-        $newAddress = null;
-        $newCity = null;
-        $newContact = null;
-        $newIsMain = (new RandomGenerator())->generateNumber(0, 1);
+        $newMaxOpenInvoice = (new RandomGenerator())->generateNumber(5);
+        $newMaxOutstandingInvoice = (new RandomGenerator())->generateNumber(5);
+        $newMaxInvoiceAge = (new RandomGenerator())->generateNumber(5);
+        $newPaymentTerm = (new RandomGenerator())->generateNumber(5);
+        $newSellingPoint = (new RandomGenerator())->generateNumber(4);
+        $newSellingPointMultiple = (new RandomGenerator())->generateNumber(5);
+        $newSellAtCost = null;
+        $newPriceMarkupPercent = (new RandomGenerator())->generateNumber(5);
+        $newPriceMarkupNominal = (new RandomGenerator())->generateNumber(5);
+        $newMarkdownPercent = (new RandomGenerator())->generateNumber(4);
+        $newMarkdownNominal = (new RandomGenerator())->generateNumber(4);
+        $newRoundOn = (new RandomGenerator())->generateNumber(1, 3);
+        $newRoundDigit = (new RandomGenerator())->generateNumber(4);
         $newRemarks = null;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newCashId = null;
 
         $this->service->update(
             id: $id,
             company_id: $company_id,
             code: $newCode,
             name: $newName,
-            address: $newAddress,
-            city: $newCity,
-            contact: $newContact,
-            is_main: $newIsMain,
+            max_open_invoice: $newMaxOpenInvoice,
+            max_outstanding_invoice: $newMaxOutstandingInvoice,
+            max_invoice_age: $newMaxInvoiceAge,
+            payment_term : $newPaymentTerm,
+            selling_point: $newSellingPoint,
+            selling_point_multiple: $newSellingPointMultiple,
+            sell_at_cost: $newSellAtCost,
+            price_markup_percent: $newPriceMarkupPercent,
+            price_markup_nominal: $newPriceMarkupNominal,
+            price_markdown_percent : $newMarkdownPercent,
+            price_markdown_nominal: $newMarkdownNominal,
+            round_on: $newRoundOn,
+            round_digit: $newRoundDigit,
             remarks: $newRemarks,
-            status: $newStatus
+            cash_id: $newCashId
         );
 
-        $this->assertDatabaseHas('customers', [
+        $this->assertDatabaseHas('customer_groups', [
             'id' => $id,
             'company_id' => $company_id,
             'code' => $newCode,
-            'name' => $newName
+            'name' => $newName,
+            'max_open_invoice' => $newMaxOpenInvoice,
+            'max_outstanding_invoice' => $newMaxOutstandingInvoice,
+            'max_invoice_age' => $newMaxInvoiceAge,
+            'payment_term' => $newPaymentTerm,
+            'selling_point' => $newSellingPoint,
+            'selling_point_multiple' => $newSellingPointMultiple,
+            'sell_at_cost' => $newSellAtCost,
+            'price_markup_percent' => $newPriceMarkupPercent,
+            'price_markup_nominal' => $newPriceMarkupNominal,
+            'price_markdown_percent' => $newMarkdownPercent,
+            'price_markdown_nominal' => $newMarkdownNominal,
+            'round_on' => $newRoundOn,
+            'round_digit' => $newRoundDigit,
+            'remarks' => $newRemarks,
+            'cash_id' => $newCashId
         ]);
     }
 
     public function test_call_delete()
     {
-        $company_id = Company::has('customers')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $address = $this->faker->address;
-        $city = $this->faker->city;
-        $contact = $this->faker->e164PhoneNumber;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
-        $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
-
-        $branch = CustomerGroup::create([
+        $max_open_invoice = (new RandomGenerator())->generateNumber(4);
+        $max_outstanding_invoice = (new RandomGenerator())->generateNumber(4);
+        $max_invoice_age = (new RandomGenerator())->generateNumber(4);
+        $payment_term = (new RandomGenerator())->generateNumber(1, 365);
+        $selling_point = (new RandomGenerator())->generateNumber(4);
+        $selling_point_multiple = (new RandomGenerator())->generateNumber(4);
+        $sell_at_cost = (new RandomGenerator())->generateNumber(4);
+        $price_markup_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markup_nominal = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_percent = (new RandomGenerator())->generateNumber(4);
+        $price_markdown_nominal = (new RandomGenerator())->generateNumber(4);
+        $round_on = (new RandomGenerator())->generateNumber(1, 3);
+        $round_digit = (new RandomGenerator())->generateNumber(4);
+        $remarks = null;
+        $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        
+        $customer_group = CustomerGroup::create([
             'company_id' => $company_id,
+            'cash_id' => $cash_id,
             'code' => $code,
             'name' => $name,
-            'address' => $address,
-            'city' => $city,
-            'contact' => $contact,
-            'is_main' => $is_main,
-            'remarks' => $remarks,
-            'status' => $status
+            'max_open_invoice' => $max_open_invoice,
+            'max_outstanding_invoice' => $max_outstanding_invoice,
+            'max_invoice_age' => $max_invoice_age,
+            'payment_term' => $payment_term,
+            'selling_point' => $selling_point,
+            'selling_point_multiple' => $selling_point_multiple,
+            'sell_at_cost' => $sell_at_cost,
+            'price_markup_percent' => $price_markup_percent,
+            'price_markup_nominal' => $price_markup_nominal,
+            'price_markdown_percent' => $price_markdown_percent,
+            'price_markdown_nominal' => $price_markdown_nominal,
+            'round_on' => $round_on,
+            'round_digit' => $round_digit,
+            'remarks' => $remarks
         ]);
-        $id = $branch->id;
+        $id = $customer_group->id;
 
         $this->service->delete($id);
 
-        $this->assertSoftDeleted('customers', [
+        $this->assertSoftDeleted('customer_groups', [
             'id' => $id
         ]);
     }
 
-    public function test_call_read_when_user_have_customers_read_with_empty_search()
+    public function test_call_read_when_user_have_customer_groups_read_with_empty_search()
     {
-        $companyId = Company::has('customers')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
 
         $response = $this->service->read(
             companyId: $companyId, 
@@ -245,9 +431,9 @@ class CustomerGroupServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_have_customers_with_special_char_in_search()
+    public function test_call_read_when_user_have_customer_groups_with_special_char_in_search()
     {
-        $companyId = Company::has('customers')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
         $paginate = true;
         $page = 1;

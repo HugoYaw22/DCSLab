@@ -2,11 +2,16 @@
 
 namespace Tests\Feature\Service;
 
-use App\Models\Income;
+use Carbon\Carbon;
+use App\Models\Cash;
+use App\Models\Branch;
 use App\Models\Company;
+use App\Models\Income;
 use Tests\ServiceTestCase;
-use App\Services\IncomeService;
+use App\Models\IncomeGroup;
 use App\Actions\RandomGenerator;
+use App\Enums\PaymentTermType;
+use App\Services\IncomeService;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Contracts\Pagination\Paginator;
 
@@ -19,207 +24,266 @@ class IncomeServiceTest extends ServiceTestCase
         parent::setUp();
 
         $this->service = app(IncomeService::class);
-
-        if (Income::count() < 2)
-            $this->artisan('db:seed', ['--class' => 'IncomeTableSeeder']);
     }
 
     public function test_call_save_with_all_field_filled()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $income_group_id = IncomeGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
-        $name = $this->faker->name;
-        $address = $this->faker->address;
-        $city = $this->faker->city;
-        $contact = $this->faker->e164PhoneNumber;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $date = Carbon::now()->toDateTimeString();
+        $payment_term_type = $this->faker->creditCardType;
+        $amount = (new RandomGenerator())->generateNumber(6);
+        $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $posted = (new RandomGenerator())->generateNumber(0, 1);
 
         $this->service->create(
             company_id: $company_id,
+            branch_id: $branch_id,
+            income_group_id: $income_group_id,
+            cash_id: $cash_id,
             code: $code,
-            name: $name,
-            address: $address,
-            city: $city,
-            contact: $contact,
-            is_main : $is_main,
+            date: $date,
+            payment_term_type: $payment_term_type,
+            amount : $amount,
+            amount_owed: $amount_owed,
             remarks: $remarks,
-            status: $status
+            posted: $posted
         );
 
         $this->assertDatabaseHas('incomes', [
             'company_id' => $company_id,
+            'branch_id' => $branch_id,
+            'income_group_id' => $income_group_id,
+            'cash_id' => $cash_id,
             'code' => $code,
-            'name' => $name
+            'date' => $date,
+            'payment_term_type' => $payment_term_type,
+            'amount' => $amount,
+            'amount_owed' => $amount_owed,
+            'remarks' => $remarks,
+            'posted' => $posted
         ]);
     }
 
     public function test_call_save_with_minimal_field_filled()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $income_group_id = IncomeGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $cash_id = null;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
-        $name = $this->faker->name;
-        $address = null;
-        $city = null;
-        $contact = null;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
-        $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $date = Carbon::now()->toDateTimeString();
+        $payment_term_type = $this->faker->creditCardType;
+        $amount = (new RandomGenerator())->generateNumber(5);
+        $amount_owed = (new RandomGenerator())->generateNumber(5);
+        $remarks = $this->faker->sentence;
+        $posted = 0;
 
         $this->service->create(
             company_id: $company_id,
+            branch_id: $branch_id,
+            income_group_id: $income_group_id,
+            cash_id: $cash_id,
             code: $code,
-            name: $name,
-            address: $address,
-            city: $city,
-            contact: $contact,
-            is_main : $is_main,
+            date: $date,
+            payment_term_type: $payment_term_type,
+            amount : $amount,
+            amount_owed: $amount_owed,
             remarks: $remarks,
-            status: $status
+            posted: $posted
         );
 
         $this->assertDatabaseHas('incomes', [
             'company_id' => $company_id,
+            'branch_id' => $branch_id,
+            'income_group_id' => $income_group_id,
+            'cash_id' => $cash_id,
             'code' => $code,
-            'name' => $name
+            'date' => $date,
+            'payment_term_type' => $payment_term_type,
+            'amount' => $amount,
+            'amount_owed' => $amount_owed,
+            'remarks' => $remarks,
+            'posted' => $posted
         ]);
     }
 
     public function test_call_edit_with_all_field_filled()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $income_group_id = IncomeGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
-        $name = $this->faker->name;
-        $address = $this->faker->address;
-        $city = $this->faker->city;
-        $contact = $this->faker->e164PhoneNumber;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $date = Carbon::now()->toDateTimeString();
+        $payment_term_type = $this->faker->creditCardType;
+        $amount = (new RandomGenerator())->generateNumber(6);
+        $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $posted = (new RandomGenerator())->generateNumber(0, 1);
 
-        $branch = Income::create([
+        $income = Income::create([
             'company_id' => $company_id,
+            'branch_id' => $branch_id,
+            'income_group_id' => $income_group_id,
+            'cash_id' => $cash_id,
             'code' => $code,
-            'name' => $name,
-            'address' => $address,
-            'city' => $city,
-            'contact' => $contact,
-            'is_main' => $is_main,
+            'date' => $date,
+            'payment_term_type' => $payment_term_type,
+            'amount' => $amount,
+            'amount_owed' => $amount_owed,
             'remarks' => $remarks,
-            'status' => $status
+            'posted' => $posted
         ]);
-        $id = $branch->id;
+        $id = $income->id;
 
+        $company_id = Company::inRandomOrder()->first()->id;
+        $newBranchId = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $newIncomeGroupId = IncomeGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $newCashId = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
-        $newName = $this->faker->name;
-        $newAddress = $this->faker->address;
-        $newCity = $this->faker->city;
-        $newContact = $this->faker->e164PhoneNumber;
-        $newIsMain = (new RandomGenerator())->generateNumber(0, 1);
+        $newDate = Carbon::now()->toDateTimeString();
+        $newPaymentTermType = $this->faker->creditCardType;
+        $newAmount = (new RandomGenerator())->generateNumber(6);
+        $newAmountOwed = (new RandomGenerator())->generateNumber(6);
         $newRemarks = $this->faker->sentence;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newPosted = (new RandomGenerator())->generateNumber(0, 1);
 
         $this->service->update(
             id: $id,
             company_id: $company_id,
+            branch_id: $newBranchId,
+            income_group_id: $newIncomeGroupId,
+            cash_id: $newCashId,
             code: $newCode,
-            name: $newName,
-            address: $newAddress,
-            city: $newCity,
-            contact: $newContact,
-            is_main: $newIsMain,
+            date: $newDate,
+            payment_term_type: $newPaymentTermType,
+            amount : $newAmount,
+            amount_owed: $newAmountOwed,
             remarks: $newRemarks,
-            status: $newStatus
+            posted: $newPosted
         );
 
         $this->assertDatabaseHas('incomes', [
             'id' => $id,
             'company_id' => $company_id,
+            'branch_id' => $newBranchId,
+            'income_group_id' => $newIncomeGroupId,
+            'cash_id' => $newCashId,
             'code' => $newCode,
-            'name' => $newName
+            'date' => $newDate,
+            'payment_term_type' => $newPaymentTermType,
+            'amount' => $newAmount,
+            'amount_owed' => $newAmountOwed,
+            'remarks' => $newRemarks,
+            'posted' => $newPosted
         ]);
     }
 
     public function test_call_edit_with_minimal_field_filled()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $income_group_id = IncomeGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $cash_id = null;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
-        $name = $this->faker->name;
-        $address = null;
-        $city = null;
-        $contact = null;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
-        $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $date = Carbon::now()->toDateTimeString();
+        $payment_term_type = $this->faker->creditCardType;
+        $amount = (new RandomGenerator())->generateNumber(6);
+        $amount_owed = (new RandomGenerator())->generateNumber(5);
+        $remarks = $this->faker->sentence;
+        $posted = (new RandomGenerator())->generateNumber(0, 1);
 
-        $branch = Income::create([
+        $income = Income::create([
             'company_id' => $company_id,
+            'branch_id' => $branch_id,
+            'income_group_id' => $income_group_id,
+            'cash_id' => $cash_id,
             'code' => $code,
-            'name' => $name,
-            'address' => $address,
-            'city' => $city,
-            'contact' => $contact,
-            'is_main' => $is_main,
+            'date' => $date,
+            'payment_term_type' => $payment_term_type,
+            'amount' => $amount,
+            'amount_owed' => $amount_owed,
             'remarks' => $remarks,
-            'status' => $status
+            'posted' => $posted
         ]);
-        $id = $branch->id;
+        $id = $income->id;
 
+        $company_id = Company::inRandomOrder()->first()->id;
+        $newBranchId = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $newIncomeGroupId = IncomeGroup::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
+        $newCashId = null;
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
-        $newName = $this->faker->name;
-        $newAddress = null;
-        $newCity = null;
-        $newContact = null;
-        $newIsMain = (new RandomGenerator())->generateNumber(0, 1);
-        $newRemarks = null;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newDate = Carbon::now()->toDateTimeString();
+        $newPaymentTermType = $this->faker->creditCardType;
+        $newAmount = (new RandomGenerator())->generateNumber(6);
+        $newAmountOwed = (new RandomGenerator())->generateNumber(6);
+        $newRemarks = $this->faker->sentence;
+        $newPosted = (new RandomGenerator())->generateNumber(0, 1);
 
         $this->service->update(
             id: $id,
             company_id: $company_id,
+            branch_id: $newBranchId,
+            income_group_id: $newIncomeGroupId,
+            cash_id: $newCashId,
             code: $newCode,
-            name: $newName,
-            address: $newAddress,
-            city: $newCity,
-            contact: $newContact,
-            is_main: $newIsMain,
+            date: $newDate,
+            payment_term_type: $newPaymentTermType,
+            amount : $newAmount,
+            amount_owed: $newAmountOwed,
             remarks: $newRemarks,
-            status: $newStatus
+            posted: $newPosted
         );
 
         $this->assertDatabaseHas('incomes', [
             'id' => $id,
             'company_id' => $company_id,
+            'branch_id' => $newBranchId,
+            'income_group_id' => $newIncomeGroupId,
+            'cash_id' => $newCashId,
             'code' => $newCode,
-            'name' => $newName
+            'date' => $newDate,
+            'payment_term_type' => $newPaymentTermType,
+            'amount' => $newAmount,
+            'amount_owed' => $newAmountOwed,
+            'remarks' => $newRemarks,
+            'posted' => $newPosted
         ]);
     }
 
     public function test_call_delete()
     {
-        $company_id = Company::has('incomes')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
+        $branch_id = Branch::where('company_id', '=', $company_id)->first()->id;
+        $income_group_id = IncomeGroup::where('company_id', '=', $company_id)->first()->id;
+        $cash_id = Cash::where('company_id', '=', $company_id)->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
-        $name = $this->faker->name;
-        $address = $this->faker->address;
-        $city = $this->faker->city;
-        $contact = $this->faker->e164PhoneNumber;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $date = Carbon::now()->toDateTimeString();
+        $payment_term_type = $this->faker->creditCardType;
+        $amount = (new RandomGenerator())->generateNumber(6);
+        $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $posted = (new RandomGenerator())->generateNumber(0, 1);
 
-        $branch = Income::create([
+        $income = Income::create([
             'company_id' => $company_id,
+            'branch_id' => $branch_id,
+            'income_group_id' => $income_group_id,
+            'cash_id' => $cash_id,
             'code' => $code,
-            'name' => $name,
-            'address' => $address,
-            'city' => $city,
-            'contact' => $contact,
-            'is_main' => $is_main,
+            'date' => $date,
+            'payment_term_type' => $payment_term_type,
+            'amount' => $amount,
+            'amount_owed' => $amount_owed,
             'remarks' => $remarks,
-            'status' => $status
+            'posted' => $posted
         ]);
-        $id = $branch->id;
+        $id = $income->id;
 
         $this->service->delete($id);
 
@@ -230,7 +294,7 @@ class IncomeServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_incomes_read_with_empty_search()
     {
-        $companyId = Company::has('incomes')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
 
         $response = $this->service->read(
             companyId: $companyId, 
@@ -247,7 +311,7 @@ class IncomeServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_incomes_with_special_char_in_search()
     {
-        $companyId = Company::has('incomes')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
         $paginate = true;
         $page = 1;

@@ -23,7 +23,6 @@ class ExpenseGroupServiceImpl implements ExpenseGroupService
         int $company_id,
         string $code,
         string $name,
-        int $status,
     ): ?ExpenseGroup
     {
         DB::beginTransaction();
@@ -37,7 +36,6 @@ class ExpenseGroupServiceImpl implements ExpenseGroupService
             $expenseGroup->company_id = $company_id;
             $expenseGroup->code = $code;
             $expenseGroup->name = $name;
-            $expenseGroup->status = $status;
 
             $expenseGroup->save();
 
@@ -148,7 +146,6 @@ class ExpenseGroupServiceImpl implements ExpenseGroupService
         int $company_id,
         string $code,
         string $name,
-        int $status,
     ): ?ExpenseGroup
     {
         DB::beginTransaction();
@@ -164,7 +161,6 @@ class ExpenseGroupServiceImpl implements ExpenseGroupService
                 'company_id' => $company_id,
                 'code' => $code,
                 'name' => $name,
-                'status' => $status,
             ]);
 
             DB::commit();

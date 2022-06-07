@@ -50,7 +50,7 @@ class ExpenseController extends BaseController
         $request = $expenseRequest->validated();
         
         $company_id = Hashids::decode($request['company_id'])[0];
-        $company_id = Hashids::decode($request['company_id'])[0];
+        $branch_id = Hashids::decode($request['branch$branch_id'])[0];
         $code = $request['code'];
         $date = $request['date'];
         $payment_term_type = $request['payment_term_type'];
@@ -63,6 +63,7 @@ class ExpenseController extends BaseController
 
         $result = $this->expenseService->create(
             $company_id,
+            $branch_id,
             $code, 
             $date,
             $payment_term_type,
@@ -82,7 +83,7 @@ class ExpenseController extends BaseController
         $request = $expenseRequest->validated();
 
         $company_id = Hashids::decode($request['company_id'])[0];
-        $company_id = Hashids::decode($request['company_id'])[0];
+        $branch_id = Hashids::decode($request['branch_id'])[0];
         $code = $request['code'];
         $date = $request['date'];
         $payment_term_type = $request['payment_term_type'];
@@ -96,6 +97,7 @@ class ExpenseController extends BaseController
         $expense = $this->expenseService->update(
             $id,
             $company_id,
+            $branch_id,
             $code, 
             $date,
             $payment_term_type,

@@ -19,14 +19,11 @@ class ExpenseGroupServiceTest extends ServiceTestCase
         parent::setUp();
 
         $this->service = app(ExpenseGroupService::class);
-
-        if (ExpenseGroup::count() < 2)
-            $this->artisan('db:seed', ['--class' => 'ExpenseGroupTableSeeder']);
     }
 
     public function test_call_save_with_all_field_filled()
     {
-        $company_id = Company::has('expense_groups')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
 
@@ -45,7 +42,7 @@ class ExpenseGroupServiceTest extends ServiceTestCase
 
     public function test_call_save_with_minimal_field_filled()
     {
-        $company_id = Company::has('expense_groups')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
 
@@ -64,7 +61,7 @@ class ExpenseGroupServiceTest extends ServiceTestCase
 
     public function test_call_edit_with_all_field_filled()
     {
-        $company_id = Company::has('expense_groups')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
 
@@ -95,7 +92,7 @@ class ExpenseGroupServiceTest extends ServiceTestCase
 
     public function test_call_edit_with_minimal_field_filled()
     {
-        $company_id = Company::has('expense_groups')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
 
@@ -126,7 +123,7 @@ class ExpenseGroupServiceTest extends ServiceTestCase
 
     public function test_call_delete()
     {
-        $company_id = Company::has('expense_groups')->inRandomOrder()->first()->id;
+        $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
 
@@ -146,7 +143,7 @@ class ExpenseGroupServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_expense_groups_read_with_empty_search()
     {
-        $companyId = Company::has('expense_groups')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
 
         $response = $this->service->read(
             companyId: $companyId, 
@@ -163,7 +160,7 @@ class ExpenseGroupServiceTest extends ServiceTestCase
 
     public function test_call_read_when_user_have_expense_groups_with_special_char_in_search()
     {
-        $companyId = Company::has('expense_groups')->inRandomOrder()->first()->id;
+        $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
         $paginate = true;
         $page = 1;

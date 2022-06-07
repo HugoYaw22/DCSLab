@@ -23,6 +23,7 @@ class Capital extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'company_id',
         'investor_id',
         'group_id',
         'cash_id',
