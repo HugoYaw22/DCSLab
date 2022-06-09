@@ -16,6 +16,13 @@ class DashboardServiceImpl implements DashboardService
         
     }
     
+    public function clearUserCache($userId): bool
+    {
+        $this->flushCache($userId);
+
+        return true;
+    }
+
     public function createMenu(bool $useCache = true): array
     {
         $cacheKey = '';
@@ -104,6 +111,12 @@ class DashboardServiceImpl implements DashboardService
             'title' => 'components.menu.company-branch'
         );
 
+        $employees = array(
+            'icon' => '',
+            'pageName' => 'side-menu-company-employee',
+            'title' => 'components.menu.company-employee'
+        );
+
         $warehouses = array(
             'icon' => '',
             'pageName' => 'side-menu-company-warehouse',
@@ -125,7 +138,7 @@ class DashboardServiceImpl implements DashboardService
         );
 
         if ($hasCompany || $hasDevRole)
-            array_push($root_array['subMenu'], $company, $branches, $warehouses, $employees);
+            array_push($root_array['subMenu'], $company, $branches, $employees, $warehouses);
         else 
             array_push($root_array['subMenu'], $company);
 

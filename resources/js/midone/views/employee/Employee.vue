@@ -6,6 +6,7 @@
                 <table class="table table-report -mt-2">
                     <thead>
                         <tr>
+                            <th class="whitespace-nowrap">{{ t('views.employee.table.cols.code') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.employee.table.cols.name') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.employee.table.cols.email') }}</th>
                             <th class="whitespace-nowrap">{{ t('views.employee.table.cols.join_date') }}</th>
@@ -16,6 +17,7 @@
                     <tbody>
                         <template v-if="tableProps.dataList !== undefined" v-for="(item, itemIdx) in tableProps.dataList.data">
                             <tr class="intro-x">
+                                <td>{{ item.code }}</td>
                                 <td><a href="" @click.prevent="toggleDetail(itemIdx)" class="hover:animate-pulse">{{ item.user.name }}</a></td>
                                 <td>{{ item.user.email }}</td>
                                 <td>{{ item.join_date }}</td>
@@ -49,11 +51,35 @@
                                     </div>
                                     <div class="flex flex-row">
                                         <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.name') }}</div>
-                                        <div class="flex-1">{{ item.name }}</div>
+                                        <div class="flex-1">{{ item.user.name }}</div>
                                     </div>
                                     <div class="flex flex-row">
-                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.remarks') }}</div>
-                                        <div class="flex-1">{{ item.remarks }}</div>
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.email') }}</div>
+                                        <div class="flex-1">{{ item.user.email }}</div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.address') }}</div>
+                                        <div class="flex-1">{{ item.user.profile.address }}</div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.city') }}</div>
+                                        <div class="flex-1">{{ item.user.profile.city }}</div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.postal_code') }}</div>
+                                        <div class="flex-1">{{ item.user.profile.postal_code }}</div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.country') }}</div>
+                                        <div class="flex-1">{{ item.user.profile.country }}</div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.tax_id') }}</div>
+                                        <div class="flex-1">{{ item.user.profile.tax_id }}</div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.ic_num') }}</div>
+                                        <div class="flex-1">{{ item.user.profile.ic_num }}</div>
                                     </div>
                                     <div class="flex flex-row">
                                         <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.status') }}</div>
@@ -61,6 +87,14 @@
                                             <span v-if="item.status === 'ACTIVE'">{{ t('components.dropdown.values.statusDDL.active') }}</span>
                                             <span v-if="item.status === 'INACTIVE'">{{ t('components.dropdown.values.statusDDL.inactive') }}</span>
                                         </div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.join_date') }}</div>
+                                        <div class="flex-1">{{ item.join_date }}</div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <div class="ml-5 w-48 text-right pr-5">{{ t('views.employee.fields.remarks') }}</div>
+                                        <div class="flex-1">{{ item.user.profile.remarks }}</div>
                                     </div>
                                 </td>
                             </tr>
@@ -96,6 +130,17 @@
         <div class="loader-container">
             <VeeForm id="employeeForm" class="p-5" @submit="onSubmit" @invalid-submit="invalidSubmit" v-slot="{ handleReset, errors }">
                 <div class="p-5">
+                    <!-- #region Code -->
+                    <div class="mb-3">
+                        <label for="inputCode" class="form-label">{{ t('views.employee.fields.code') }}</label>
+                        <div class="flex items-center">
+                            <VeeField id="inputCode" name="code" type="text" :class="{'form-control':true, 'border-danger': errors['code']}" :placeholder="t('views.employee.fields.code')" :label="t('views.employee.fields.code')" rules="required" @blur="reValidate(errors)" v-model="employee.code" :readonly="employee.code === '[AUTO]'" />
+                            <button type="button" class="btn btn-secondary mx-1" @click="generateCode" v-show="mode === 'create'">{{ t('components.buttons.auto') }}</button>
+                        </div>
+                        <ErrorMessage name="code" class="text-danger" />
+                    </div>
+                    <!-- #endregion -->
+
                     <!-- #region Name-->
                     <div class="mb-3">
                         <label for="inputName" class="form-label">{{ t('views.employee.fields.name') }}</label>
@@ -113,7 +158,7 @@
                     <!-- #endregion -->
                     
                     <!-- #region Input Img-->
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="inputImg" class="form-label">{{ t('views.employee.fields.picture') }}</label>
                             <div class="">
                                 <div class="my-1">
@@ -123,7 +168,7 @@
                                     <input type="file" class="h-full w-full" name="img_path" v-if="mode === 'create' || mode === 'edit'" v-on:change="handleUpload" />
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     <!-- #endregion -->
                     
                     <!-- #region Address-->
@@ -250,33 +295,31 @@ const expandDetail = ref(null);
 //#region Data - Views
 const employeeList = ref({});
 const employee = ref({
+    code: '',
     company: { 
             hId: '',
             name: '',
         },
-    user: [
-        {
+    user: {
+        hId: '',
+        name: '',
+        email: '',
+        profile: {
             hId: '',
-            name: '',
-            email: '',
-            profile: [
-                {
-                    hId: '',
-                    img_path: '',
-                    address: '',
-                    city: '',
-                    postal_code: '',
-                    country: '',
-                    tax_id: '',
-                    ic_num: '',
-                    remarks: '',
-                    status: 1,
-                },
-            ],
-        },
-    ],
+            img_path: '',
+            address: '',
+            city: '',
+            postal_code: '',
+            country: '',
+            tax_id: '',
+            ic_num: '',
+            remarks: '',
+            status: 'ACTIVE',
+        }
+    },
+    code: '',
     join_date: '',
-    status: 1,
+    status: 'ACTIVE',
 });
 const companyDDL = ref([]);
 const countriesDDL = ref([]);
@@ -311,12 +354,19 @@ const setMode = () => {
 
 const getAllEmployees = (args) => {
     employeeList.value = {};
-    if (args.pageSize === undefined) args.pageSize = 10;
-    if (args.search === undefined) args.search = '';
-
     let companyId = selectedUserCompany.value;
+    if (args.search === undefined) args.search = '';
+    if (args.paginate === undefined) args.paginate = 1;
+    if (args.page === undefined) args.page = 1;
+    if (args.pageSize === undefined) args.pageSize = 10;
 
-    axios.get(route('api.get.db.company.employee.read', { "companyId": companyId, "page": args.page, "perPage": args.pageSize, "search": args.search })).then(response => {
+    axios.get(route('api.get.db.company.employee.read', { 
+        "companyId": companyId,
+        "search": args.search,
+        "paginate" : 1,
+        "page": args.page,
+        "perPage": args.pageSize
+    })).then(response => {
         employeeList.value = response.data;
         loading.value = false;
     });
@@ -343,11 +393,8 @@ const getDDL = () => {
 }
 
 const getDDLSync = () => {
-    axios.get(route('api.get.db.company.company.read.all_active', {
-            companyId: selectedUserCompany.value,
-            paginate: false
-        })).then(response => {
-            companyDDL.value = response.data;
+    axios.get(route('api.get.db.company.company.read.all_active')).then(response => {
+        companyDDL.value = response.data;
     });
 }
 
@@ -411,29 +458,26 @@ const emptyEmployee = () => {
             hId: '',
             name: '',
         },
-        user: [
-            {
+        user: {
+            hId: '',
+            name: '',
+            email: '',
+            profile: {
                 hId: '',
-                name: '',
-                email: '',
-                profile: [
-                    {
-                        hId: '',
-                        img_path: '',
-                        address: '',
-                        city: '',
-                        postal_code: '',
-                        country: '',
-                        tax_id: '',
-                        ic_num: '',
-                        remarks: '',
-                        status: 1,
-                    },
-                ],
-            },
-        ],
+                img_path: '',
+                address: '',
+                city: '',
+                postal_code: '',
+                country: '',
+                tax_id: '',
+                ic_num: '',
+                remarks: '',
+                status: 'ACTIVE',
+            }
+        },
+        code: '[AUTO]',
         join_date: '',
-        status: 1,
+        status: 'ACTIVE'
     }
 }
 
@@ -448,7 +492,7 @@ const createNew = () => {
         employee.value = JSON.parse(sessionStorage.getItem('DCSLAB_LAST_ENTITY'));
         sessionStorage.removeItem('DCSLAB_LAST_ENTITY');
     } else {
-        employee.value = emptyBranch();
+        employee.value = emptyEmployee();
 
         let c = _.find(companyDDL.value, { 'hId': selectedUserCompany.value });
         if (c) employee.value.company.hId = c.hId;
@@ -489,7 +533,11 @@ const backToList = () => {
     sessionStorage.removeItem('DCSLAB_LAST_ENTITY');
 
     mode.value = 'list';
-    getAllEmployees({ page: employeeList.value.current_page, pageSize: employeeList.value.per_page });
+    getAllEmployees({
+        paginate : 1,
+        page: employeeList.value.current_page,
+        pageSize: employeeList.value.per_page 
+    });
 }
 
 const toggleDetail = (idx) => {

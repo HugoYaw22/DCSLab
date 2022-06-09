@@ -7,6 +7,7 @@
             "company": "Perusahaan",
             "company-company": "Perusahaan",
             "company-branch": "Cabang",
+            "company-employee": "Karyawan",
             "company-warehouse": "Gudang",
             "company-employee": "Karyawan",
             "cash": "Kas",
@@ -361,12 +362,46 @@
                 "address": "Alamat",
                 "city": "Kota",
                 "contact": "Kontak",
-                "is_main": "Utama",
+                "is_main": "Cabang Utama",
                 "remarks": "Keterangan",
                 "status": "Status"
             }
-        }
-        ,
+        },
+        "employee": {
+            "table": {
+                "title": "Daftar Karyawan",
+                "cols": {
+                    "company": "Persusahaan",
+                    "code": "Kode",
+                    "name": "Nama",
+                    "email": "Email",
+                    "join_date": "Join Date",
+                    "status": "Status"
+                }
+            },
+            "actions": {
+                "create": "Tambah Karyawan",
+                "edit": "Ubah Karyawan",
+                "show": "Tampilkan Karyawan",
+                "delete": "Hapus Karyawan"
+            },
+            "fields": {
+                "company_id": "Nama Perusahaan",
+                "code": "Kode",
+                "name": "Nama",
+                "email": "Email",
+                "img_path": "Gambar",
+                "address": "Alamat",
+                "city": "Kota",
+                "postal_code": "Kode Pos",
+                "country": "Negara",
+                "tax_id": "Nomor Pajak",
+                "ic_num": "Nomor KTP",
+                "status": "Status",
+                "join_date": "Tanggal Bergabung",
+                "remarks": "Keterangan"
+            }
+        },
         "warehouse": {
             "table": {
                 "title": " Daftar Gudang",
@@ -396,8 +431,7 @@
                 "remarks": "Keterangan",
                 "status": "Status"
             }
-        }
-        ,
+        },
         "employee": {
             "table": {
                 "title": "Daftar Karyawan",
@@ -429,8 +463,7 @@
                 "join_date": "Tanggal Bergabung",
                 "remarks": "Keterangan"
             }
-        }
-        ,
+        },
         "cash": {
             "table": {
                 "title": "Daftar Kas",
@@ -453,8 +486,7 @@
                 "is_bank": "Bank",
                 "status": "Status"
             }
-        }
-        ,
+        },
         "capital": {
             "table": {
                 "title": "Daftar Modal",
@@ -485,8 +517,7 @@
                 "amount": "Jumlah",
                 "remarks": "Keterangan"
             }
-        }
-        ,
+        },
         "capital_group": {
             "table": {
                 "title": "Daftar Kelompok Modal",
@@ -506,8 +537,7 @@
                 "code": "Kode",
                 "name": "Nama"
             }
-        }
-        ,
+        },
         "customer": {
             "table": {
                 "title": "Daftar Pelanggan",
@@ -544,8 +574,7 @@
                 "remarks": "Keterangan",
                 "status": "Status"
             }
-        }
-        ,
+        },
         "customer_group": {
             "table": {
                 "title": "Daftar Kelompok Pelanggan",
@@ -581,8 +610,7 @@
                 "remarks": "Keterangan",
                 "cash_id": "Default Pembayaran"
             }
-        }
-        ,
+        },
         "expense": {
             "table": {
                 "title": "Daftar Pengeluaran",
@@ -612,8 +640,7 @@
                 "remarks": "Keterangan",
                 "posted": "Posted"
             }
-        }
-        ,
+        },
         "expense_group": {
             "table": {
                 "title": "Daftar Kelompok Pengeluaran",
@@ -632,8 +659,7 @@
                 "code": "Kode",
                 "name": "Nama"
             }
-        }
-        ,
+        },
         "income": {
             "table": {
                 "title": "Daftar Pendapatan",
@@ -663,8 +689,7 @@
                 "remarks": "Keterangan",
                 "posted": "Posted"
             }
-        }
-        ,
+        },
         "income_group": {
             "table": {
                 "title": "Daftar Kelompok Pendapatan",
@@ -683,8 +708,7 @@
                 "code": "Kode",
                 "name": "Nama"
             }
-        }
-        ,
+        },
         "investor": {
             "table": {
                 "title": "Daftar Penananm Modal",
@@ -713,8 +737,7 @@
                 "remarks": "Keterangan",
                 "status": "Status"
             }
-        }
-        ,
+        },
         "purchase_order": {
             "tabs": {
                 "purchase_order": "Pembelian",
