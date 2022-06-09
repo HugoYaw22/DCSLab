@@ -20,6 +20,7 @@ class CustomerGroup extends Model
     use SoftDeletes;
     
     protected $fillable = [
+        'company_id',
         'code',
         'name',
         'max_open_invoice',

@@ -20,6 +20,7 @@ class Customer extends Model
     use SoftDeletes;
     
     protected $fillable = [
+        'company_id',
         'code',
         'name',
         'is_member',

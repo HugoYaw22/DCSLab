@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCashesTable extends Migration
+class CreateCapitalGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateCashesTable extends Migration
      */
     public function up()
     {
-        Schema::create('cashes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('capital_groups', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('company_id')->references('id')->on('companies');
             $table->string('code');
             $table->string('name');
-            $table->integer('is_bank');
-            $table->integer('status');
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->default(0);
             $table->unsignedBigInteger('deleted_by')->default(0);
@@ -35,6 +33,6 @@ class CreateCashesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cashes');
+        Schema::dropIfExists('capital_groups');
     }
 }

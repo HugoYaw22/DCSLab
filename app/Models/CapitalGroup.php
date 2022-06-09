@@ -19,6 +19,7 @@ class CapitalGroup extends Model
     use SoftDeletes;
     
     protected $fillable = [
+        'company_id',
         'code',
         'name'
     ];

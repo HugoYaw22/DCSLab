@@ -23,6 +23,12 @@ class InvestorServiceImpl implements InvestorService
         int $company_id,
         string $code,
         string $name,
+        ?string $contact = null,
+        ?string $city = null,
+        ?string $address = null,
+        ?string $tax_number = null,
+        ?string $remarks = null,
+        int $status,
     ): ?Investor
     {
         DB::beginTransaction();
@@ -37,6 +43,12 @@ class InvestorServiceImpl implements InvestorService
             $investor->company_id = $company_id;
             $investor->code = $code;
             $investor->name = $name;
+            $investor->contact = $contact;
+            $investor->city = $city;
+            $investor->address = $address;
+            $investor->tax_number = $tax_number;
+            $investor->remarks = $remarks;
+            $investor->status = $status;
             $investor->save();
 
             DB::commit();
@@ -151,6 +163,12 @@ class InvestorServiceImpl implements InvestorService
         int $company_id,
         string $code,
         string $name,
+        ?string $contact = null,
+        ?string $city = null,
+        ?string $address = null,
+        ?string $tax_number = null,
+        ?string $remarks = null,
+        int $status,
     ): ?Investor
     {
         DB::beginTransaction();
@@ -167,6 +185,12 @@ class InvestorServiceImpl implements InvestorService
                 'company_id' => $company_id,
                 'code' => $code,
                 'name' => $name,
+                'contact' => $contact,
+                'city' => $city,
+                'address' => $address,
+                'tax_number' => $tax_number,
+                'remarks' => $remarks,
+                'status' => $status,
             ]);
 
             DB::commit();

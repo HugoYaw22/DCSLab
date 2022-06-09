@@ -26,7 +26,7 @@ export default {
         },
         {
             path: root + '/cash' + '/capital' + '/capital',
-            name: 'side-menu-cash-capital-capital',
+            name: 'components.menu.cash-capital',
             component: Capital,
             meta: { 
                 remember: true,
@@ -79,8 +79,8 @@ export default {
             }
         },
         {
-            path: root + '/cash' + '/investor' + '/investor',
-            name: 'side-menu-cash-investor-investor',
+            path: root + '/cash' + '/investor',
+            name: 'side-menu-cash-investor',
             component: Investor,
             meta: {
                 remember: true,

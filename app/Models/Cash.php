@@ -18,6 +18,7 @@ class Cash extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'company_id',
         'code',
         'name',
         'is_bank',

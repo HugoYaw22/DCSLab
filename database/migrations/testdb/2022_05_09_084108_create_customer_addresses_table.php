@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCustomersTable extends Migration
+class CreateCustomerAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,14 @@ class CreateCustomersTable extends Migration
      */
     public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('customer_addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('company_id')->references('id')->on('companies');
-            $table->foreignId('customer_group_id')->references('id')->on('customer_groups');
-            $table->string('code');
-            $table->integer('is_member');
-            $table->string('name');
-            $table->string('zone')->nullable();
-            $table->integer('max_open_invoice')->default(0);
-            $table->decimal('max_outstanding_invoice', $precision = 16, $scale = 8)->default(0);
-            $table->integer('max_invoice_age')->default(0);
-            $table->integer('payment_term')->default(0);
-            $table->string('tax_id')->nullable();
+            $table->foreignId('customer_id')->references('id')->on('customers');
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('contact')->nullable();
             $table->string('remarks')->nullable();
-			$table->integer('status')->default(0);
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->default(0);
             $table->unsignedBigInteger('deleted_by')->default(0);
@@ -43,6 +36,6 @@ class CreateCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('customer_addresses');
     }
 }
