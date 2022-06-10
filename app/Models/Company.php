@@ -57,15 +57,11 @@ class Company extends Model
 
     protected static $logOnlyDirty = true;
 
-    protected $hidden = [
-        'id',
-        'created_by',
-        'updated_by',
-        'deleted_by',
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'pivot',
+    protected $hidden = [];
+
+    protected $casts = [
+        'default' => 'boolean',
+        'status' => ActiveStatus::class
     ];
 
     public function hId() : Attribute
