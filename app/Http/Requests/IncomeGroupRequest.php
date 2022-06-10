@@ -57,4 +57,32 @@ class IncomeGroupRequest extends FormRequest
             'company_id' => trans('validation_attributes.company'),
         ];
     }
+
+    public function validationData()
+    {
+        $additionalArray = [];
+
+        return array_merge($this->all(), $additionalArray);
+    }
+
+    public function prepareForValidation()
+    {
+        $currentRouteMethod = $this->route()->getActionMethod();
+        switch($currentRouteMethod) {
+            case 'read':
+                $this->merge([
+                    'company_id' => $this->has('companyId') ? Hashids::decode($this['companyId'])[0] : '',
+                    'paginate' => $this->has('paginate') ? filter_var($this->paginate, FILTER_VALIDATE_BOOLEAN) : true,
+                ]);
+                break;
+            case 'store':
+            case 'update':
+                $this->merge([
+                    'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
+                ]);
+                break;
+            default:
+                $this->merge([]);
+        }
+    }
 }

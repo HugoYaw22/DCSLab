@@ -3,9 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Rules\uniqueCode;
+use App\Enums\ActiveStatus;
+use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use Vinkla\Hashids\Facades\Hashids;
 
 class CustomerGroupRequest extends FormRequest
 {
@@ -84,5 +85,43 @@ class CustomerGroupRequest extends FormRequest
         return [
             'company_id' => trans('validation_attributes.company'),
         ];
+    }
+
+    public function validationData()
+    {
+        $additionalArray = [];
+
+        return array_merge($this->all(), $additionalArray);
+    }
+
+    public function prepareForValidation()
+    {
+        $currentRouteMethod = $this->route()->getActionMethod();
+        switch($currentRouteMethod) {
+            case 'read':
+                $this->merge([
+                    'company_id' => $this->has('companyId') ? Hashids::decode($this['companyId'])[0] : '',
+                    'paginate' => $this->has('paginate') ? filter_var($this->paginate, FILTER_VALIDATE_BOOLEAN) : true,
+                ]);
+                break;
+            case 'store':
+                $this->merge([
+                    'select_at_cost' => $this->has('select_at_cost') ? $this['select_at_cost'] : null,
+                    'round_on' => $this->has('round_on') ? $this['round_on'] : null,
+                    'remarks' => $this->has('remarks') ? $this['remarks'] : null,
+                    'cash_id' => $this->has('cash_id') ? Hashids::decode($this['cash_id'])[0] : '',
+                ]);
+            case 'update':
+                $this->merge([
+                    'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
+                    'select_at_cost' => $this->has('select_at_cost') ? $this['select_at_cost'] : null,
+                    'round_on' => $this->has('round_on') ? $this['round_on'] : null,
+                    'remarks' => $this->has('remarks') ? $this['remarks'] : null,
+                    'cash_id' => $this->has('cash_id') ? Hashids::decode($this['cash_id'])[0] : '',
+                ]);
+                break;
+            default:
+                $this->merge([]);
+        }
     }
 }

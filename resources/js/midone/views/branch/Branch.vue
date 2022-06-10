@@ -296,14 +296,6 @@ const setMode = () => {
 
 const getAllBranches = (args) => {
     branchList.value = {};
-<<<<<<< HEAD
-    if (args.search === undefined) args.search = '';
-    if (args.paginate === undefined) args.paginate = 1;
-    if (args.page === undefined) args.page = 1;
-    if (args.pageSize === undefined) args.pageSize = 10;
-
-=======
->>>>>>> e42acc17de6932e25c092ab582fc55d72d9d5664
     let companyId = selectedUserCompany.value;
     if (args.search === undefined) args.search = '';
     if (args.paginate === undefined) args.paginate = 1;

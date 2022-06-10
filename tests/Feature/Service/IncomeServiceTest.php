@@ -26,7 +26,7 @@ class IncomeServiceTest extends ServiceTestCase
         $this->service = app(IncomeService::class);
     }
 
-    public function test_call_save_with_all_field_filled()
+    public function test_service_call_save()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $branch_id = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
@@ -38,7 +38,7 @@ class IncomeServiceTest extends ServiceTestCase
         $amount = (new RandomGenerator())->generateNumber(6);
         $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
-        $posted = (new RandomGenerator())->generateNumber(0, 1);
+        $posted = $this->faker->boolean;
 
         $this->service->create(
             company_id: $company_id,
@@ -69,7 +69,7 @@ class IncomeServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_save_with_minimal_field_filled()
+    public function test_service_call_save_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $branch_id = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
@@ -112,7 +112,7 @@ class IncomeServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_all_field_filled()
+    public function test_service_call_edit()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $branch_id = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
@@ -124,7 +124,7 @@ class IncomeServiceTest extends ServiceTestCase
         $amount = (new RandomGenerator())->generateNumber(6);
         $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
-        $posted = (new RandomGenerator())->generateNumber(0, 1);
+        $posted = $this->faker->boolean;
 
         $income = Income::create([
             'company_id' => $company_id,
@@ -151,7 +151,7 @@ class IncomeServiceTest extends ServiceTestCase
         $newAmount = (new RandomGenerator())->generateNumber(6);
         $newAmountOwed = (new RandomGenerator())->generateNumber(6);
         $newRemarks = $this->faker->sentence;
-        $newPosted = (new RandomGenerator())->generateNumber(0, 1);
+        $newPosted = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -184,7 +184,7 @@ class IncomeServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_minimal_field_filled()
+    public function test_service_call_edit_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $branch_id = Branch::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
@@ -196,7 +196,7 @@ class IncomeServiceTest extends ServiceTestCase
         $amount = (new RandomGenerator())->generateNumber(6);
         $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
-        $posted = (new RandomGenerator())->generateNumber(0, 1);
+        $posted = $this->faker->boolean;
 
         $income = Income::create([
             'company_id' => $company_id,
@@ -223,7 +223,7 @@ class IncomeServiceTest extends ServiceTestCase
         $newAmount = (new RandomGenerator())->generateNumber(6);
         $newAmountOwed = (new RandomGenerator())->generateNumber(6);
         $newRemarks = $this->faker->sentence;
-        $newPosted = (new RandomGenerator())->generateNumber(0, 1);
+        $newPosted = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -256,7 +256,7 @@ class IncomeServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_delete()
+    public function test_service_call_delete()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $branch_id = Branch::where('company_id', '=', $company_id)->first()->id;
@@ -268,7 +268,7 @@ class IncomeServiceTest extends ServiceTestCase
         $amount = (new RandomGenerator())->generateNumber(6);
         $amount_owed = (new RandomGenerator())->generateNumber(5);
         $remarks = $this->faker->sentence;
-        $posted = (new RandomGenerator())->generateNumber(0, 1);
+        $posted = $this->faker->boolean;
 
         $income = Income::create([
             'company_id' => $company_id,
@@ -292,7 +292,7 @@ class IncomeServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_read_when_user_have_incomes_read_with_empty_search()
+    public function test_service_call_read_when_user_have_incomes_read_with_empty_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
 
@@ -309,7 +309,7 @@ class IncomeServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_have_incomes_with_special_char_in_search()
+    public function test_service_call_read_when_user_have_incomes_with_special_char_in_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";

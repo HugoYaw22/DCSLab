@@ -21,7 +21,7 @@ class InvestorServiceTest extends ServiceTestCase
         $this->service = app(InvestorService::class);
     }
 
-    public function test_call_save_with_all_field_filled()
+    public function test_service_call_save()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -31,7 +31,7 @@ class InvestorServiceTest extends ServiceTestCase
         $contact = $this->faker->e164PhoneNumber;
         $tax_number = (new RandomGenerator())->generateAlphaNumeric(6);
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $this->service->create(
             company_id: $company_id,
@@ -52,7 +52,7 @@ class InvestorServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_save_with_minimal_field_filled()
+    public function test_service_call_save_with_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -62,7 +62,7 @@ class InvestorServiceTest extends ServiceTestCase
         $contact = null;
         $tax_number = (new RandomGenerator())->generateAlphaNumeric(6);
         $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $this->service->create(
             company_id: $company_id,
@@ -83,7 +83,7 @@ class InvestorServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_all_field_filled()
+    public function test_service_call_edit()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -93,7 +93,7 @@ class InvestorServiceTest extends ServiceTestCase
         $contact = $this->faker->e164PhoneNumber;
         $tax_number = (new RandomGenerator())->generateAlphaNumeric(6);
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $branch = Investor::create([
             'company_id' => $company_id,
@@ -115,7 +115,7 @@ class InvestorServiceTest extends ServiceTestCase
         $newContact = $this->faker->e164PhoneNumber;
         $newIsMain = (new RandomGenerator())->generateAlphaNumeric(6);
         $newRemarks = $this->faker->sentence;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -138,7 +138,7 @@ class InvestorServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_minimal_field_filled()
+    public function test_service_call_edit_with_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -148,7 +148,7 @@ class InvestorServiceTest extends ServiceTestCase
         $contact = null;
         $tax_number = (new RandomGenerator())->generateAlphaNumeric(6);
         $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $branch = Investor::create([
             'company_id' => $company_id,
@@ -170,7 +170,7 @@ class InvestorServiceTest extends ServiceTestCase
         $newContact = null;
         $newIsMain = (new RandomGenerator())->generateAlphaNumeric(6);
         $newRemarks = null;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -193,7 +193,7 @@ class InvestorServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_delete()
+    public function test_service_call_delete()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -203,7 +203,7 @@ class InvestorServiceTest extends ServiceTestCase
         $contact = $this->faker->e164PhoneNumber;
         $tax_number = (new RandomGenerator())->generateAlphaNumeric(6);
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $branch = Investor::create([
             'company_id' => $company_id,
@@ -225,7 +225,7 @@ class InvestorServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_read_when_user_have_investors_read_with_empty_search()
+    public function test_service_call_read_when_user_have_investors_read_with_empty_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
 
@@ -242,7 +242,7 @@ class InvestorServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_have_investors_with_special_char_in_search()
+    public function test_service_call_read_when_user_have_investors_with_special_char_in_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";

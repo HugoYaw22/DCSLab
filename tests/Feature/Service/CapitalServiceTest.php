@@ -25,7 +25,7 @@ class CapitalServiceTest extends ServiceTestCase
         $this->service = app(CapitalService::class);
     }
 
-    public function test_call_save_with_all_field_filled()
+    public function test_service_call_save()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
@@ -33,7 +33,7 @@ class CapitalServiceTest extends ServiceTestCase
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = (new RandomGenerator())->generateNumber(1, 9999);
         $date = Carbon::now()->toDateTimeString();
-        $capital_status = (new RandomGenerator())->generateNumber(0, 1);
+        $capital_status = $this->faker->boolean;
         $amount = $this->faker->randomDigit;
         $remarks = null;
 
@@ -62,7 +62,7 @@ class CapitalServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_save_with_minimal_field_filled()
+    public function test_service_call_save_with_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
@@ -70,7 +70,7 @@ class CapitalServiceTest extends ServiceTestCase
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = null;
         $date = Carbon::now()->toDateTimeString();
-        $capital_status = (new RandomGenerator())->generateNumber(0, 1);
+        $capital_status = $this->faker->boolean;
         $amount = $this->faker->randomDigit;
         $remarks = null;
 
@@ -99,7 +99,7 @@ class CapitalServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_all_field_filled()
+    public function test_service_call_edit()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
@@ -107,7 +107,7 @@ class CapitalServiceTest extends ServiceTestCase
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = (new RandomGenerator())->generateNumber(1, 9999);
         $date = Carbon::now()->toDateTimeString();
-        $capital_status = (new RandomGenerator())->generateNumber(0, 1);
+        $capital_status = $this->faker->boolean;
         $amount = $this->faker->randomDigit;
         $remarks = null;
 
@@ -129,7 +129,7 @@ class CapitalServiceTest extends ServiceTestCase
         $newCashId = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $newRefNumber = (new RandomGenerator())->generateNumber(1, 9999);
         $newDate = Carbon::now()->toDateTimeString();
-        $newCapitalStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newCapitalStatus = $this->faker->boolean;
         $newAmount = $this->faker->randomDigit;
         $newRemarks = null;
 
@@ -160,7 +160,7 @@ class CapitalServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_minimal_field_filled()
+    public function test_service_call_edit_with_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
@@ -168,7 +168,7 @@ class CapitalServiceTest extends ServiceTestCase
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = null;
         $date = Carbon::now()->toDateTimeString();
-        $capital_status = (new RandomGenerator())->generateNumber(0, 1);
+        $capital_status = $this->faker->boolean;
         $amount = $this->faker->randomDigit;
         $remarks = null;
 
@@ -190,7 +190,7 @@ class CapitalServiceTest extends ServiceTestCase
         $newCashId = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $newRefNumber = null;
         $newDate = Carbon::now()->toDateTimeString();
-        $newCapitalStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newCapitalStatus = $this->faker->boolean;
         $newAmount = $this->faker->randomDigit;
         $newRemarks = null;
 
@@ -221,7 +221,7 @@ class CapitalServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_delete()
+    public function test_service_call_delete()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $investor_id = Investor::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
@@ -229,7 +229,7 @@ class CapitalServiceTest extends ServiceTestCase
         $cash_id = Cash::where('company_id', '=', $company_id)->inRandomOrder()->first()->id;
         $ref_number = (new RandomGenerator())->generateNumber(1, 9999);
         $date = Carbon::now()->toDateTimeString();
-        $capital_status = (new RandomGenerator())->generateNumber(0, 1);
+        $capital_status = $this->faker->boolean;
         $amount = $this->faker->randomDigit;
         $remarks = null;
 
@@ -253,7 +253,7 @@ class CapitalServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_read_when_user_have_capitals_read_with_empty_search()
+    public function test_service_call_read_when_user_have_capitals_read_with_empty_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
 
@@ -270,7 +270,7 @@ class CapitalServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_have_capitals_with_special_char_in_search()
+    public function test_service_call_read_when_user_have_capitals_with_special_char_in_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
