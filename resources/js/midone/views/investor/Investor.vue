@@ -255,10 +255,11 @@ const setMode = () => {
 
 const getAllInvestors = (args) => {
     investorList.value = {};
-    if (args.pageSize === undefined) args.pageSize = 10;
-    if (args.search === undefined) args.search = '';
-
     let companyId = selectedUserCompany.value;
+    if (args.search === undefined) args.search = '';
+    if (args.paginate === undefined) args.paginate = 1;
+    if (args.page === undefined) args.page = 1;
+    if (args.pageSize === undefined) args.pageSize = 10;
 
     axios.get(route('api.get.db.company.investor.read', { "companyId": companyId, "page": args.page, "perPage": args.pageSize, "search": args.search })).then(response => {
         investorList.value = response.data;
