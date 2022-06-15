@@ -372,6 +372,10 @@
             }
         },
         "employee": {
+            "tabs": {
+                "employee": "Employee",
+                "access": "Access"
+            },
             "table": {
                 "title": "Employee Lists",
                 "cols": {
@@ -403,7 +407,17 @@
                 "ic_num": "Ic Num",
                 "status": "Status",
                 "join_date": "Join Date",
-                "remarks": "Remarks"
+                "remarks": "Remarks",
+                "access": {
+                    "access_lists": "Product Lists",
+                    "table": {
+                        "cols": {
+                            "selected": "Selected",
+                            "company": "Company",
+                            "branch": "Branch"
+                        }
+                    }
+                }
             }
         },
         "warehouse": {
