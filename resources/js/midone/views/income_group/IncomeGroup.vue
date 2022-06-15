@@ -176,10 +176,11 @@ const setMode = () => {
 
 const getAllIncomeGroups = (args) => {
     income_groupList.value = {};
-    if (args.pageSize === undefined) args.pageSize = 10;
-    if (args.search === undefined) args.search = '';
-
     let companyId = selectedUserCompany.value;
+    if (args.search === undefined) args.search = '';
+    if (args.paginate === undefined) args.paginate = 1;
+    if (args.page === undefined) args.page = 1;
+    if (args.pageSize === undefined) args.pageSize = 10;
 
     axios.get(route('api.get.db.company.income_group.read', { "companyId": companyId, "page": args.page, "perPage": args.pageSize, "search": args.search })).then(response => {
         income_groupList.value = response.data;
@@ -192,7 +193,7 @@ const getDDL = () => {
         axios.get(route('api.get.db.common.ddl.list.statuses')).then(response => {
             statusDDL.value = response.data;
             setCachedDDL('statusDDL', response.data);
-        });    
+        });
     } else {
         statusDDL.value = getCachedDDL('statusDDL');
     }

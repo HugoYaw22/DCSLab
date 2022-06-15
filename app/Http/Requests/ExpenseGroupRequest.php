@@ -3,9 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Rules\uniqueCode;
+use App\Enums\ActiveStatus;
+use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use Vinkla\Hashids\Facades\Hashids;
 
 class ExpenseGroupRequest extends FormRequest
 {
@@ -56,5 +57,33 @@ class ExpenseGroupRequest extends FormRequest
         return [
             'company_id' => trans('validation_attributes.company'),
         ];
+    }
+
+    public function validationData()
+    {
+        $additionalArray = [];
+
+        return array_merge($this->all(), $additionalArray);
+    }
+
+    public function prepareForValidation()
+    {
+        $currentRouteMethod = $this->route()->getActionMethod();
+        switch($currentRouteMethod) {
+            case 'read':
+                $this->merge([
+                    'company_id' => $this->has('companyId') ? Hashids::decode($this['companyId'])[0] : '',
+                    'paginate' => $this->has('paginate') ? filter_var($this->paginate, FILTER_VALIDATE_BOOLEAN) : true,
+                ]);
+                break;
+            case 'store':
+            case 'update':
+                $this->merge([
+                    'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
+                ]);
+                break;
+            default:
+                $this->merge([]);
+        }
     }
 }

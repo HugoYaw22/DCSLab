@@ -33,7 +33,7 @@ class CompanyServiceTest extends ServiceTestCase
         }
     }
 
-    public function test_call_save_with_all_field_filled()
+    public function test_company_call_service_save()
     {
         $user = User::has('companies')->get()->first();
 
@@ -41,7 +41,7 @@ class CompanyServiceTest extends ServiceTestCase
         $name = $this->faker->name;
         $address = $this->faker->address;
         $default = 0;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
         $userId = $user->id;
 
         $this->service->create(
@@ -59,7 +59,7 @@ class CompanyServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_save_with_minimal_field_filled()
+    public function test_company_call_service_save_with_null_field()
     {
         $user = User::has('companies')->get()->first();
 
@@ -67,7 +67,7 @@ class CompanyServiceTest extends ServiceTestCase
         $name = $this->faker->name;
         $address = null;
         $default = 0;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
         $userId = $user->id;
 
         $this->service->create(
@@ -85,7 +85,7 @@ class CompanyServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_all_field_filled()
+    public function test_company_call_service_edit()
     {
         $user = User::has('companies')->get()->first();
 
@@ -93,7 +93,7 @@ class CompanyServiceTest extends ServiceTestCase
         $name = $this->faker->name;
         $address = $this->faker->address;
         $default = 0;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
         $userId = $user->id;
 
         $company = Company::create([
@@ -110,7 +110,7 @@ class CompanyServiceTest extends ServiceTestCase
         $newName = $this->faker->name;
         $newAddress = $this->faker->address;
         $newDefault = 0;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -128,7 +128,7 @@ class CompanyServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_minimal_field_filled()
+    public function test_company_call_service_edit_with_null_field()
     {
         $user = User::has('companies')->get()->first();
 
@@ -136,7 +136,7 @@ class CompanyServiceTest extends ServiceTestCase
         $name = $this->faker->name;
         $address = null;
         $default = 0;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
         $userId = $user->id;
 
         $company = Company::create([
@@ -153,7 +153,7 @@ class CompanyServiceTest extends ServiceTestCase
         $newName = $this->faker->name;
         $newAddress = null;
         $newDefault = 0;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -174,7 +174,7 @@ class CompanyServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_delete()
+    public function test_company_call_service_delete()
     {
         $user = User::has('companies')->get()->first();
 
@@ -182,7 +182,7 @@ class CompanyServiceTest extends ServiceTestCase
         $name = $this->faker->name;
         $address = $this->faker->address;
         $default = 0;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
         $userId = $user->id;
 
         $company = Company::create([
@@ -205,7 +205,7 @@ class CompanyServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_read_when_user_have_companies_read_with_empty_search()
+    public function test_company_call_service_read_when_user_have_companies_read_with_empty_search()
     {
         $user = User::has('companies')->get()->first();
 
@@ -222,7 +222,7 @@ class CompanyServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_have_companies_with_special_char_in_search()
+    public function test_company_call_service_read_when_user_have_companies_with_special_char_in_search()
     {
         $user = User::has('companies')->get()->first();
 
@@ -246,7 +246,7 @@ class CompanyServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_doesnt_have_companies_with_empty_search()
+    public function test_company_call_service_read_when_user_doesnt_have_companies_with_empty_search()
     {
         $user = User::doesnthave('companies')->get();
 
@@ -270,7 +270,7 @@ class CompanyServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_doesnt_have_companies_with_special_char_in_search()
+    public function test_company_call_service_read_when_user_doesnt_have_companies_with_special_char_in_search()
     {
         $user = User::doesnthave('companies')->get();
 

@@ -24,7 +24,7 @@ class BranchServiceTest extends ServiceTestCase
             $this->artisan('db:seed', ['--class' => 'BranchTableSeeder']);
     }
 
-    public function test_call_save_with_all_field_filled()
+    public function test_service_call_save()
     {
         $company_id = Company::has('branches')->inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -32,9 +32,9 @@ class BranchServiceTest extends ServiceTestCase
         $address = $this->faker->address;
         $city = $this->faker->city;
         $contact = $this->faker->e164PhoneNumber;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $is_main = $this->faker->boolean;
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $this->service->create(
             company_id: $company_id,
@@ -55,7 +55,7 @@ class BranchServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_save_with_minimal_field_filled()
+    public function test_service_call_save_with_null_field()
     {
         $company_id = Company::has('branches')->inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -63,9 +63,9 @@ class BranchServiceTest extends ServiceTestCase
         $address = null;
         $city = null;
         $contact = null;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $is_main = $this->faker->boolean;
         $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $this->service->create(
             company_id: $company_id,
@@ -86,7 +86,7 @@ class BranchServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_all_field_filled()
+    public function test_service_call_edit()
     {
         $company_id = Company::has('branches')->inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -94,9 +94,9 @@ class BranchServiceTest extends ServiceTestCase
         $address = $this->faker->address;
         $city = $this->faker->city;
         $contact = $this->faker->e164PhoneNumber;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $is_main = $this->faker->boolean;
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $branch = Branch::create([
             'company_id' => $company_id,
@@ -116,9 +116,9 @@ class BranchServiceTest extends ServiceTestCase
         $newAddress = $this->faker->address;
         $newCity = $this->faker->city;
         $newContact = $this->faker->e164PhoneNumber;
-        $newIsMain = (new RandomGenerator())->generateNumber(0, 1);
+        $newIsMain = $this->faker->boolean;
         $newRemarks = $this->faker->sentence;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -141,7 +141,7 @@ class BranchServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_minimal_field_filled()
+    public function test_service_call_edit_with_null_field()
     {
         $company_id = Company::has('branches')->inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -149,9 +149,9 @@ class BranchServiceTest extends ServiceTestCase
         $address = null;
         $city = null;
         $contact = null;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $is_main = $this->faker->boolean;
         $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $branch = Branch::create([
             'company_id' => $company_id,
@@ -171,9 +171,9 @@ class BranchServiceTest extends ServiceTestCase
         $newAddress = null;
         $newCity = null;
         $newContact = null;
-        $newIsMain = (new RandomGenerator())->generateNumber(0, 1);
+        $newIsMain = $this->faker->boolean;
         $newRemarks = null;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -196,7 +196,7 @@ class BranchServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_delete()
+    public function test_service_call_delete()
     {
         $company_id = Company::has('branches')->inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -204,9 +204,9 @@ class BranchServiceTest extends ServiceTestCase
         $address = $this->faker->address;
         $city = $this->faker->city;
         $contact = $this->faker->e164PhoneNumber;
-        $is_main = (new RandomGenerator())->generateNumber(0, 1);
+        $is_main = $this->faker->boolean;
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $branch = Branch::create([
             'company_id' => $company_id,
@@ -228,7 +228,7 @@ class BranchServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_read_when_user_have_branches_read_with_empty_search()
+    public function test_service_call_read_when_user_have_branches_read_with_empty_search()
     {
         $companyId = Company::has('branches')->inRandomOrder()->first()->id;
 
@@ -245,7 +245,7 @@ class BranchServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_have_branches_with_special_char_in_search()
+    public function test_service_call_read_when_user_have_branches_with_special_char_in_search()
     {
         $companyId = Company::has('branches')->inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";

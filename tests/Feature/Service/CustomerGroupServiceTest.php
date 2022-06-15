@@ -22,7 +22,7 @@ class CustomerGroupServiceTest extends ServiceTestCase
         $this->service = app(CustomerGroupService::class);
     }
 
-    public function test_call_save_with_all_field_filled()
+    public function test_service_call_save()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -86,7 +86,7 @@ class CustomerGroupServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_save_with_minimal_field_filled()
+    public function test_service_call_save_with_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -150,7 +150,7 @@ class CustomerGroupServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_all_field_filled()
+    public function test_service_call_edit()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -257,7 +257,7 @@ class CustomerGroupServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_minimal_field_filled()
+    public function test_service_call_edit_with_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -364,7 +364,7 @@ class CustomerGroupServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_delete()
+    public function test_service_call_delete()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -414,7 +414,7 @@ class CustomerGroupServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_read_when_user_have_customer_groups_read_with_empty_search()
+    public function test_service_call_read_when_user_have_customer_groups_read_with_empty_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
 
@@ -431,7 +431,7 @@ class CustomerGroupServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_have_customer_groups_with_special_char_in_search()
+    public function test_service_call_read_when_user_have_customer_groups_with_special_char_in_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";

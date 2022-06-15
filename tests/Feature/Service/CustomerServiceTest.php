@@ -52,7 +52,7 @@ class CustomerServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_save_with_minimal_field_filled()
+    public function test_call_save_with_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
@@ -138,7 +138,7 @@ class CustomerServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_minimal_field_filled()
+    public function test_call_edit_with_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);

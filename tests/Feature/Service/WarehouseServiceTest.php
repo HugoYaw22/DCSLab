@@ -34,7 +34,7 @@ class WarehouseServiceTest extends ServiceTestCase
         }
     }
 
-    public function test_call_save_with_all_field_filled()
+    public function test_service_call_save()
     {
         $branch_id = Branch::inRandomOrder()->first()->id;
         $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
@@ -44,7 +44,7 @@ class WarehouseServiceTest extends ServiceTestCase
         $city = $this->faker->city;
         $contact = $this->faker->e164PhoneNumber;
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $this->service->create(
             company_id: $company_id,
@@ -66,7 +66,7 @@ class WarehouseServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_save_with_minimal_field_filled()
+    public function test_service_call_save_with_minimal_field_filled()
     {
         $branch_id = Branch::inRandomOrder()->first()->id;
         $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
@@ -76,7 +76,7 @@ class WarehouseServiceTest extends ServiceTestCase
         $city = null;
         $contact = null;
         $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $this->service->create(
             company_id: $company_id,
@@ -98,7 +98,7 @@ class WarehouseServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_all_field_filled()
+    public function test_service_call_edit()
     {
         $branch_id = Branch::inRandomOrder()->first()->id;
         $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
@@ -108,7 +108,7 @@ class WarehouseServiceTest extends ServiceTestCase
         $city = $this->faker->city;
         $contact = $this->faker->e164PhoneNumber;
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $warehouse = Warehouse::create([
             'company_id' => $company_id,
@@ -129,7 +129,7 @@ class WarehouseServiceTest extends ServiceTestCase
         $newCity = $this->faker->city;
         $newContact = $this->faker->e164PhoneNumber;
         $newRemarks = $this->faker->sentence;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -153,7 +153,7 @@ class WarehouseServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_minimal_field_filled()
+    public function test_service_call_edit_with_minimal_field_filled()
     {
         $branch_id = Branch::inRandomOrder()->first()->id;
         $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
@@ -163,7 +163,7 @@ class WarehouseServiceTest extends ServiceTestCase
         $city = null;
         $contact = null;
         $remarks = null;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $warehouse = Warehouse::create([
             'company_id' => $company_id,
@@ -184,7 +184,7 @@ class WarehouseServiceTest extends ServiceTestCase
         $newCity = null;
         $newContact = null;
         $newRemarks = null;
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -208,7 +208,7 @@ class WarehouseServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_delete()
+    public function test_service_call_delete()
     {
         $branch_id = Branch::inRandomOrder()->first()->id;
         $company_id = Branch::where('id', '=', $branch_id)->first()->company_id;
@@ -218,7 +218,7 @@ class WarehouseServiceTest extends ServiceTestCase
         $city = $this->faker->city;
         $contact = $this->faker->e164PhoneNumber;
         $remarks = $this->faker->sentence;
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $status = $this->faker->boolean;
 
         $warehouse = Warehouse::create([
             'company_id' => $company_id,
@@ -240,7 +240,7 @@ class WarehouseServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_read_when_user_have_warehouses_read_with_empty_search()
+    public function test_service_call_read_when_user_have_warehouses_read_with_empty_search()
     {
         $warehouseId = Warehouse::inRandomOrder()->first()->id;
         $companyId = Warehouse::where('id', '=', $warehouseId)->first()->company_id;
@@ -258,7 +258,7 @@ class WarehouseServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_have_warehouses_with_special_char_in_search()
+    public function test_service_call_read_when_user_have_warehouses_with_special_char_in_search()
     {
         $warehouseId = Warehouse::inRandomOrder()->first()->id;
         $companyId = Warehouse::where('id', '=', $warehouseId)->first()->company_id;

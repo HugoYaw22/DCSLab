@@ -21,13 +21,13 @@ class CashServiceTest extends ServiceTestCase
         $this->service = app(CashService::class);
     }
 
-    public function test_call_save_with_all_field_filled()
+    public function test_service_call_save()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $is_bank = (new RandomGenerator())->generateNumber(0, 1);
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $is_bank = $this->faker->boolean;
+        $status = $this->faker->boolean;
 
         $this->service->create(
             company_id: $company_id,
@@ -44,13 +44,13 @@ class CashServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_save_with_minimal_field_filled()
+    public function test_service_call_save_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $is_bank = (new RandomGenerator())->generateNumber(0, 1);
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $is_bank = $this->faker->boolean;
+        $status = $this->faker->boolean;
 
         $this->service->create(
             company_id: $company_id,
@@ -67,13 +67,13 @@ class CashServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_all_field_filled()
+    public function test_service_call_edit()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $is_bank = (new RandomGenerator())->generateNumber(0, 1);
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $is_bank = $this->faker->boolean;
+        $status = $this->faker->boolean;
 
         $cash = Cash::create([
             'company_id' => $company_id,
@@ -86,8 +86,8 @@ class CashServiceTest extends ServiceTestCase
 
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newName = $this->faker->name;
-        $newIsBank = (new RandomGenerator())->generateNumber(0, 1);
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newIsBank = $this->faker->boolean;
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -106,13 +106,13 @@ class CashServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_edit_with_minimal_field_filled()
+    public function test_service_call_edit_null_field()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $is_bank = (new RandomGenerator())->generateNumber(0, 1);
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $is_bank = $this->faker->boolean;
+        $status = $this->faker->boolean;
 
         $cash = Cash::create([
             'company_id' => $company_id,
@@ -125,8 +125,8 @@ class CashServiceTest extends ServiceTestCase
 
         $newCode = (new RandomGenerator())->generateAlphaNumeric(5);
         $newName = $this->faker->name;
-        $newIsBank = (new RandomGenerator())->generateNumber(0, 1);
-        $newStatus = (new RandomGenerator())->generateNumber(0, 1);
+        $newIsBank = $this->faker->boolean;
+        $newStatus = $this->faker->boolean;
 
         $this->service->update(
             id: $id,
@@ -145,13 +145,13 @@ class CashServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_delete()
+    public function test_service_call_delete()
     {
         $company_id = Company::inRandomOrder()->first()->id;
         $code = (new RandomGenerator())->generateAlphaNumeric(5);
         $name = $this->faker->name;
-        $is_bank = (new RandomGenerator())->generateNumber(0, 1);
-        $status = (new RandomGenerator())->generateNumber(0, 1);
+        $is_bank = $this->faker->boolean;
+        $status = $this->faker->boolean;
 
         $cash = Cash::create([
             'company_id' => $company_id,
@@ -169,7 +169,7 @@ class CashServiceTest extends ServiceTestCase
         ]);
     }
 
-    public function test_call_read_when_user_have_cashes_read_with_empty_search()
+    public function test_service_call_read_when_user_have_cashes_read_with_empty_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
 
@@ -186,7 +186,7 @@ class CashServiceTest extends ServiceTestCase
         $this->assertNotNull($response);
     }
 
-    public function test_call_read_when_user_have_cashes_with_special_char_in_search()
+    public function test_service_call_read_when_user_have_cashes_with_special_char_in_search()
     {
         $companyId = Company::inRandomOrder()->first()->id;
         $search = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";

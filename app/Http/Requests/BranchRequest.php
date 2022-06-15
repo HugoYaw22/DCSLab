@@ -111,9 +111,21 @@ class BranchRequest extends FormRequest
                 ]);
                 break;
             case 'store':
+                $this->merge([
+                    'address' => $this->has('address') ? $this['address'] : null,
+                    'city' => $this->has('city') ? $this['city'] : null,
+                    'contact' => $this->has('contact') ? $this['contact'] : null,
+                    'remarks' => $this->has('remarks') ? $this['remarks'] : null,
+                    'is_main' => $this->has('is_main') ? filter_var($this->is_main, FILTER_VALIDATE_BOOLEAN) : false,
+                    'status' => ActiveStatus::isValid($this->status) ? ActiveStatus::fromName($this->status)->value : -1
+                ]);
             case 'update':
                 $this->merge([
                     'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
+                    'address' => $this->has('address') ? $this['address'] : null,
+                    'city' => $this->has('city') ? $this['city'] : null,
+                    'contact' => $this->has('contact') ? $this['contact'] : null,
+                    'remarks' => $this->has('remarks') ? $this['remarks'] : null,
                     'is_main' => $this->has('is_main') ? filter_var($this->is_main, FILTER_VALIDATE_BOOLEAN) : false,
                     'status' => ActiveStatus::isValid($this->status) ? ActiveStatus::fromName($this->status)->value : -1
                 ]);
