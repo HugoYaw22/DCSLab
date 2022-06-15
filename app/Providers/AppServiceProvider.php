@@ -115,6 +115,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(EmployeeService::class, function (){
             return new EmployeeServiceImpl();
         });
+
+        $this->app->singleton(CashService::class, function (){
+            return new CashServiceImpl();
+        });
         
         #endregion
     }
