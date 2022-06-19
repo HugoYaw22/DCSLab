@@ -16,8 +16,6 @@ use App\Models\User;
 use App\Models\Company;
 use App\Traits\CacheHelper;
 
-use function PHPUnit\Framework\isNull;
-
 class CompanyServiceImpl implements CompanyService
 {
     use CacheHelper;
@@ -126,7 +124,10 @@ class CompanyServiceImpl implements CompanyService
         }
     }
 
-    public function getAllActiveCompany(int $userId)
+    public function getAllActiveCompany(
+        int $userId, 
+        ?array $with = []
+    )
     {
         $timer_start = microtime(true);
 
@@ -135,7 +136,28 @@ class CompanyServiceImpl implements CompanyService
             if (!$usr) return null;
     
             $compIds = $usr->companies()->pluck('company_id');
-            return Company::where('status', '=', 1)->whereIn('id',  $compIds)->get();    
+
+            $companies = Company::where('status', '=', 1)->whereIn('id',  $compIds);
+
+            if (in_array('branches', $with)) {
+                $companies = $companies->with(['branches' => function ($query) { 
+                    $query->where('status', '=', 1);
+                }]);
+            }
+
+            if (in_array('warehouses', $with)) {
+                $companies = $companies->with(['warehouses' => function ($query) { 
+                    $query->where('status', '=', 1);
+                }]);
+            }
+
+            if (in_array('employees', $with)) {
+                $companies = $companies->with(['employees' => function ($query) { 
+                    $query->where('status', '=', 1);
+                }]);
+            }
+        
+            return $companies->get();
         } catch (Exception $e) {
             return Config::get('const.DEFAULT.ERROR_RETURN_VALUE');
         } finally {
