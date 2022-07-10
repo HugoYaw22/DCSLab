@@ -19,7 +19,322 @@ class BrandAPITest extends APITestCase
 
     #region store
 
+    public function test_brand_api_call_store_expect_successful()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault(), 'companies')
+                    ->create();
+
+        $companyId = $user->companies->first()->id;
+
+        $this->actingAs($user);
+
+        $brandArr = array_merge([
+            'company_id' => Hashids::encode($companyId),
+        ], Brand::factory()->make()->toArray());
+
+        $api = $this->json('POST', route('api.post.db.product.brand.save'), $brandArr);
+
+        $api->assertSuccessful();
+        $this->assertDatabaseHas('brands', [
+            'company_id' => $companyId,
+            'code' => $brandArr['code'],
+            'name' => $brandArr['name'],
+        ]);
+    }
+
+    public function test_brand_api_call_store_with_existing_code_in_same_company_expect_failed()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault(), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        Brand::factory()->create([
+            'company_id' => $companyId,
+            'code' => 'test1',
+        ]);
+
+        $this->actingAs($user);
+
+        $brandArr = array_merge([
+            'company_id' => Hashids::encode($companyId),
+        ], Brand::factory()->make([
+            'code' => 'test1',
+        ])->toArray());
+
+        $api = $this->json('POST', route('api.post.db.product.brand.save'), $brandArr);
+
+        $api->assertStatus(422);
+        $api->assertJsonStructure([
+            'errors',
+        ]);
+    }
+
+    public function test_brand_api_call_store_with_empty_string_parameters_expect_failed()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                ->has(Company::factory()->setIsDefault(), 'companies')
+                ->create();
+
+        $this->actingAs($user);
+
+        $brandArr = [];
+        $api = $this->json('POST', route('api.post.db.product.brand.save'), $brandArr);
+
+        $api->assertStatus(422);
+    }
+
     #endregion
+
+    #region list
+
+    public function test_brand_api_call_list_with_or_without_pagination_expect_paginator_or_collection()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault()
+                            ->has(Brand::factory()->count(15), 'brands'), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $this->actingAs($user);
+
+        $api = $this->getJson(route('api.get.db.product.brand.list', [
+            'companyId' => Hashids::encode($companyId),
+            'search' => '',
+            'paginate' => true,
+            'page' => 1,
+            'perPage' => 10,
+            'refresh' => true,
+        ]));
+
+        $api->assertSuccessful();
+        $api->assertJsonStructure([
+            'data',
+            'links' => [
+                'first', 'last', 'prev', 'next',
+            ],
+            'meta'=> [
+                'current_page', 'from', 'last_page', 'links', 'path', 'per_page', 'to', 'total',
+            ],
+        ]);
+
+        $api = $this->getJson(route('api.get.db.product.brand.list', [
+            'companyId' => Hashids::encode($companyId),
+            'search' => '',
+            'paginate' => false,
+            'page' => 1,
+            'perPage' => 10,
+            'refresh' => true,
+        ]));
+
+        $api->assertSuccessful();
+    }
+
+    public function test_brand_api_call_list_with_search_expect_filtered_results()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault(), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        Brand::factory()->insertStringInName(' testing')->count(10)->create([
+            'company_id' => $companyId
+        ]);
+
+        Brand::factory()->count(10)->create([
+            'company_id' => $companyId,
+        ]);
+
+        $this->actingAs($user);
+
+        $api = $this->getJson(route('api.get.db.product.brand.list', [
+            'companyId' => Hashids::encode($companyId),
+            'search' => 'testing',
+            'paginate' => true,
+            'page' => 1,
+            'perPage' => 10,
+            'refresh' => true,
+        ]));
+
+        $api->assertSuccessful();
+        $api->assertJsonStructure([
+            'data',
+            'links' => [
+                'first', 'last', 'prev', 'next',
+            ],
+            'meta'=> [
+                'current_page', 'from', 'last_page', 'links', 'path', 'per_page', 'to', 'total',
+            ],
+        ]);
+
+        $api->assertJsonFragment([
+            'total' => 10,
+        ]);
+    }
+
+    public function test_brand_api_call_list_without_search_querystring_expect_failed()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault()
+                            ->has(Brand::factory()->count(2), 'brands'), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $this->actingAs($user);
+
+        $api = $this->getJson(route('api.get.db.product.brand.list', [
+            'companyId' => Hashids::encode($companyId),
+        ]));
+
+        $api->assertStatus(422);
+    }
+
+    public function test_brand_api_call_list_with_special_char_in_search_expect_results()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault()
+                            ->has(Brand::factory()->count(5), 'brands'), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $this->actingAs($user);
+
+        $api = $this->getJson(route('api.get.db.product.brand.list', [
+            'companyId' => Hashids::encode($companyId),
+            'search' => " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~",
+            'paginate' => true,
+            'page' => 1,
+            'perPage' => 10,
+            'refresh' => false,
+        ]));
+
+        $api->assertSuccessful();
+        $api->assertJsonStructure([
+            'data',
+            'links' => [
+                'first', 'last', 'prev', 'next',
+            ],
+            'meta'=> [
+                'current_page', 'from', 'last_page', 'links', 'path', 'per_page', 'to', 'total',
+            ],
+        ]);
+    }
+
+    public function test_brand_api_call_list_with_negative_value_in_parameters_expect_results()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault()
+                            ->has(Brand::factory()->count(5), 'brands'), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $this->actingAs($user);
+
+        $api = $this->getJson(route('api.get.db.product.brand.list', [
+            'companyId' => Hashids::encode($companyId),
+            'search' => '',
+            'paginate' => true,
+            'page' => -1,
+            'perPage' => -10,
+            'refresh' => false,
+        ]));
+
+        $api->assertSuccessful();
+        $api->assertJsonStructure([
+            'data',
+            'links' => [
+                'first', 'last', 'prev', 'next',
+            ],
+            'meta'=> [
+                'current_page', 'from', 'last_page', 'links', 'path', 'per_page', 'to', 'total',
+            ],
+        ]);
+    }
+
+    #endregion
+
+    #region read
+
+    public function test_brand_api_call_read_expect_successful()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault()
+                            ->has(Brand::factory()->count(5), 'brands'), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $this->actingAs($user);
+
+        $uuid = $company->brands()->inRandomOrder()->first()->uuid;
+
+        $api = $this->getJson(route('api.get.db.product.brand.read', $uuid));
+
+        $api->assertSuccessful();
+    }
+
+    public function test_brand_api_call_read_without_uuid_expect_exception()
+    {
+        $this->expectException(Exception::class);
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault(), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $this->actingAs($user);
+
+        $this->getJson(route('api.get.db.product.brand.read', null));
+    }
+
+    public function test_brand_api_call_read_with_nonexistance_uuid_expect_not_found()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault()
+                            ->has(Brand::factory()->count(5), 'brands'), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $this->actingAs($user);
 
     #region list
 
