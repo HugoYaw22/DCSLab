@@ -2,8 +2,12 @@
 
 namespace Tests\Feature\API;
 
-use App\Actions\RandomGenerator;
+use Exception;
+use App\Enums\UserRoles;
 use App\Models\Brand;
+use App\Models\Company;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\APITestCase;
 use Vinkla\Hashids\Facades\Hashids;
@@ -27,7 +31,8 @@ class BrandAPITest extends APITestCase
                     ->has(Company::factory()->setIsDefault(), 'companies')
                     ->create();
 
-        $companyId = $user->companies->first()->id;
+        $company = $user->companies->first();
+        $companyId = $company->id;
 
         $this->actingAs($user);
 
@@ -74,6 +79,42 @@ class BrandAPITest extends APITestCase
         $api->assertStatus(422);
         $api->assertJsonStructure([
             'errors',
+        ]);
+    }
+
+    public function test_brand_api_call_store_with_existing_code_in_different_company_expect_successful()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->count(2), 'companies')
+                    ->create();
+
+        $company_1 = $user->companies[0];
+        $companyId_1 = $company_1->id;
+
+        $company_2 = $user->companies[1];
+        $companyId_2 = $company_2->id;
+
+        Brand::factory()->create([
+            'company_id' => $companyId_1,
+            'code' => 'test1',
+        ]);
+
+        $this->actingAs($user);
+
+        $brandArr = array_merge([
+            'company_id' => Hashids::encode($companyId_2),
+        ], Brand::factory()->make([
+            'code' => 'test1',
+        ])->toArray());
+
+        $api = $this->json('POST', route('api.post.db.product.brand.save'), $brandArr);
+
+        $api->assertSuccessful();
+        $this->assertDatabaseHas('brands', [
+            'company_id' => $companyId_2,
+            'code' => $brandArr['code'],
         ]);
     }
 
@@ -154,8 +195,9 @@ class BrandAPITest extends APITestCase
         $company = $user->companies->first();
         $companyId = $company->id;
 
-        Brand::factory()->insertStringInName(' testing')->count(10)->create([
-            'company_id' => $companyId
+        Brand::factory()->count(10)->create([
+            'company_id' => $companyId,
+            'name' => 'Kantor Cabang '.$this->faker->randomElement(['Utama', 'Pembantu', 'Daerah']).' '.'testing',
         ]);
 
         Brand::factory()->count(10)->create([
@@ -336,19 +378,131 @@ class BrandAPITest extends APITestCase
 
         $this->actingAs($user);
 
-    #region list
+        $uuid = $this->faker->uuid();
 
-    #endregion
+        $api = $this->getJson(route('api.get.db.product.brand.read', $uuid));
 
-    #region read
+        $api->assertStatus(404);
+    }
 
     #endregion
 
     #region update
 
+    public function test_brand_api_call_update_expect_successful()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault()
+                            ->has(Brand::factory()->count(5), 'brands'), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $this->actingAs($user);
+
+        $brand = $company->brands()->inRandomOrder()->first();
+        $brandArr = array_merge([
+            'company_id' => Hashids::encode($companyId),
+        ], Brand::factory()->make()->toArray());
+
+        $api = $this->json('POST', route('api.post.db.product.brand.edit', $brand->uuid), $brandArr);
+
+        $api->assertSuccessful();
+        $this->assertDatabaseHas('brands', [
+            'id' => $brand->id,
+            'company_id' => $companyId,
+            'code' => $brandArr['code'],
+            'name' => $brandArr['name'],
+        ]);
+    }
+
+    public function test_brand_api_call_update_and_use_existing_code_in_same_company_expect_failed()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault()
+                            ->has(Brand::factory()->count(5), 'brands'), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $this->actingAs($user);
+
+        $brands = $company->brands()->inRandomOrder()->take(2)->get();
+        $brand_1 = $brands[0];
+        $brand_2 = $brands[1];
+
+        $brandArr = array_merge([
+            'company_id' => Hashids::encode($companyId),
+        ], Brand::factory()->make([
+            'code' => $brand_1->code,
+        ])->toArray());
+
+        $api = $this->json('POST', route('api.post.db.product.brand.edit', $brand_2->uuid), $brandArr);
+
+        $api->assertStatus(422);
+        $api->assertJsonStructure([
+            'errors',
+        ]);
+    }
+
     #endregion
 
     #region delete
+
+    public function test_brand_api_call_delete_expect_successful()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->setIsDefault()
+                            ->has(Brand::factory()->count(5), 'brands'), 'companies')
+                    ->create();
+
+        $company = $user->companies->first();
+        $companyId = $company->id;
+
+        $brand = $company->brands()->inRandomOrder()->first();
+
+        $this->actingAs($user);
+
+        $api = $this->json('POST', route('api.post.db.product.brand.delete', $brand->uuid));
+
+        $api->assertSuccessful();
+        $this->assertSoftDeleted('brands', [
+            'id' => $brand->id,
+        ]);
+    }
+
+    public function test_brand_api_call_delete_of_nonexistance_uuid_expect_not_found()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
+        $uuid = $this->faker->uuid();
+
+        $api = $this->json('POST', route('api.post.db.product.brand.delete', $uuid));
+
+        $api->assertStatus(404);
+    }
+
+    public function test_brand_api_call_delete_without_parameters_expect_failed()
+    {
+        $this->expectException(Exception::class);
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
+        $api = $this->json('POST', route('api.post.db.product.brand.delete', null));
+
+        dd($api);
+    }
 
     #endregion
 
