@@ -3,14 +3,15 @@
 namespace Tests\Feature\API;
 
 use Exception;
-use App\Enums\UserRoles;
-use App\Models\Brand;
-use App\Models\Company;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Brand;
 use Tests\APITestCase;
+use App\Models\Company;
+use App\Enums\UserRoles;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class BrandAPITest extends APITestCase
 {
@@ -31,8 +32,7 @@ class BrandAPITest extends APITestCase
                     ->has(Company::factory()->setIsDefault(), 'companies')
                     ->create();
 
-        $company = $user->companies->first();
-        $companyId = $company->id;
+        $companyId = $user->companies->first()->id;
 
         $this->actingAs($user);
 
@@ -79,42 +79,6 @@ class BrandAPITest extends APITestCase
         $api->assertStatus(422);
         $api->assertJsonStructure([
             'errors',
-        ]);
-    }
-
-    public function test_brand_api_call_store_with_existing_code_in_different_company_expect_successful()
-    {
-        /** @var \Illuminate\Contracts\Auth\Authenticatable */
-        $user = User::factory()
-                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
-                    ->has(Company::factory()->count(2), 'companies')
-                    ->create();
-
-        $company_1 = $user->companies[0];
-        $companyId_1 = $company_1->id;
-
-        $company_2 = $user->companies[1];
-        $companyId_2 = $company_2->id;
-
-        Brand::factory()->create([
-            'company_id' => $companyId_1,
-            'code' => 'test1',
-        ]);
-
-        $this->actingAs($user);
-
-        $brandArr = array_merge([
-            'company_id' => Hashids::encode($companyId_2),
-        ], Brand::factory()->make([
-            'code' => 'test1',
-        ])->toArray());
-
-        $api = $this->json('POST', route('api.post.db.product.brand.save'), $brandArr);
-
-        $api->assertSuccessful();
-        $this->assertDatabaseHas('brands', [
-            'company_id' => $companyId_2,
-            'code' => $brandArr['code'],
         ]);
     }
 
@@ -195,9 +159,8 @@ class BrandAPITest extends APITestCase
         $company = $user->companies->first();
         $companyId = $company->id;
 
-        Brand::factory()->count(10)->create([
-            'company_id' => $companyId,
-            'name' => 'Kantor Cabang '.$this->faker->randomElement(['Utama', 'Pembantu', 'Daerah']).' '.'testing',
+        Brand::factory()->insertStringInName(' testing')->count(10)->create([
+            'company_id' => $companyId
         ]);
 
         Brand::factory()->count(10)->create([
@@ -449,6 +412,43 @@ class BrandAPITest extends APITestCase
         $api->assertJsonStructure([
             'errors',
         ]);
+    }
+
+    public function test_brand_api_call_update_and_use_existing_code_in_different_company_expect_successful()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable */
+        $user = User::factory()
+                    ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+                    ->has(Company::factory()->count(2)->state(new Sequence(['default' => true], ['default' => false])), 'companies')
+                    ->create();
+
+        $company_1 = $user->companies[0];
+        $companyId_1 = $company_1->id;
+
+        $company_2 = $user->companies[1];
+        $companyId_2 = $company_2->id;
+
+        Brand::factory()->create([
+            'company_id' => $companyId_1,
+            'code' => 'test1',
+        ]);
+
+        Brand::factory()->create([
+            'company_id' => $companyId_2,
+            'code' => 'test2',
+        ]);
+
+        $this->actingAs($user);
+
+        $brandArr = array_merge([
+            'company_id' => Hashids::encode($companyId_2),
+        ], Brand::factory()->make([
+            'code' => 'test1',
+        ])->toArray());
+
+        $api = $this->json('POST', route('api.post.db.product.brand.edit', $company_2->brands()->first()->uuid), $brandArr);
+
+        $api->assertSuccessful();
     }
 
     #endregion
