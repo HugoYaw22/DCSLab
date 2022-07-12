@@ -34,8 +34,7 @@ class UnitAPITest extends APITestCase
                     ->has(Company::factory()->setIsDefault(), 'companies')
                     ->create();
 
-        $company = $user->companies->first();
-        $companyId = $company->id;
+        $companyId = $user->companies->first()->id;
 
         $this->actingAs($user);
 
