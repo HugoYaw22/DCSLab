@@ -27,6 +27,8 @@ class UnitServiceTest extends ServiceTestCase
     #region create
     public function test_unit_service_call_create_expect_db_has_record()
     {
+        $anu = Unit::first()->toArray();
+        
         $user = User::factory()
                     ->has(Company::factory()->setIsDefault(), 'companies')
                     ->create();

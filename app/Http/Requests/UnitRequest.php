@@ -129,7 +129,7 @@ class UnitRequest extends FormRequest
             case 'update':
                 $this->merge([
                     'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
-                    'category' => ProductCategory::isValid($this->category) ? ProductCategory::fromName($this->category)->value : -1,
+                    'category' => ProductCategory::isValid($this->category) ? ProductCategory::resolveToEnum($this->category)->value : -1,
                 ]);
                 break;
             default:

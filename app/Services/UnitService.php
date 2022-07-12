@@ -12,8 +12,7 @@ interface UnitService
 
     public function list(
         int $companyId,
-        bool $isProduct = true,
-        bool $isService = true,
+        int $category,
         string $search = '',
         bool $paginate = true,
         int $page = 1,
