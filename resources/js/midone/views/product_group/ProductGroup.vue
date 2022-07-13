@@ -1,7 +1,7 @@
 <template>
     <AlertPlaceholder :messages="alertErrors" />
     <div class="intro-y" v-if="mode === 'list'">
-        <DataList :title="t('views.product_group.table.title')" :data="product_groupList" v-on:createNew="createNew" v-on:dataListChange="onDataListChange" :enableSearch="true">
+        <DataList :title="t('views.product_group.table.title')" :data="productGroupList" v-on:createNew="createNew" v-on:dataListChange="onDataListChange" :enableSearch="true">
            <template v-slot:table="tableProps">
                 <table class="table table-report -mt-2" aria-describedby="">
                     <thead>
@@ -164,7 +164,7 @@ const expandDetail = ref(null);
 //#endregion
 
 //#region Data - Views
-const product_groupList = ref({});
+const productGroupList = ref({});
 const product_group = ref({
     code: '',
     name: '',
@@ -201,7 +201,7 @@ const setMode = () => {
 }
 
 const getAllProductGroups = (args) => {
-    product_groupList.value = {};
+    productGroupList.value = {};
     let companyId = selectedUserCompany.value;
     if (args.search === undefined) args.search = '';
     if (args.paginate === undefined) args.paginate = 1;
@@ -215,7 +215,7 @@ const getAllProductGroups = (args) => {
         "perPage": args.pageSize,
         "search": args.search
     })).then(response => {
-        product_groupList.value = response.data;
+        productGroupList.value = response.data;
         loading.value = false;
     });
 }
@@ -255,8 +255,6 @@ const onSubmit = (values, actions) => {
             loading.value = false;
         });
     } else if (mode.value === 'edit') {
-        formData.append('company_id', selectedUserCompany.value);
-
         axios.post(route('api.post.db.product.product_group.edit', product_group.value.uuid), formData).then(response => {
             actions.resetForm();
             backToList();
@@ -326,11 +324,11 @@ const onDataListChange = ({page, pageSize, search}) => {
 
 const editSelected = (index) => {
     mode.value = 'edit';
-    product_group.value = product_groupList.value.data[index];
+    product_group.value = productGroupList.value.data[index];
 }
 
 const deleteSelected = (index) => {
-    deleteId.value = product_groupList.value.data[index].uuid;
+    deleteId.value = productGroupList.value.data[index].uuid;
     deleteModalShow.value = true;
 }
 
@@ -354,7 +352,7 @@ const backToList = () => {
     sessionStorage.removeItem('DCSLAB_LAST_ENTITY');
 
     mode.value = 'list';
-    getAllProductGroups({ page: product_groupList.value.meta.current_page, pageSize: product_groupList.value.meta.per_page });
+    getAllProductGroups({ page: productGroupList.value.meta.current_page, pageSize: productGroupList.value.meta.per_page });
 }
 
 const toggleDetail = (idx) => {

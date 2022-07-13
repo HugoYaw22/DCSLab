@@ -157,7 +157,6 @@ const brand = ref({
     name: "",
 });
 const companyDDL = ref([]);
-const productCategoryDDL = ref([]);
 //#endregion
 
 //#region onMounted
@@ -193,7 +192,7 @@ const getAllProductGroups = (args) => {
     if (args.page === undefined) args.page = 1;
     if (args.pageSize === undefined) args.pageSize = 10;
 
-    axios.get( route("api.get.db.product.brand.read", {
+    axios.get( route("api.get.db.product.brand.list", {
         companyId: companyId,
         page: args.page,
         perPage: args.pageSize,
@@ -205,14 +204,7 @@ const getAllProductGroups = (args) => {
 };
 
 const getDDL = () => {
-    if (getCachedDDL("productCategoryDDL") == null) {
-        axios.get(route("api.get.db.common.ddl.list.productcategory")) .then((response) => {
-            productCategoryDDL.value = response.data;
-            setCachedDDL("productCategoryDDL", response.data);
-        });
-    } else {
-        productCategoryDDL.value = getCachedDDL("productCategoryDDL");
-    }
+
 };
 
 const getDDLSync = () => {
@@ -239,9 +231,7 @@ const onSubmit = (values, actions) => {
             loading.value = false;
         });
     } else if (mode.value === "edit") {
-        formData.append("company_id", selectedUserCompany.value);
-
-        axios.post(route("api.post.db.product.brand.edit", brand.value.hId), formData ).then((response) => {
+        axios.post(route("api.post.db.product.brand.edit", brand.value.uuid), formData ).then((response) => {
             actions.resetForm();
             backToList();
         }).catch((e) => {
@@ -313,7 +303,7 @@ const editSelected = (index) => {
 }
 
 const deleteSelected = (index) => {
-    deleteId.value = brandList.value.data[index].hId;
+    deleteId.value = brandList.value.data[index].uuid;
     deleteModalShow.value = true;
 }
 
