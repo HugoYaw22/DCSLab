@@ -18,9 +18,9 @@
                                 <td>{{ item.code }}</td>
                                 <td><a href="" @click.prevent="toggleDetail(itemIdx)" class="hover:animate-pulse">{{ item.name }}</a></td>
                                 <td>
-                                    <span v-if="item.category == 1">{{ t('components.dropdown.values.productCategoryDDL.product') }}</span>
-                                    <span v-if="item.category == 2">{{ t('components.dropdown.values.productCategoryDDL.service') }}</span>
-                                    <span v-if="item.category == 3">{{ t('components.dropdown.values.productCategoryDDL.product_service') }}</span>
+                                    <span v-if="item.category == 1">{{ t('components.dropdown.values.productGroupCategoryDDL.product') }}</span>
+                                    <span v-if="item.category == 2">{{ t('components.dropdown.values.productGroupCategoryDDL.service') }}</span>
+                                    <span v-if="item.category == 3">{{ t('components.dropdown.values.productGroupCategoryDDL.product_service') }}</span>
                                 </td>
                                 <td class="table-report__action w-12">
                                     <div class="flex justify-center items-center">
@@ -49,9 +49,9 @@
                                     <div class="flex flex-row">
                                         <div class="ml-5 w-48 text-right pr-5">{{ t('views.product_group.fields.category') }}</div>
                                         <div class="flex-1">
-                                            <span v-if="item.category == 1">{{ t('components.dropdown.values.productCategoryDDL.product') }}</span>
-                                            <span v-if="item.category == 2">{{ t('components.dropdown.values.productCategoryDDL.service') }}</span>
-                                            <span v-if="item.category == 3">{{ t('components.dropdown.values.productCategoryDDL.product_service') }}</span>
+                                            <span v-if="item.category == 1">{{ t('components.dropdown.values.productGroupCategoryDDL.product') }}</span>
+                                            <span v-if="item.category == 2">{{ t('components.dropdown.values.productGroupCategoryDDL.service') }}</span>
+                                            <span v-if="item.category == 3">{{ t('components.dropdown.values.productGroupCategoryDDL.product_service') }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -105,7 +105,7 @@
                         <label for="category" class="form-label">{{ t('views.product_group.fields.category') }}</label>
                         <VeeField as="select" id="category" name="category" :class="{'form-control form-select':true, 'border-danger': errors['category']}" v-model="product_group.category" rules="required" @blur="reValidate(errors)">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
-                            <option v-for="c in productCategoryDDL" :key="c.code" :value="c.code">{{ t(c.name) }}</option>
+                            <option v-for="c in productGroupCategoryDDL" :key="c.code" :value="c.code">{{ t(c.name) }}</option>
                         </VeeField>
                         <ErrorMessage name="category" class="text-danger" />
                     </div>
@@ -163,7 +163,7 @@ const product_group = ref({
     category: '',
 });
 const companyDDL = ref([]);
-const productCategoryDDL = ref([]);
+const productGroupCategoryDDL = ref([]);
 //#endregion
 
 //#region onMounted
@@ -200,20 +200,26 @@ const getAllProductGroups = (args) => {
     if (args.page === undefined) args.page = 1;
     if (args.pageSize === undefined) args.pageSize = 10;
 
-    axios.get(route('api.get.db.product.product_group.list', { "companyId": companyId, "page": args.page, "perPage": args.pageSize, "search": args.search })).then(response => {
+    axios.get(route('api.get.db.product.product_group.list', {
+        "companyId": companyId,
+        "category": "PRODUCTS_AND_SERVICES",
+        "page": args.page,
+        "perPage": args.pageSize,
+        "search": args.search
+    })).then(response => {
         product_groupList.value = response.data;
         loading.value = false;
     });
 }
 
 const getDDL = () => {
-    if (getCachedDDL('productCategoryDDL') == null) {
+    if (getCachedDDL('productGroupCategoryDDL') == null) {
         axios.get(route('api.get.db.common.ddl.list.category')).then(response => {
-            productCategoryDDL.value = response.data;
-            setCachedDDL('productCategoryDDL', response.data);
+            productGroupCategoryDDL.value = response.data;
+            setCachedDDL('productGroupCategoryDDL', response.data);
         });    
     } else {
-        productCategoryDDL.value = getCachedDDL('productCategoryDDL');
+        productGroupCategoryDDL.value = getCachedDDL('productGroupCategoryDDL');
     }
 }
 

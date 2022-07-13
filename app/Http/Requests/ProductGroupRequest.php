@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\ProductCategory;
+use App\Enums\ProductGroupCategory;
 use App\Models\ProductGroup;
 use App\Rules\isValidCompany;
 use Illuminate\Foundation\Http\FormRequest;
@@ -76,7 +76,7 @@ class ProductGroupRequest extends FormRequest
                     'company_id' => ['required', new isValidCompany(), 'bail'],
                     'code' => ['required', 'max:255'],
                     'name' => 'required|min:3|max:255',
-                    'category' => [new Enum(ProductCategory::class)],
+                    'category' => [new Enum(ProductGroupCategory::class)],
                 ];
 
                 return array_merge($rules_store, $nullableArr);
@@ -85,7 +85,7 @@ class ProductGroupRequest extends FormRequest
                     'company_id' => ['required', new isValidCompany(), 'bail'],
                     'code' => ['required', 'max:255'],
                     'name' => 'required|min:3|max:255',
-                    'category' => [new Enum(ProductCategory::class)],
+                    'category' => [new Enum(ProductGroupCategory::class)],
                 ];
 
                 return array_merge($rules_update, $nullableArr);
@@ -127,7 +127,7 @@ class ProductGroupRequest extends FormRequest
             case 'update':
                 $this->merge([
                     'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
-                    'category' => ProductCategory::isValid($this->category) ? ProductCategory::fromName($this->category)->value : -1,
+                    'category' => ProductGroupCategory::isValid($this->category) ? ProductGroupCategory::fromName($this->category)->value : -1,
                 ]);
                 break;
             default:

@@ -9,11 +9,8 @@ use App\Models\User;
 use Tests\APITestCase;
 use App\Models\Company;
 use App\Enums\UserRoles;
-use App\Enums\ProductCategory;
-use App\Actions\RandomGenerator;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class UnitAPITest extends APITestCase
 {
@@ -46,7 +43,7 @@ class UnitAPITest extends APITestCase
 
         $api->assertSuccessful();
         $this->assertDatabaseHas('units', [
-            'company_id' => $unitArr['company_id'],
+            'company_id' => Hashids::decode($unitArr['company_id'])[0],
             'code' => $unitArr['code'],
             'name' => $unitArr['name'],
             'description' => $unitArr['description'],

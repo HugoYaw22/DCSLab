@@ -67,7 +67,7 @@ class UnitServiceImpl implements UnitService
         try {
             $cacheKey = '';
             if ($useCache) {
-                $cacheKey = 'read_'.$companyId.'-'.$category.'-'.$category.'-'.(empty($search) ? '[empty]' : $search).'-'.$paginate.'-'.$page.'-'.$perPage;
+                $cacheKey = 'read_'.$companyId.'-'.$category.'-'.(empty($search) ? '[empty]' : $search).'-'.$paginate.'-'.$page.'-'.$perPage;
                 $cacheResult = $this->readFromCache($cacheKey);
 
                 if (!is_null($cacheResult)) {
@@ -79,16 +79,18 @@ class UnitServiceImpl implements UnitService
 
             $unit = Unit::whereCompanyId($companyId);
 
-            if (UnitCategory::PRODUCTS) {
+            if ($category == UnitCategory::PRODUCTS->value) {
                 $unit = $unit->where([
                     ['category', '=', UnitCategory::PRODUCTS->value],
                     ['category', '=', UnitCategory::PRODUCTS_AND_SERVICES->value]
                 ]);
-            } elseif (UnitCategory::SERVICES) {
+            } elseif ($category == UnitCategory::SERVICES->value) {
                 $unit = $unit->where([
                     ['category', '=', UnitCategory::SERVICES->value],
                     ['category', '=', UnitCategory::PRODUCTS_AND_SERVICES->value]
                 ]);
+            } elseif ($category == UnitCategory::PRODUCTS_AND_SERVICES->value) {
+                
             } else {
                 return null;
             }
