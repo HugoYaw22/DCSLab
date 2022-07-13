@@ -58,6 +58,7 @@ class ProductGroupRequest extends FormRequest
             case 'list':
                 $rules_list = [
                     'company_id' => ['required', new isValidCompany(), 'bail'],
+                    'category' => ['required'],
                     'search' => ['present', 'string'],
                     'paginate' => ['required', 'boolean'],
                     'page' => ['required_if:paginate,true', 'numeric'],
@@ -75,7 +76,7 @@ class ProductGroupRequest extends FormRequest
                 $rules_store = [
                     'company_id' => ['required', new isValidCompany(), 'bail'],
                     'code' => ['required', 'max:255'],
-                    'name' => 'required|min:3|max:255',
+                    'name' => 'required|min:2|max:255',
                     'category' => [new Enum(ProductGroupCategory::class)],
                 ];
 
@@ -84,7 +85,7 @@ class ProductGroupRequest extends FormRequest
                 $rules_update = [
                     'company_id' => ['required', new isValidCompany(), 'bail'],
                     'code' => ['required', 'max:255'],
-                    'name' => 'required|min:3|max:255',
+                    'name' => 'required|min:2|max:255',
                     'category' => [new Enum(ProductGroupCategory::class)],
                 ];
 
@@ -118,6 +119,7 @@ class ProductGroupRequest extends FormRequest
                 $this->merge([
                     'company_id' => $this->has('companyId') ? Hashids::decode($this['companyId'])[0] : '',
                     'paginate' => $this->has('paginate') ? filter_var($this->paginate, FILTER_VALIDATE_BOOLEAN) : true,
+                    'category' => ProductGroupCategory::isValid($this->category) ? ProductGroupCategory::fromName($this->category)->value : -1,
                 ]);
                 break;
             case 'read':

@@ -57,11 +57,6 @@
                     "active": "Active",
                     "inactive": "Inactive"
                 },
-                "productOrServiceCategoryDDL": {
-                    "product": "Product",
-                    "service": "Service",
-                    "product_and_service": "Product And Service"
-                },
                 "paymentTermTypeDDL": {
                     "pia": "Payment In Advance",
                     "net": "Payment In X Days After Invoice Date",
@@ -73,6 +68,16 @@
                 "yesNoDDL": {
                     "yes": "Yes",
                     "no": "No"
+                },
+                "productGroupCategoryDDL": {
+                    "product": "Product",
+                    "service": "Service",
+                    "product_and_service": "Product And Service"
+                },
+                "unitCategoryDDL": {
+                    "product": "Product",
+                    "service": "Service",
+                    "product_and_service": "Product And Service"
                 },
                 "productTypeDDL": {
                     "raw": "Raw Material",

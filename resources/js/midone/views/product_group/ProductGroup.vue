@@ -18,9 +18,9 @@
                                 <td>{{ item.code }}</td>
                                 <td><a href="" @click.prevent="toggleDetail(itemIdx)" class="hover:animate-pulse">{{ item.name }}</a></td>
                                 <td>
-                                    <span v-if="item.category == 1">{{ t('components.dropdown.values.productGroupCategoryDDL.product') }}</span>
-                                    <span v-if="item.category == 2">{{ t('components.dropdown.values.productGroupCategoryDDL.service') }}</span>
-                                    <span v-if="item.category == 3">{{ t('components.dropdown.values.productGroupCategoryDDL.product_service') }}</span>
+                                    <span v-if="item.category == 'PRODUCTS'">{{ t('components.dropdown.values.productGroupCategoryDDL.product') }}</span>
+                                    <span v-if="item.category == 'SERVICES'">{{ t('components.dropdown.values.productGroupCategoryDDL.service') }}</span>
+                                    <span v-if="item.category == 'PRODUCTS_AND_SERVICES'">{{ t('components.dropdown.values.productGroupCategoryDDL.product_and_service') }}</span>
                                 </td>
                                 <td class="table-report__action w-12">
                                     <div class="flex justify-center items-center">
@@ -49,9 +49,9 @@
                                     <div class="flex flex-row">
                                         <div class="ml-5 w-48 text-right pr-5">{{ t('views.product_group.fields.category') }}</div>
                                         <div class="flex-1">
-                                            <span v-if="item.category == 1">{{ t('components.dropdown.values.productGroupCategoryDDL.product') }}</span>
-                                            <span v-if="item.category == 2">{{ t('components.dropdown.values.productGroupCategoryDDL.service') }}</span>
-                                            <span v-if="item.category == 3">{{ t('components.dropdown.values.productGroupCategoryDDL.product_service') }}</span>
+                                            <span v-if="item.category == 'PRODUCTS'">{{ t('components.dropdown.values.productGroupCategoryDDL.product') }}</span>
+                                            <span v-if="item.category == 'SERVICES'">{{ t('components.dropdown.values.productGroupCategoryDDL.service') }}</span>
+                                            <span v-if="item.category == 'PRODUCTS_AND_SERVICES'">{{ t('components.dropdown.values.productGroupCategoryDDL.product_and_service') }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -214,10 +214,10 @@ const getAllProductGroups = (args) => {
 
 const getDDL = () => {
     if (getCachedDDL('productGroupCategoryDDL') == null) {
-        axios.get(route('api.get.db.common.ddl.list.category')).then(response => {
+        axios.get(route('api.get.db.common.ddl.list.productgroupcategories')).then(response => {
             productGroupCategoryDDL.value = response.data;
             setCachedDDL('productGroupCategoryDDL', response.data);
-        });    
+        });
     } else {
         productGroupCategoryDDL.value = getCachedDDL('productGroupCategoryDDL');
     }
@@ -235,7 +235,8 @@ const getDDLSync = () => {
 const onSubmit = (values, actions) => {
     loading.value = true;
 
-    var formData = new FormData(dom('#product_groupForm')[0]); 
+    var formData = new FormData(dom('#product_groupForm')[0]);
+    formData.append('company_id', selectedUserCompany.value);
     
     if (mode.value === 'create') {
         axios.post(route('api.post.db.product.product_group.save'), formData).then(response => {

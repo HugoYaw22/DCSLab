@@ -461,7 +461,7 @@ const getDDLSync = () => {
 const onSubmit = (values, actions) => {
     loading.value = true;
 
-    var formData = new FormData(dom('#productForm')[0]); 
+    var formData = new FormData(dom('#productForm')[0]);
     formData.append('company_id', selectedUserCompany.value);
     
     if (mode.value === 'create') {

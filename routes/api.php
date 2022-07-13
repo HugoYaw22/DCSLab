@@ -129,6 +129,8 @@ Route::group(['prefix' => 'get', 'middleware' => ['auth:sanctum', 'throttle:100,
                 Route::get('list/countries', [CommonController::class, 'getCountries'])->name('.list.countries');
                 Route::get('list/statuses', [CommonController::class, 'getStatus'])->name('.list.statuses');
                 Route::get('list/confirmation', [CommonController::class, 'getConfirmationDialog'])->name('.list.confirmationdialog');
+                Route::get('list/productgroupcategory', [CommonController::class, 'getProductGroupCategory'])->name('.list.productgroupcategories');
+                Route::get('list/unitcategory', [CommonController::class, 'getUnitCategory'])->name('.list.unitcategories');
             });
         });
     });
