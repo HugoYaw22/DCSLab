@@ -65,7 +65,7 @@ class UnitController extends BaseController
         $request = $unitRequest->validated();
 
         $companyId = $request['company_id'];
-        $category = array_key_exists('category', $request) ? $request['category'] : null;
+        $category = array_key_exists('category', $request) ? $request['category'] : 3;
         $search = $request['search'];
         $paginate = $request['paginate'];
         $page = array_key_exists('page', $request) ? abs($request['page']) : 1;
