@@ -87,7 +87,8 @@
         </div>
         <div class="loader-container">
             <VeeForm id="product_groupForm" class="p-5" @submit="onSubmit" @invalid-submit="invalidSubmit" v-slot="{ handleReset, errors }">
-                <div class="p-5">                    
+                <div class="p-5">
+                    <!-- #region Code -->
                     <div class="mb-3">
                         <label for="inputCode" class="form-label">{{ t('views.product_group.fields.code') }}</label>
                         <div class="flex items-center">
@@ -96,11 +97,17 @@
                         </div>
                         <ErrorMessage name="code" class="text-danger" />
                     </div>
+                    <!-- #endregion -->
+
+                    <!-- #region Name -->
                     <div class="mb-3">
                         <label for="inputName" class="form-label">{{ t('views.product_group.fields.name') }}</label>
                         <VeeField id="inputName" name="name" type="text" :class="{'form-control':true, 'border-danger': errors['name']}" :placeholder="t('views.product_group.fields.name')" :label="t('views.product_group.fields.name')" rules="required" @blur="reValidate(errors)" v-model="product_group.name" />
                         <ErrorMessage name="name" class="text-danger" />
                     </div>
+                    <!-- #endregion -->
+                    
+                    <!-- #region Category -->
                     <div class="mb-3">
                         <label for="category" class="form-label">{{ t('views.product_group.fields.category') }}</label>
                         <VeeField as="select" id="category" name="category" :class="{'form-control form-select':true, 'border-danger': errors['category']}" v-model="product_group.category" rules="required" @blur="reValidate(errors)">
@@ -109,6 +116,7 @@
                         </VeeField>
                         <ErrorMessage name="category" class="text-danger" />
                     </div>
+                    <!-- #endregion -->                    
                 </div>
                 <div class="pl-5" v-if="mode === 'create' || mode === 'edit'">
                     <button type="submit" class="btn btn-primary w-24 mr-3">{{ t('components.buttons.save') }}</button>
@@ -227,8 +235,8 @@ const getDDLSync = () => {
     axios.get(route('api.get.db.company.company.read.all_active', {
             companyId: selectedUserCompany.value,
             paginate: false
-        })).then(response => {
-            companyDDL.value = response.data;
+    })).then(response => {
+        companyDDL.value = response.data;
     });
 }
 

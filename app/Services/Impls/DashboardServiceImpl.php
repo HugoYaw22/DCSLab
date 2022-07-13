@@ -229,6 +229,12 @@ class DashboardServiceImpl implements DashboardService
             'title' => 'components.menu.product-product_group',
         ];
 
+        $brand = array(
+            'icon' => '',
+            'pageName' => 'side-menu-product-brand',
+            'title' => 'components.menu.product-brand'
+        );
+
         $product = [
             'icon' => '',
             'pageName' => 'side-menu-product-product',
@@ -250,6 +256,7 @@ class DashboardServiceImpl implements DashboardService
         ];
 
         array_push($root_array['subMenu'], $product_group);
+        array_push($root_array['subMenu'], $brand);
         array_push($root_array['subMenu'], $product);
         array_push($root_array['subMenu'], $service);
 
