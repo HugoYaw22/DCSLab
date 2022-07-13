@@ -1,7 +1,8 @@
 import SideMenu from "@/layouts/side-menu/Main.vue";
+import ProductGroup from "@/views/product_group/ProductGroup.vue";
+import Brand from "@/views/brand/Brand.vue";
 import Product from "@/views/product/Product.vue";
 import Service from "@/views/product/Service.vue";
-import ProductGroup from "@/views/product_group/ProductGroup.vue";
 
 const root = '/dashboard';
 
@@ -17,6 +18,15 @@ export default {
                 remember: true,
                 log_route: true
             }
+        },
+        {
+            path: root + "/product" + "/brand",
+            name: "side-menu-product-brand",
+            component: Brand,
+            meta: {
+                remember: true,
+                log_route: true,
+            },
         },
         {
             path: root + '/product' + '/product',
@@ -35,6 +45,6 @@ export default {
                 remember: true,
                 log_route: true 
             }
-        }
+        },
     ]
 };
