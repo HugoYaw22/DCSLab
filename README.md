@@ -1,3 +1,4 @@
+[![CI/CD](https://github.com/GitzJoey/DCSLab/actions/workflows/dcslab.yml/badge.svg)](https://github.com/GitzJoey/DCSLab/actions/workflows/dcslab.yml)
 # DCSLab
 
 Doctor Computer SG Lab
