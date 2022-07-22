@@ -49,10 +49,11 @@ class Branch extends Model
     protected $hidden = [];
 
     protected $casts = [
+        'is_main' => 'boolean',
         'status' => RecordStatus::class,
     ];
 
-    public function hId() : Attribute
+    public function hId(): Attribute
     {
         return Attribute::make(
             get: fn () => HashIds::encode($this->attributes['id'])

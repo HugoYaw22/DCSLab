@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use App\Models\Unit;
 use App\Models\Company;
 use App\Models\Product;
-use Spatie\Activitylog\LogOptions;
-use Vinkla\Hashids\Facades\Hashids;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Vinkla\Hashids\Facades\Hashids;
 
 class ProductUnit extends Model
 {
@@ -43,7 +43,7 @@ class ProductUnit extends Model
         'is_primary_unit' => 'boolean',
     ];
 
-    public function hId() : Attribute
+    public function hId(): Attribute
     {
         return Attribute::make(
             get: fn () => HashIds::encode($this->attributes['id'])

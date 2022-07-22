@@ -40,6 +40,14 @@ trait EnumHelper
 
     public static function isValid($test): bool
     {
+        if (is_null($test)) {
+            return false;
+        }
+
+        if (gettype($test) == 'string' && strlen($test) === 0) {
+            return false;
+        }
+
         if (self::isValidName($test) || self::isValidValue($test)) {
             return true;
         } else {

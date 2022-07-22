@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
-use Laravel\Sanctum\HasApiTokens;
 use Laratrust\Traits\LaratrustUserTrait;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Vinkla\Hashids\Facades\Hashids;
@@ -56,7 +56,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function hId() : Attribute
+    public function hId(): Attribute
     {
         return Attribute::make(
             get: fn () => Hashids::encode($this->attributes['id'])

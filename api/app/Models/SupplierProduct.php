@@ -34,21 +34,21 @@ class SupplierProduct extends Model
         'main_product' => 'boolean',
     ];
 
-    public function hId() : Attribute
+    public function hId(): Attribute
     {
         return Attribute::make(
             get: fn () => HashIds::encode($this->attributes['id'])
         );
     }
 
-    public function supplier_hId() : Attribute
+    public function supplier_hId(): Attribute
     {
         return Attribute::make(
             get: fn () => HashIds::encode($this->attributes['supplier_id'])
         );
     }
 
-    public function product_hId() : Attribute
+    public function product_hId(): Attribute
     {
         return Attribute::make(
             get: fn () => HashIds::encode($this->attributes['product_id'])
