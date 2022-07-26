@@ -57,9 +57,10 @@
             "values": {
                 "statusDDL": {
                     "active": "Active",
-                    "inactive": "Inactive"
+                    "inactive": "Inactive",
+                    "deleted": "Deleted"
                 },
-                "productOrServiceCategoryDDL": {
+                "productGroupCategoryDDL": {
                     "product": "Product",
                     "service": "Service",
                     "product_and_service": "Product And Service"
@@ -302,6 +303,29 @@
                         }
                     }
                 }
+            }
+        },
+        "product_group": {
+            "table": {
+                "title": "Product Group Lists",
+                "cols": {
+                    "code": "Code",
+                    "name": "Name",    
+                    "description": "Description",
+                    "category": "Category"
+                }
+            },
+            "actions": {
+                "create": "Create Product Group",
+                "edit": "Edit Product Group",
+                "show": "Show Product Group",
+                "delete": "Delete Product Group"
+            },
+            "fields": {
+                "code": "Code",
+                "name": "Name",
+                "description": "Description",
+                "category": "Category"
             }
         },
         "brand": {
