@@ -62,3 +62,47 @@ jobs:
       - name: Execute tests
         run: npm run test
         working-directory: ./web
+
+  cypress-tests:
+    needs: vue-tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shogo82148/actions-setup-redis@v1
+        with:
+          redis-version: 'latest'
+      - name: Check Redis
+        run: redis-cli ping
+      - name: Prepare The Api Environment
+        run: cp .env.example .env
+        working-directory: ./api
+      - name: Prepare The Web Environment
+        run: cp .env.example .env
+        working-directory: ./web
+      - name: Set Root Password To Empty
+        run: |
+          sudo systemctl start mysql
+          # To prevent "ERROR 2013 (HY000): Lost connection to MySQL server at 'reading initial communication packet', system error: 0"
+          # See: https://github.com/mirromutth/mysql-action/issues/16
+          sleep 15
+
+          cat <<EOF | mysql -h 127.0.0.1 -u root --password=root
+            UPDATE mysql.user SET authentication_string = null WHERE user = 'root';
+            FLUSH PRIVILEGES;
+          EOF
+      - name: Create Database
+        run: mysql --user="root" --password="" -e "CREATE DATABASE laravel character set UTF8mb4 collate utf8mb4_bin;"
+      - name: Install
+        run: npm install
+      - name: Run Laravel Server
+        run: php artisan serve &
+        working-directory: ./api
+      - name: Create Ziggy
+        run: php artisan ziggy:generate "../web/src/ziggy/ziggy.js"
+        working-directory: ./api
+      - name: Run Web Server
+        run: npm run dev &
+        working-directory: ./web
+      - name: Start cypress
+        run: npx cypress run

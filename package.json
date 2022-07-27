@@ -14,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/GitzJoey/DCSLab/issues"
   },
-  "homepage": "https://github.com/GitzJoey/DCSLab#readme"
+  "homepage": "https://github.com/GitzJoey/DCSLab#readme",
+  "devDependencies": {
+    "cypress": "^10.3.1"
+  }
 }
